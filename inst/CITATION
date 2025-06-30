@@ -1,9 +1,0 @@
-bibentry(
-  bibtype    = "Manual",
-  title      = "R DES RAP Template",
-  author     = person("Amy", "Heather", email = "a.heather2@exeter.ac.uk", role = c("aut", "cre"), comment = "ORCID: 0000-0002-6596-3479"),
-  organization = "University of Exeter",
-  year       = 2025,
-  note       = "Version 0.4.0. A template for creating discrete-event simulation (DES) models in R within a reproducible analytical pipeline (RAP).",
-  url        = "https://github.com/pythonhealthdatascience/rdesrap_mms"
-)

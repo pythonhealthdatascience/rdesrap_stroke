@@ -9,36 +9,17 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-URL: https://github.com/pythonhealthdatascience/rdesrap_mms
-Description: Template reproducible analytical pipeline (RAP) for simple R
-    discrete-event simulation (DES) model.
+URL: https://github.com/pythonhealthdatascience/rdesrap_stroke
+Description: Reproducible analytical pipeline (RAP) for R discrete-event
+  simulation (DES) implementing the Stroke Capacity Planning Model from Monks
+  et al. 2016.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Imports:
-    simmer,
-    magrittr,
-    dplyr,
-    purrr,
-    rlang,
-    tidyr,
-    tidyselect,
-    future,
-    future.apply,
-    ggplot2,
-    tibble,
-    gridExtra,
-    R6
+    simmer
 Suggests:
     testthat (>= 3.0.0),
-    patrick,
-    lintr,
-    devtools,
-    xtable,
-    data.table,
-    mockery,
-    fitdistrplus,
-    lubridate,
-    plotly
+    lintr
 Config/testthat/edition: 3

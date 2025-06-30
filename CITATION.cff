@@ -3,7 +3,7 @@
 
 cff-version: 1.2.0
 title: >-
-  R DES RAP Template
+  Stroke capacity planning model: R DES RAP
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
@@ -15,9 +15,9 @@ authors:
     affiliation: University of Exeter
     orcid: 'https://orcid.org/0000-0002-6596-3479'
 repository-code: >-
-  https://github.com/pythonhealthdatascience/rdesrap_mms
+  https://github.com/pythonhealthdatascience/rdesrap_stroke
 abstract: >-
-  A template for creating discrete-event simulation (DES) models in R
-  within a reproducible analytical pipeline (RAP).
-version: 0.4.0
-date-released: '2025-06-04'
+  Reproducible analytical pipeline (RAP) for R discrete-event simulation (DES)
+  implementing the Stroke Capacity Planning Model from Monks et al. 2016.
+version: 0.1.0
+date-released: '2025-06-30'
