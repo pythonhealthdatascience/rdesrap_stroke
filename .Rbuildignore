@@ -1,0 +1,16 @@
+^renv$
+^renv\.lock$
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^CONTRIBUTING\.md$
+^docs$
+^images$
+^\.github$
+^\.lintr$
+^outputs$
+^rmarkdown$
+^CITATION\.cff$
+^run_rmarkdown\.sh$
+^inputs$
+^mock_paper\.md$

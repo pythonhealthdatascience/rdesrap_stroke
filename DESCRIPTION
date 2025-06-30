@@ -1,0 +1,44 @@
+Package: simulation
+Type: Package
+Title: Simulation
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Amy", "Heather",
+      email = "a.heather2@exeter.ac.uk",
+      role = c("aut", "cre")
+    )
+  )
+URL: https://github.com/pythonhealthdatascience/rdesrap_mms
+Description: Template reproducible analytical pipeline (RAP) for simple R
+    discrete-event simulation (DES) model.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
+Imports:
+    simmer,
+    magrittr,
+    dplyr,
+    purrr,
+    rlang,
+    tidyr,
+    tidyselect,
+    future,
+    future.apply,
+    ggplot2,
+    tibble,
+    gridExtra,
+    R6
+Suggests:
+    testthat (>= 3.0.0),
+    patrick,
+    lintr,
+    devtools,
+    xtable,
+    data.table,
+    mockery,
+    fitdistrplus,
+    lubridate,
+    plotly
+Config/testthat/edition: 3

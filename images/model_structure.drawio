@@ -1,0 +1,76 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36" version="26.1.1">
+  <diagram name="Page-1" id="ynTKS2v_TZv17swCPKiS">
+    <mxGraphModel dx="1434" dy="915" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ltitkqDnKHNBnyyiyaz9-11" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;parameters()&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2A25C;" parent="1" vertex="1">
+          <mxGeometry x="127.5" y="50" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ltitkqDnKHNBnyyiyaz9-40" target="5LiT1j53H3c69v0TLy5i-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-17" value="Input to..." style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5LiT1j53H3c69v0TLy5i-11">
+          <mxGeometry x="-0.3333" y="3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ltitkqDnKHNBnyyiyaz9-40" value="Generates list of parameters" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="90" y="81.5" width="175" height="23.5" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;" edge="1" parent="1" source="5LiT1j53H3c69v0TLy5i-1" target="5LiT1j53H3c69v0TLy5i-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;" edge="1" parent="1" source="5LiT1j53H3c69v0TLy5i-1" target="5LiT1j53H3c69v0TLy5i-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;" edge="1" parent="1" source="5LiT1j53H3c69v0TLy5i-1" target="5LiT1j53H3c69v0TLy5i-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-18" value="Uses..." style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5LiT1j53H3c69v0TLy5i-16">
+          <mxGeometry x="-0.6645" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-1" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;model()&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2A25C;" vertex="1" parent="1">
+          <mxGeometry x="142.5" y="170" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="5LiT1j53H3c69v0TLy5i-2" target="5LiT1j53H3c69v0TLy5i-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-19" value="Used by..." style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5LiT1j53H3c69v0TLy5i-13">
+          <mxGeometry x="-0.2477" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-2" value="Defines model processes, runs simulation with seeds and logs, extracts patient and resource results" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="102.5" y="208" width="150" height="57.5" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-3" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;valid_inputs()&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2A25C;" vertex="1" parent="1">
+          <mxGeometry x="427.75" y="130.5" width="102.5" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-4" value="Checks that provided parameters are valid" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="530.25" y="130.5" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-5" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;filter_warmup()&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2A25C;" vertex="1" parent="1">
+          <mxGeometry x="424" y="180.5" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-6" value="Removes results that occurred during warm-up" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="534" y="175.5" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-7" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;get_run_results()&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2A25C;" vertex="1" parent="1">
+          <mxGeometry x="414" y="230.5" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-8" value="Calculates average results for that run" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="544" y="225.5" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-9" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;runner()&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2A25C;" vertex="1" parent="1">
+          <mxGeometry x="142.5" y="330" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5LiT1j53H3c69v0TLy5i-10" value="Runs replications, sequentially or in parallel" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="102.5" y="360" width="150" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
