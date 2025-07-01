@@ -1,0 +1,16 @@
+---
+title: "analysis"
+output: html_document
+---
+
+```{r}
+# Load the package from the local directory
+devtools::load_all()
+
+# Load the package
+library(simulation)
+```
+
+```{r}
+create_parameters()
+```
