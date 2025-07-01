@@ -25,5 +25,5 @@ healthcare system.
 }
 \description{
 Represents patient stay on the rehabilitation unit - samples their (1)
- destination after rehab, and (2) length of stay (LOS) on the unit.
+destination after rehab, and (2) length of stay (LOS) on the unit.
 }

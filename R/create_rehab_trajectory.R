@@ -1,7 +1,7 @@
 #' Create rehab patient trajectory.
 #'
-#'  Represents patient stay on the rehabilitation unit - samples their (1)
-#'  destination after rehab, and (2) length of stay (LOS) on the unit.
+#' Represents patient stay on the rehabilitation unit - samples their (1)
+#' destination after rehab, and (2) length of stay (LOS) on the unit.
 #'
 #' @param env Simmer environment object. The simulation environment where
 #' generators will be added.

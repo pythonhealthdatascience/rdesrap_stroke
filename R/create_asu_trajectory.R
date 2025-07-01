@@ -13,7 +13,7 @@
 #' of routing to each destination (e.g.
 #' \code{param$asu_routing$stroke$rehab = 0.24}).
 #'
-#' @importFrom simmer trajectory
+#' @importFrom simmer branch trajectory
 #' @importFrom stats rlnorm
 #'
 #' @return Simmer trajectory object. Defines patient journey logic through the
@@ -57,5 +57,19 @@ create_asu_trajectory <- function(env, patient_type, param) {
         meanlog = los_params[["meanlog"]],
         sdlog = los_params[["sdlog"]]
       )
-    })
+    }) |>
+
+    # If that patient's destination is rehab, then start on that trajectory
+    branch(
+      option = function() {
+        # Retrieve attribute, and use to get post-ASU destination as a string
+        dest_index <- get_attribute(env, "post_asu_destination")
+        dest_names <- names(param[["asu_routing"]][[patient_type]])
+        dest <- dest_names[dest_index]
+        # Return 1 for rehab and 0 otherwise
+        if (dest == "rehab") 1L else 0L
+      },
+      continue = FALSE,  # Do not continue main trajectory after branch
+      create_rehab_trajectory(env, patient_type, param)
+    )
 }
