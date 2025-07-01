@@ -12,7 +12,7 @@ model(run_number, param, set_seed = TRUE)
 \item{param}{Named list of model parameters.}
 
 \item{set_seed}{Whether to set seed within the model function (which we
-may not wish to do if being set elsewhere - such as done in runner()).
+may not wish to do if being set elsewhere - such as done in \code{runner()}).
 Default is TRUE.}
 }
 \value{

@@ -3,7 +3,7 @@
 #' @param run_number Integer representing index of current simulation run.
 #' @param param Named list of model parameters.
 #' @param set_seed Whether to set seed within the model function (which we
-#' may not wish to do if being set elsewhere - such as done in runner()).
+#' may not wish to do if being set elsewhere - such as done in \code{runner()}).
 #' Default is TRUE.
 #'
 #' @importFrom simmer get_attribute get_mon_arrivals get_mon_resources
@@ -19,19 +19,30 @@ model <- function(run_number, param, set_seed = TRUE) {
     set.seed(run_number)
   }
 
+  # Transform LOS parameters to lognormal scale
+  param[["asu_los_lnorm"]] <- transform_to_lnorm(param[["asu_los"]])
+  param[["rehab_los_lnorm"]] <- transform_to_lnorm(param[["rehab_los"]])
+
   # Create simmer environment
   env <- simmer("simulation", verbose = TRUE)
 
   # Add ASU and rehab direct admission patient generators
   for (unit in c("asu", "rehab")) {
     for (patient_type in names(param[[paste0(unit, "_arrivals")]])) {
+
+      # Create patient trajectory
+      traj <- if (unit == "asu") {
+        create_asu_trajectory(
+          env = env, patient_type = patient_type, param = param
+        )
+      } else {
+        create_rehab_trajectory(patient_type, param)
+      }
+
+      # Add patient generator using the created trajectory
       env <- add_patient_generator(
         env = env,
-        # Get trajectory given unit and patient type
-        trajectory = (
-          if (unit == "asu") create_asu_trajectory(patient_type, param)
-          else create_rehab_trajectory(patient_type, param)
-        ),
+        trajectory = traj,
         unit = unit,
         patient_type = patient_type,
         param = param

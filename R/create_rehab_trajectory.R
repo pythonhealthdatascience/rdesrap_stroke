@@ -1,11 +1,12 @@
-#' Create rehab patient trajectory
+#' Create rehab patient trajectory.
 #'
 #' @param patient_type Character string specifying patient category. Must be
 #' one of: "stroke", "tia", "neuro", or "other". Determines which arrival rate
 #' parameter is used.
 #' @param param Nested list containing simulation parameters. Must have
-#' structure `param$rehab_routing$<patient_type>` containing the probability of
-#' routing to each destination (e.g.`param$rehab_routing$stroke$esd = 0.40`).
+#' structure \code{param$rehab_routing$<patient_type>} containing the
+#' probability of routing to each destination (e.g.
+#' \code{param$rehab_routing$stroke$esd = 0.40}).
 #'
 #' @importFrom simmer trajectory
 #'

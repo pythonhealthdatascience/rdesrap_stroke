@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_routing.R
 \name{sample_routing}
 \alias{sample_routing}
-\title{Sample a destination based on probabilities}
+\title{Sample a destination based on probabilities.}
 \usage{
 sample_routing(prob_list)
 }
@@ -12,10 +12,11 @@ and the values are their corresponding probabilities (numeric, non-negative,
 sum to 1).}
 }
 \value{
-An integer. The index of the selected destination within `prob_list`.
+An integer. The index of the selected destination within
+\code{prob_list}.
 }
 \description{
 Randomly selects a destination from a list, where each destination has an
 associated probability. The destination is returned as a numeric index, as
-`simmer::set_attribute()` requires a numeric or function.
+\code{simmer::set_attribute()} requires a numeric or function.
 }

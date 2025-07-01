@@ -22,8 +22,8 @@ one of: "stroke", "tia", "neuro", or "other". Determines which arrival rate
 parameter is used.}
 
 \item{param}{Nested list containing simulation parameters. Must have
-structure `param$<unit>_arrivals$<patient_type>` containing numeric
-arrival intervals (e.g., `param$asu_arrivals$stroke = 10`).}
+structure \code{param$<unit>_arrivals$<patient_type>} containing numeric
+arrival intervals (e.g., \code{param$asu_arrivals$stroke = 10}).}
 }
 \value{
 The modified Simmer environment with the new patient generator added.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_rehab_trajectory.R
 \name{create_rehab_trajectory}
 \alias{create_rehab_trajectory}
-\title{Create rehab patient trajectory}
+\title{Create rehab patient trajectory.}
 \usage{
 create_rehab_trajectory(patient_type, param)
 }
@@ -12,13 +12,14 @@ one of: "stroke", "tia", "neuro", or "other". Determines which arrival rate
 parameter is used.}
 
 \item{param}{Nested list containing simulation parameters. Must have
-structure `param$rehab_routing$<patient_type>` containing the probability of
-routing to each destination (e.g.`param$rehab_routing$stroke$esd = 0.40`).}
+structure \code{param$rehab_routing$<patient_type>} containing the
+probability of routing to each destination (e.g.
+\code{param$rehab_routing$stroke$esd = 0.40}).}
 }
 \value{
 Simmer trajectory object. Defines patient journey logic through the
 healthcare system.
 }
 \description{
-Create rehab patient trajectory
+Create rehab patient trajectory.
 }
