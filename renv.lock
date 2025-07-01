@@ -134,6 +134,16 @@
       ],
       "Hash": "3f038e5ac7f41d4ac41ce658c85e3042"
     },
+    "codetools": {
+      "Package": "codetools",
+      "Version": "0.2-20",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "61e097f35917d342622f21cdc79c256e"
+    },
     "commonmark": {
       "Package": "commonmark",
       "Version": "1.9.2",
@@ -987,6 +997,20 @@
         "xtable"
       ],
       "Hash": "011db3556755012e632ed99d083d7d75"
+    },
+    "simmer": {
+      "Package": "simmer",
+      "Version": "4.4.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "codetools",
+        "magrittr",
+        "utils"
+      ],
+      "Hash": "6e993f252a8a2a7bf19856c82af1414b"
     },
     "sourcetools": {
       "Package": "sourcetools",

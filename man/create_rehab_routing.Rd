@@ -7,8 +7,8 @@
 create_rehab_routing(
   stroke_esd = 0.4,
   stroke_other = 0.6,
-  tia_esd = 0,
-  tia_other = 1,
+  tia_esd = 0L,
+  tia_other = 1L,
   neuro_esd = 0.09,
   neuro_other = 0.91,
   other_esd = 0.13,

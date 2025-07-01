@@ -12,5 +12,5 @@ library(simulation)
 ```
 
 ```{r}
-create_parameters()
+model(run_number = 1L, param = create_parameters(), set_seed = TRUE)
 ```
