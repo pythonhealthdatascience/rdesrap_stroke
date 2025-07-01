@@ -1,22 +1,60 @@
-#' Create ASU patient trajectory
+#' Create acute stroke unit (ASU) patient trajectory.
 #'
+#' Represents patient stay in the ASU - samples their (1) destination after
+#' the ASU, and (2) length of stay (LOS) on the ASU.
+#'
+#' @param env Simmer environment object. The simulation environment where
+#' generators will be added.
 #' @param patient_type Character string specifying patient category. Must be
 #' one of: "stroke", "tia", "neuro", or "other". Determines which arrival rate
 #' parameter is used.
 #' @param param Nested list containing simulation parameters. Must have
-#' structure `param$asu_routing$<patient_type>` containing the probability of
-#' routing to each destination (e.g.`param$asu_routing$stroke$rehab = 0.24`).
+#' structure \code{param$asu_routing$<patient_type>} containing the probability
+#' of routing to each destination (e.g.
+#' \code{param$asu_routing$stroke$rehab = 0.24}).
 #'
 #' @importFrom simmer trajectory
+#' @importFrom stats rlnorm
 #'
 #' @return Simmer trajectory object. Defines patient journey logic through the
 #' healthcare system.
 #' @export
 
-create_asu_trajectory <- function(patient_type, param) {
+create_asu_trajectory <- function(env, patient_type, param) {
+
+  # Set up simmer trajectory object...
   trajectory(paste0("ASU_", patient_type, "_path")) |>
-    set_attribute("post_asu_destination", function(env) {
+
+    # Sample destination after ASU (we do this immediately on arrival in the
+    # ASU, as the destination influences the length of stay)
+    set_attribute("post_asu_destination", function() {
       sample_routing(prob_list = param[["asu_routing"]][[patient_type]])
     }) |>
-    timeout(1L)
+
+    timeout(function() {
+
+      # Retrieve attribute, and use to get post-ASU destination as a string
+      dest_index <- get_attribute(env, "post_asu_destination")
+      dest_names <- names(param[["asu_routing"]][[patient_type]])
+      dest <- dest_names[dest_index]
+
+      # Determine which LOS distribution to use
+      if (patient_type == "stroke") {
+        los_params <- switch(
+          dest,
+          "esd" = param[["asu_los_lnorm"]][["stroke_esd"]],
+          "rehab" = param[["asu_los_lnorm"]][["stroke_noesd"]],
+          param[["asu_los_lnorm"]][["stroke_mortality"]]  # Default case
+        )
+      } else {
+        los_params <- param[["asu_los_lnorm"]][[patient_type]]
+      }
+
+      # Sample LOS from lognormal
+      rlnorm(
+        n = 1L,
+        meanlog = los_params[["meanlog"]],
+        sdlog = los_params[["sdlog"]]
+      )
+    })
 }

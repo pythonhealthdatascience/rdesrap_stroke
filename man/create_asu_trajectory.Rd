@@ -2,23 +2,28 @@
 % Please edit documentation in R/create_asu_trajectory.R
 \name{create_asu_trajectory}
 \alias{create_asu_trajectory}
-\title{Create ASU patient trajectory}
+\title{Create acute stroke unit (ASU) patient trajectory.}
 \usage{
-create_asu_trajectory(patient_type, param)
+create_asu_trajectory(env, patient_type, param)
 }
 \arguments{
+\item{env}{Simmer environment object. The simulation environment where
+generators will be added.}
+
 \item{patient_type}{Character string specifying patient category. Must be
 one of: "stroke", "tia", "neuro", or "other". Determines which arrival rate
 parameter is used.}
 
 \item{param}{Nested list containing simulation parameters. Must have
-structure `param$asu_routing$<patient_type>` containing the probability of
-routing to each destination (e.g.`param$asu_routing$stroke$rehab = 0.24`).}
+structure \code{param$asu_routing$<patient_type>} containing the probability
+of routing to each destination (e.g.
+\code{param$asu_routing$stroke$rehab = 0.24}).}
 }
 \value{
 Simmer trajectory object. Defines patient journey logic through the
 healthcare system.
 }
 \description{
-Create ASU patient trajectory
+Represents patient stay in the ASU - samples their (1) destination after
+the ASU, and (2) length of stay (LOS) on the ASU.
 }
