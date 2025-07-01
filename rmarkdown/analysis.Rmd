@@ -18,5 +18,6 @@ library(simulation)
 
 
 ```{r}
-model(run_number = 1L, param = create_parameters(), set_seed = TRUE)
+param <- create_parameters(log_to_console = TRUE)
+model(run_number = 1L, param = param, set_seed = TRUE)
 ```
