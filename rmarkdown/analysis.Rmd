@@ -1,0 +1,23 @@
+---
+title: "analysis"
+author: "Amy Heather"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+      toc: true
+      html_preview: false
+---
+
+```{r}
+# Load the package from the local directory
+devtools::load_all()
+
+# Load the package
+library(simulation)
+```
+
+
+```{r}
+param <- create_parameters(log_to_console = TRUE)
+model(run_number = 1L, param = param, set_seed = TRUE)
+```
