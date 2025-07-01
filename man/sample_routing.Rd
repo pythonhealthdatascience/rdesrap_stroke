@@ -12,9 +12,10 @@ and the values are their corresponding probabilities (numeric, non-negative,
 sum to 1).}
 }
 \value{
-A character string. The name of the selected destination.
+An integer. The index of the selected destination within `prob_list`.
 }
 \description{
 Randomly selects a destination from a list, where each destination has an
-associated probability.
+associated probability. The destination is returned as a numeric index, as
+`simmer::set_attribute()` requires a numeric or function.
 }

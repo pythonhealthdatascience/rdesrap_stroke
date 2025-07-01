@@ -12,8 +12,8 @@ one of: "stroke", "tia", "neuro", or "other". Determines which arrival rate
 parameter is used.}
 
 \item{param}{Nested list containing simulation parameters. Must have
-structure `param$asu_routing$<patient_type>` containing the probability of
-routing to each destination (e.g.`param$asu_routing_stroke$rehab = 0.24`).}
+structure `param$rehab_routing$<patient_type>` containing the probability of
+routing to each destination (e.g.`param$rehab_routing$stroke$esd = 0.40`).}
 }
 \value{
 Simmer trajectory object. Defines patient journey logic through the

@@ -5,7 +5,7 @@
 #' parameter is used.
 #' @param param Nested list containing simulation parameters. Must have
 #' structure `param$asu_routing$<patient_type>` containing the probability of
-#' routing to each destination (e.g.`param$asu_routing_stroke$rehab = 0.24`).
+#' routing to each destination (e.g.`param$asu_routing$stroke$rehab = 0.24`).
 #'
 #' @importFrom simmer trajectory
 #'
