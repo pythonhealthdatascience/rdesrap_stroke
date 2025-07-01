@@ -14,8 +14,11 @@ create_parameters(
   warm_up_period = 365 * 3,
   data_collection_period = 365 * 5,
   number_of_runs = 150,
-  audit_interval = 1,
-  cores = 1
+  scenario_name = NULL,
+  cores = 1,
+  log_to_console = FALSE,
+  log_to_file = FALSE,
+  file_path = NULL
 )
 }
 \arguments{
@@ -38,9 +41,15 @@ create_parameters(
 
 \item{number_of_runs}{Integer. Number of simulation runs.}
 
-\item{audit_interval}{Numeric. Audit interval (days).}
+\item{scenario_name}{Label for scenario (int|float|string).}
 
 \item{cores}{Integer. Number of CPU cores to use.}
+
+\item{log_to_console}{Whether to print activity log to console.}
+
+\item{log_to_file}{Whether to save activity log to file.}
+
+\item{file_path}{Path to save log to file.}
 }
 \value{
 A named list of all simulation parameters.

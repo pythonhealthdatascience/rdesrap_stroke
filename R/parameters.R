@@ -10,15 +10,12 @@
 #' @param other Numeric. Mean days between other patient arrivals.
 #'
 #' @return A named list of arrival intervals for ASU.
+#' @export
+
 create_asu_arrivals <- function(
-    stroke = 1.2, tia = 9.3, neuro = 3.6, other = 3.2
+  stroke = 1.2, tia = 9.3, neuro = 3.6, other = 3.2
 ) {
-  list(
-    stroke = stroke,
-    tia = tia,
-    neuro = neuro,
-    other = other
-  )
+  return(as.list(environment()))
 }
 
 #' Rehabilitation unit arrival intervals (days).
@@ -31,14 +28,12 @@ create_asu_arrivals <- function(
 #' @param other Numeric. Mean days between other patient arrivals.
 #'
 #' @return A named list of arrival intervals for rehabilitation unit.
+#' @export
+
 create_rehab_arrivals <- function(
-    stroke = 21.8, neuro = 31.7, other = 28.6
+  stroke = 21.8, neuro = 31.7, other = 28.6
 ) {
-  list(
-    stroke = stroke,
-    neuro = neuro,
-    other = other
-  )
+  return(as.list(environment()))
 }
 
 #' Acute Stroke Unit (ASU) length of stay (LOS) distributions (days).
@@ -63,22 +58,17 @@ create_rehab_arrivals <- function(
 #' @param other_sd Numeric. SD LOS for other patients.
 #'
 #' @return A named list of LOS distributions for ASU.
+#' @export
+
 create_asu_los <- function(
-    stroke_noesd_mean = 7.4, stroke_noesd_sd = 8.61,
-    stroke_esd_mean = 4.6, stroke_esd_sd = 4.8,
-    stroke_mortality_mean = 7.0, stroke_mortality_sd = 8.7,
-    tia_mean = 1.8, tia_sd = 2.3,
-    neuro_mean = 4.0, neuro_sd = 5.0,
-    other_mean = 3.8, other_sd = 5.2
+  stroke_noesd_mean = 7.4, stroke_noesd_sd = 8.61,
+  stroke_esd_mean = 4.6, stroke_esd_sd = 4.8,
+  stroke_mortality_mean = 7.0, stroke_mortality_sd = 8.7,
+  tia_mean = 1.8, tia_sd = 2.3,
+  neuro_mean = 4.0, neuro_sd = 5.0,
+  other_mean = 3.8, other_sd = 5.2
 ) {
-  list(
-    stroke_noesd = list(mean = stroke_noesd_mean, sd = stroke_noesd_sd),
-    stroke_esd = list(mean = stroke_esd_mean, sd = stroke_esd_sd),
-    stroke_mortality = list(mean = stroke_mortality_mean, sd = stroke_mortality_sd),
-    tia = list(mean = tia_mean, sd = tia_sd),
-    neuro = list(mean = neuro_mean, sd = neuro_sd),
-    other = list(mean = other_mean, sd = other_sd)
-  )
+  return(as.list(environment()))
 }
 
 #' Rehabilitation unit length of stay (LOS) distributions (days).
@@ -97,20 +87,16 @@ create_asu_los <- function(
 #' @param other_sd Numeric. SD LOS for other patients.
 #'
 #' @return A named list of LOS distributions for rehabilitation unit.
+#' @export
+
 create_rehab_los <- function(
-    stroke_noesd_mean = 28.4, stroke_noesd_sd = 27.2,
-    stroke_esd_mean = 30.3, stroke_esd_sd = 23.1,
-    tia_mean = 18.7, tia_sd = 23.5,
-    neuro_mean = 27.6, neuro_sd = 28.4,
-    other_mean = 16.1, other_sd = 14.1
+  stroke_noesd_mean = 28.4, stroke_noesd_sd = 27.2,
+  stroke_esd_mean = 30.3, stroke_esd_sd = 23.1,
+  tia_mean = 18.7, tia_sd = 23.5,
+  neuro_mean = 27.6, neuro_sd = 28.4,
+  other_mean = 16.1, other_sd = 14.1
 ) {
-  list(
-    stroke_noesd = list(mean = stroke_noesd_mean, sd = stroke_noesd_sd),
-    stroke_esd = list(mean = stroke_esd_mean, sd = stroke_esd_sd),
-    tia = list(mean = tia_mean, sd = tia_sd),
-    neuro = list(mean = neuro_mean, sd = neuro_sd),
-    other = list(mean = other_mean, sd = other_sd)
-  )
+  return(as.list(environment()))
 }
 
 #' ASU routing probabilities.
@@ -137,18 +123,15 @@ create_rehab_los <- function(
 #' @param other_other Numeric. Probability other patient to other.
 #'
 #' @return A named list of routing probabilities for ASU.
+#' @export
+
 create_asu_routing <- function(
-    stroke_rehab = 0.24, stroke_esd = 0.13, stroke_other = 0.63,
-    tia_rehab = 0.01, tia_esd = 0.01, tia_other = 0.98,
-    neuro_rehab = 0.11, neuro_esd = 0.05, neuro_other = 0.84,
-    other_rehab = 0.05, other_esd = 0.10, other_other = 0.85
+  stroke_rehab = 0.24, stroke_esd = 0.13, stroke_other = 0.63,
+  tia_rehab = 0.01, tia_esd = 0.01, tia_other = 0.98,
+  neuro_rehab = 0.11, neuro_esd = 0.05, neuro_other = 0.84,
+  other_rehab = 0.05, other_esd = 0.10, other_other = 0.85
 ) {
-  list(
-    stroke = list(rehab = stroke_rehab, esd = stroke_esd, other = stroke_other),
-    tia = list(rehab = tia_rehab, esd = tia_esd, other = tia_other),
-    neuro = list(rehab = neuro_rehab, esd = neuro_esd, other = neuro_other),
-    other = list(rehab = other_rehab, esd = other_esd, other = other_other)
-  )
+  return(as.list(environment()))
 }
 
 #' Rehabilitation unit routing probabilities.
@@ -170,18 +153,15 @@ create_asu_routing <- function(
 #' @param other_other Numeric. Probability other patient to other.
 #'
 #' @return A named list of routing probabilities for rehabilitation unit.
+#' @export
+
 create_rehab_routing <- function(
-    stroke_esd = 0.40, stroke_other = 0.60,
-    tia_esd = 0, tia_other = 1,
-    neuro_esd = 0.09, neuro_other = 0.91,
-    other_esd = 0.13, other_other = 0.88
+  stroke_esd = 0.40, stroke_other = 0.60,
+  tia_esd = 0L, tia_other = 1L,
+  neuro_esd = 0.09, neuro_other = 0.91,
+  other_esd = 0.13, other_other = 0.88
 ) {
-  list(
-    stroke = list(esd = stroke_esd, other = stroke_other),
-    tia = list(esd = tia_esd, other = tia_other),
-    neuro = list(esd = neuro_esd, other = neuro_other),
-    other = list(esd = other_esd, other = other_other)
-  )
+  return(as.list(environment()))
 }
 
 #' Generate complete parameter list for simulation.
@@ -196,34 +176,30 @@ create_rehab_routing <- function(
 #' @param data_collection_period Integer. Length of data collection period
 #' (days).
 #' @param number_of_runs Integer. Number of simulation runs.
-#' @param audit_interval Numeric. Audit interval (days).
+#' @param scenario_name Label for scenario (int|float|string).
 #' @param cores Integer. Number of CPU cores to use.
+#' @param log_to_console Whether to print activity log to console.
+#' @param log_to_file Whether to save activity log to file.
+#' @param file_path Path to save log to file.
 #'
 #' @return A named list of all simulation parameters.
+#' @export
+
 create_parameters <- function(
-    asu_arrivals = create_asu_arrivals(),
-    rehab_arrivals = create_rehab_arrivals(),
-    asu_los = create_asu_los(),
-    rehab_los = create_rehab_los(),
-    asu_routing = create_asu_routing(),
-    rehab_routing = create_rehab_routing(),
-    warm_up_period = 365 * 3,
-    data_collection_period = 365 * 5,
-    number_of_runs = 150,
-    audit_interval = 1,
-    cores = 1
+  asu_arrivals = create_asu_arrivals(),
+  rehab_arrivals = create_rehab_arrivals(),
+  asu_los = create_asu_los(),
+  rehab_los = create_rehab_los(),
+  asu_routing = create_asu_routing(),
+  rehab_routing = create_rehab_routing(),
+  warm_up_period = 365L * 3L,  # 3 years
+  data_collection_period = 365L * 5L,  # 5 years
+  number_of_runs = 150L,
+  scenario_name = NULL,
+  cores = 1L,
+  log_to_console = FALSE,
+  log_to_file = FALSE,
+  file_path = NULL
 ) {
-  list(
-    asu_arrivals = asu_arrivals,
-    rehab_arrivals = rehab_arrivals,
-    asu_los = asu_los,
-    rehab_los = rehab_los,
-    asu_routing = asu_routing,
-    rehab_routing = rehab_routing,
-    warm_up_period = warm_up_period,
-    data_collection_period = data_collection_period,
-    number_of_runs = number_of_runs,
-    audit_interval = audit_interval,
-    cores = cores
-  )
+  return(as.list(environment()))
 }
