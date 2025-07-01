@@ -26,76 +26,113 @@ model(run_number = 1L, param = create_parameters(), set_seed = TRUE)
     ##          0 |    source: rehab_stroke     |       new: rehab_stroke0    | 9.5063
     ##          0 |    source: rehab_neuro      |       new: rehab_neuro0     | 91.7705
     ##          0 |    source: rehab_other      |       new: rehab_other0     | 35.1655
+    ##   0.447345 |   arrival: asu_other0       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##   0.447345 |    source: asu_other        |       new: asu_other1       | 3.50836
     ##   0.447345 |   arrival: asu_other0       |  activity: Timeout          | 1
-    ##   0.447345 |    source: asu_other        |       new: asu_other1       | 2.17433
+    ##   0.524544 |   arrival: asu_neuro0       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##   0.524544 |    source: asu_neuro        |       new: asu_neuro1       | 5.82851
     ##   0.524544 |   arrival: asu_neuro0       |  activity: Timeout          | 1
-    ##   0.524544 |    source: asu_neuro        |       new: asu_neuro1       | 3.96819
+    ##   0.906218 |   arrival: asu_stroke0      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##   0.906218 |    source: asu_stroke       |       new: asu_stroke1      | 2.39134
     ##   0.906218 |   arrival: asu_stroke0      |  activity: Timeout          | 1
-    ##   0.906218 |    source: asu_stroke       |       new: asu_stroke1      | 1.08267
-    ##    1.08267 |   arrival: asu_stroke1      |  activity: Timeout          | 1
-    ##    1.08267 |    source: asu_stroke       |       new: asu_stroke2      | 2.75156
-    ##    2.17433 |   arrival: asu_other1       |  activity: Timeout          | 1
-    ##    2.17433 |    source: asu_other        |       new: asu_other2       | 4.61283
-    ##    2.75156 |   arrival: asu_stroke2      |  activity: Timeout          | 1
-    ##    2.75156 |    source: asu_stroke       |       new: asu_stroke3      | 4.23668
-    ##    3.96819 |   arrival: asu_neuro1       |  activity: Timeout          | 1
-    ##    3.96819 |    source: asu_neuro        |       new: asu_neuro2       | 19.8944
-    ##    4.23668 |   arrival: asu_stroke3      |  activity: Timeout          | 1
-    ##    4.23668 |    source: asu_stroke       |       new: asu_stroke4      | 5.50213
-    ##    4.61283 |   arrival: asu_other2       |  activity: Timeout          | 1
-    ##    4.61283 |    source: asu_other        |       new: asu_other3       | 7.92561
-    ##    5.50213 |   arrival: asu_stroke4      |  activity: Timeout          | 1
-    ##    5.50213 |    source: asu_stroke       |       new: asu_stroke5      | 7.75337
-    ##    7.75337 |   arrival: asu_stroke5      |  activity: Timeout          | 1
-    ##    7.75337 |    source: asu_stroke       |       new: asu_stroke6      | 8.53907
-    ##    7.92561 |   arrival: asu_other3       |  activity: Timeout          | 1
-    ##    7.92561 |    source: asu_other        |       new: asu_other4       | 9.00379
-    ##    8.53907 |   arrival: asu_stroke6      |  activity: Timeout          | 1
-    ##    8.53907 |    source: asu_stroke       |       new: asu_stroke7      | 9.24525
-    ##    9.00379 |   arrival: asu_other4       |  activity: Timeout          | 1
-    ##    9.00379 |    source: asu_other        |       new: asu_other5       | 16.5702
-    ##    9.24525 |   arrival: asu_stroke7      |  activity: Timeout          | 1
-    ##    9.24525 |    source: asu_stroke       |       new: asu_stroke8      | 10.0155
+    ##    2.39134 |   arrival: asu_stroke1      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    2.39134 |    source: asu_stroke       |       new: asu_stroke2      | 3.85858
+    ##    2.39134 |   arrival: asu_stroke1      |  activity: Timeout          | 1
+    ##    3.50836 |   arrival: asu_other1       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    3.50836 |    source: asu_other        |       new: asu_other2       | 6.8829
+    ##    3.50836 |   arrival: asu_other1       |  activity: Timeout          | 1
+    ##    3.85858 |   arrival: asu_stroke2      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    3.85858 |    source: asu_stroke       |       new: asu_stroke3      | 4.09754
+    ##    3.85858 |   arrival: asu_stroke2      |  activity: Timeout          | 1
+    ##    4.09754 |   arrival: asu_stroke3      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    4.09754 |    source: asu_stroke       |       new: asu_stroke4      | 6.34878
+    ##    4.09754 |   arrival: asu_stroke3      |  activity: Timeout          | 1
+    ##    5.82851 |   arrival: asu_neuro1       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    5.82851 |    source: asu_neuro        |       new: asu_neuro2       | 7.04147
+    ##    5.82851 |   arrival: asu_neuro1       |  activity: Timeout          | 1
+    ##    6.34878 |   arrival: asu_stroke4      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    6.34878 |    source: asu_stroke       |       new: asu_stroke5      | 9.1862
+    ##    6.34878 |   arrival: asu_stroke4      |  activity: Timeout          | 1
+    ##     6.8829 |   arrival: asu_other2       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##     6.8829 |    source: asu_other        |       new: asu_other3       | 7.82408
+    ##     6.8829 |   arrival: asu_other2       |  activity: Timeout          | 1
+    ##    7.04147 |   arrival: asu_neuro2       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    7.04147 |    source: asu_neuro        |       new: asu_neuro3       | 7.42333
+    ##    7.04147 |   arrival: asu_neuro2       |  activity: Timeout          | 1
+    ##    7.42333 |   arrival: asu_neuro3       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    7.42333 |    source: asu_neuro        |       new: asu_neuro4       | 9.50669
+    ##    7.42333 |   arrival: asu_neuro3       |  activity: Timeout          | 1
+    ##    7.82408 |   arrival: asu_other3       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    7.82408 |    source: asu_other        |       new: asu_other4       | 11.5787
+    ##    7.82408 |   arrival: asu_other3       |  activity: Timeout          | 1
+    ##     9.1862 |   arrival: asu_stroke5      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##     9.1862 |    source: asu_stroke       |       new: asu_stroke6      | 9.38982
+    ##     9.1862 |   arrival: asu_stroke5      |  activity: Timeout          | 1
+    ##    9.38982 |   arrival: asu_stroke6      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    9.38982 |    source: asu_stroke       |       new: asu_stroke7      | 12.5949
+    ##    9.38982 |   arrival: asu_stroke6      |  activity: Timeout          | 1
     ##     9.5063 |   arrival: rehab_stroke0    |  activity: Timeout          | 1
-    ##     9.5063 |    source: rehab_stroke     |       new: rehab_stroke1    | 15.9181
-    ##    10.0155 |   arrival: asu_stroke8      |  activity: Timeout          | 1
-    ##    10.0155 |    source: asu_stroke       |       new: asu_stroke9      | 10.6946
-    ##    10.6946 |   arrival: asu_stroke9      |  activity: Timeout          | 1
-    ##    10.6946 |    source: asu_stroke       |       new: asu_stroke10     | 10.8218
-    ##    10.8218 |   arrival: asu_stroke10     |  activity: Timeout          | 1
-    ##    10.8218 |    source: asu_stroke       |       new: asu_stroke11     | 10.8932
-    ##    10.8932 |   arrival: asu_stroke11     |  activity: Timeout          | 1
-    ##    10.8932 |    source: asu_stroke       |       new: asu_stroke12     | 11.5876
+    ##     9.5063 |    source: rehab_stroke     |       new: rehab_stroke1    | 30.3958
+    ##    9.50669 |   arrival: asu_neuro4       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    9.50669 |    source: asu_neuro        |       new: asu_neuro5       | 10.6731
+    ##    9.50669 |   arrival: asu_neuro4       |  activity: Timeout          | 1
+    ##    10.6731 |   arrival: asu_neuro5       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    10.6731 |    source: asu_neuro        |       new: asu_neuro6       | 11.4058
+    ##    10.6731 |   arrival: asu_neuro5       |  activity: Timeout          | 1
+    ##    10.9893 |   arrival: asu_tia0         |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    10.9893 |    source: asu_tia          |       new: asu_tia1         | 13.7955
     ##    10.9893 |   arrival: asu_tia0         |  activity: Timeout          | 1
-    ##    10.9893 |    source: asu_tia          |       new: asu_tia1         | 47.8074
-    ##    11.5876 |   arrival: asu_stroke12     |  activity: Timeout          | 1
-    ##    11.5876 |    source: asu_stroke       |       new: asu_stroke13     | 12.9956
-    ##    12.9956 |   arrival: asu_stroke13     |  activity: Timeout          | 1
-    ##    12.9956 |    source: asu_stroke       |       new: asu_stroke14     | 14.1918
-    ##    14.1918 |   arrival: asu_stroke14     |  activity: Timeout          | 1
-    ##    14.1918 |    source: asu_stroke       |       new: asu_stroke15     | 15.9141
-    ##    15.9141 |   arrival: asu_stroke15     |  activity: Timeout          | 1
-    ##    15.9141 |    source: asu_stroke       |       new: asu_stroke16     | 15.9588
-    ##    15.9181 |   arrival: rehab_stroke1    |  activity: Timeout          | 1
-    ##    15.9181 |    source: rehab_stroke     |       new: rehab_stroke2    | 22.9815
-    ##    15.9588 |   arrival: asu_stroke16     |  activity: Timeout          | 1
-    ##    15.9588 |    source: asu_stroke       |       new: asu_stroke17     | 17.5434
-    ##    16.5702 |   arrival: asu_other5       |  activity: Timeout          | 1
-    ##    16.5702 |    source: asu_other        |       new: asu_other6       | 17.2215
-    ##    17.2215 |   arrival: asu_other6       |  activity: Timeout          | 1
-    ##    17.2215 |    source: asu_other        |       new: asu_other7       | 20.4942
-    ##    17.5434 |   arrival: asu_stroke17     |  activity: Timeout          | 1
-    ##    17.5434 |    source: asu_stroke       |       new: asu_stroke18     | 17.9055
-    ##    17.9055 |   arrival: asu_stroke18     |  activity: Timeout          | 1
-    ##    17.9055 |    source: asu_stroke       |       new: asu_stroke19     | 18.7757
-    ##    18.7757 |   arrival: asu_stroke19     |  activity: Timeout          | 1
-    ##    18.7757 |    source: asu_stroke       |       new: asu_stroke20     | 19.6776
-    ##    19.6776 |   arrival: asu_stroke20     |  activity: Timeout          | 1
-    ##    19.6776 |    source: asu_stroke       |       new: asu_stroke21     | 19.9596
-    ##    19.8944 |   arrival: asu_neuro2       |  activity: Timeout          | 1
-    ##    19.8944 |    source: asu_neuro        |       new: asu_neuro3       | 23.7819
-    ##    19.9596 |   arrival: asu_stroke21     |  activity: Timeout          | 1
-    ##    19.9596 |    source: asu_stroke       |       new: asu_stroke22     | 21.1935
+    ##    11.4058 |   arrival: asu_neuro6       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    11.4058 |    source: asu_neuro        |       new: asu_neuro7       | 14.1113
+    ##    11.4058 |   arrival: asu_neuro6       |  activity: Timeout          | 1
+    ##    11.5787 |   arrival: asu_other4       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    11.5787 |    source: asu_other        |       new: asu_other5       | 14.9369
+    ##    11.5787 |   arrival: asu_other4       |  activity: Timeout          | 1
+    ##    12.5949 |   arrival: asu_stroke7      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    12.5949 |    source: asu_stroke       |       new: asu_stroke8      | 13.8908
+    ##    12.5949 |   arrival: asu_stroke7      |  activity: Timeout          | 1
+    ##    13.7955 |   arrival: asu_tia1         |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    13.7955 |    source: asu_tia          |       new: asu_tia2         | 25.8135
+    ##    13.7955 |   arrival: asu_tia1         |  activity: Timeout          | 1
+    ##    13.8908 |   arrival: asu_stroke8      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    13.8908 |    source: asu_stroke       |       new: asu_stroke9      | 14.5563
+    ##    13.8908 |   arrival: asu_stroke8      |  activity: Timeout          | 1
+    ##    14.1113 |   arrival: asu_neuro7       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    14.1113 |    source: asu_neuro        |       new: asu_neuro8       | 17.6048
+    ##    14.1113 |   arrival: asu_neuro7       |  activity: Timeout          | 1
+    ##    14.5563 |   arrival: asu_stroke9      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    14.5563 |    source: asu_stroke       |       new: asu_stroke10     | 15.1733
+    ##    14.5563 |   arrival: asu_stroke9      |  activity: Timeout          | 1
+    ##    14.9369 |   arrival: asu_other5       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    14.9369 |    source: asu_other        |       new: asu_other6       | 16.2881
+    ##    14.9369 |   arrival: asu_other5       |  activity: Timeout          | 1
+    ##    15.1733 |   arrival: asu_stroke10     |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    15.1733 |    source: asu_stroke       |       new: asu_stroke11     | 16.8859
+    ##    15.1733 |   arrival: asu_stroke10     |  activity: Timeout          | 1
+    ##    16.2881 |   arrival: asu_other6       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    16.2881 |    source: asu_other        |       new: asu_other7       | 18.0158
+    ##    16.2881 |   arrival: asu_other6       |  activity: Timeout          | 1
+    ##    16.8859 |   arrival: asu_stroke11     |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    16.8859 |    source: asu_stroke       |       new: asu_stroke12     | 18.4861
+    ##    16.8859 |   arrival: asu_stroke11     |  activity: Timeout          | 1
+    ##    17.6048 |   arrival: asu_neuro8       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    17.6048 |    source: asu_neuro        |       new: asu_neuro9       | 18.3603
+    ##    17.6048 |   arrival: asu_neuro8       |  activity: Timeout          | 1
+    ##    18.0158 |   arrival: asu_other7       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    18.0158 |    source: asu_other        |       new: asu_other8       | 21.5547
+    ##    18.0158 |   arrival: asu_other7       |  activity: Timeout          | 1
+    ##    18.3603 |   arrival: asu_neuro9       |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    18.3603 |    source: asu_neuro        |       new: asu_neuro10      | 18.6831
+    ##    18.3603 |   arrival: asu_neuro9       |  activity: Timeout          | 1
+    ##    18.4861 |   arrival: asu_stroke12     |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    18.4861 |    source: asu_stroke       |       new: asu_stroke13     | 18.9841
+    ##    18.4861 |   arrival: asu_stroke12     |  activity: Timeout          | 1
+    ##    18.6831 |   arrival: asu_neuro10      |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    18.6831 |    source: asu_neuro        |       new: asu_neuro11      | 22.7153
+    ##    18.6831 |   arrival: asu_neuro10      |  activity: Timeout          | 1
+    ##    18.9841 |   arrival: asu_stroke13     |  activity: SetAttribute     | [post_asu_destination], function(), 0, N, 0
+    ##    18.9841 |    source: asu_stroke       |       new: asu_stroke14     | 20.8705
+    ##    18.9841 |   arrival: asu_stroke13     |  activity: Timeout          | 1
 
     ## $arrivals
     ## [1] name          start_time    end_time      activity_time resource     

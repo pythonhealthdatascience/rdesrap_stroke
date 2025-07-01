@@ -68,7 +68,15 @@ create_asu_los <- function(
   neuro_mean = 4.0, neuro_sd = 5.0,
   other_mean = 3.8, other_sd = 5.2
 ) {
-  return(as.list(environment()))
+  list(
+    stroke_noesd = list(mean = stroke_noesd_mean, sd = stroke_noesd_sd),
+    stroke_esd = list(mean = stroke_esd_mean, sd = stroke_esd_sd),
+    stroke_mortality = list(mean = stroke_mortality_mean,
+                            sd = stroke_mortality_sd),
+    tia = list(mean = tia_mean, sd = tia_sd),
+    neuro = list(mean = neuro_mean, sd = neuro_sd),
+    other = list(mean = other_mean, sd = other_sd)
+  )
 }
 
 #' Rehabilitation unit length of stay (LOS) distributions (days).
@@ -96,7 +104,13 @@ create_rehab_los <- function(
   neuro_mean = 27.6, neuro_sd = 28.4,
   other_mean = 16.1, other_sd = 14.1
 ) {
-  return(as.list(environment()))
+  list(
+    stroke_noesd = list(mean = stroke_noesd_mean, sd = stroke_noesd_sd),
+    stroke_esd = list(mean = stroke_esd_mean, sd = stroke_esd_sd),
+    tia = list(mean = tia_mean, sd = tia_sd),
+    neuro = list(mean = neuro_mean, sd = neuro_sd),
+    other = list(mean = other_mean, sd = other_sd)
+  )
 }
 
 #' ASU routing probabilities.
@@ -131,7 +145,12 @@ create_asu_routing <- function(
   neuro_rehab = 0.11, neuro_esd = 0.05, neuro_other = 0.84,
   other_rehab = 0.05, other_esd = 0.10, other_other = 0.85
 ) {
-  return(as.list(environment()))
+  list(
+    stroke = list(rehab = stroke_rehab, esd = stroke_esd, other = stroke_other),
+    tia = list(rehab = tia_rehab, esd = tia_esd, other = tia_other),
+    neuro = list(rehab = neuro_rehab, esd = neuro_esd, other = neuro_other),
+    other = list(rehab = other_rehab, esd = other_esd, other = other_other)
+  )
 }
 
 #' Rehabilitation unit routing probabilities.
@@ -161,7 +180,12 @@ create_rehab_routing <- function(
   neuro_esd = 0.09, neuro_other = 0.91,
   other_esd = 0.13, other_other = 0.88
 ) {
-  return(as.list(environment()))
+  list(
+    stroke = list(esd = stroke_esd, other = stroke_other),
+    tia = list(esd = tia_esd, other = tia_other),
+    neuro = list(esd = neuro_esd, other = neuro_other),
+    other = list(esd = other_esd, other = other_other)
+  )
 }
 
 #' Generate complete parameter list for simulation.

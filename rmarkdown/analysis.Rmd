@@ -16,6 +16,7 @@ devtools::load_all()
 library(simulation)
 ```
 
+
 ```{r}
 model(run_number = 1L, param = create_parameters(), set_seed = TRUE)
 ```
