@@ -32,11 +32,9 @@ model <- function(run_number, param, set_seed = TRUE) {
 
       # Create patient trajectory
       traj <- if (unit == "asu") {
-        create_asu_trajectory(
-          env = env, patient_type = patient_type, param = param
-        )
+        create_asu_trajectory(env, patient_type, param)
       } else {
-        create_rehab_trajectory(patient_type, param)
+        create_rehab_trajectory(env, patient_type, param)
       }
 
       # Add patient generator using the created trajectory

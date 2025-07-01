@@ -25,8 +25,7 @@ create_asu_trajectory <- function(env, patient_type, param) {
   # Set up simmer trajectory object...
   trajectory(paste0("ASU_", patient_type, "_path")) |>
 
-    # Sample destination after ASU (we do this immediately on arrival in the
-    # ASU, as the destination influences the length of stay)
+    # Sample destination after ASU (as destination influences length of stay)
     set_attribute("post_asu_destination", function() {
       sample_routing(prob_list = param[["asu_routing"]][[patient_type]])
     }) |>
@@ -42,9 +41,11 @@ create_asu_trajectory <- function(env, patient_type, param) {
       if (patient_type == "stroke") {
         los_params <- switch(
           dest,
-          "esd" = param[["asu_los_lnorm"]][["stroke_esd"]],
-          "rehab" = param[["asu_los_lnorm"]][["stroke_noesd"]],
-          param[["asu_los_lnorm"]][["stroke_mortality"]]  # Default case
+          esd = param[["asu_los_lnorm"]][["stroke_esd"]],
+          rehab = param[["asu_los_lnorm"]][["stroke_noesd"]],
+          other = param[["asu_los_lnorm"]][["stroke_mortality"]],
+          stop("Stroke post-asu destination '", dest, "' invalid",
+               call. = FALSE)
         )
       } else {
         los_params <- param[["asu_los_lnorm"]][[patient_type]]

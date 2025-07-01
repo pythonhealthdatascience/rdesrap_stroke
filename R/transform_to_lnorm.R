@@ -16,10 +16,10 @@
 
 transform_to_lnorm <- function(los_list) {
   lapply(los_list, function(x) {
-    variance <- x$sd^2
-    sigma_sq <- log(variance / (x$mean^2) + 1)
+    variance <- x$sd^2L
+    sigma_sq <- log(variance / (x$mean^2L) + 1L)
     sdlog <- sqrt(sigma_sq)
-    meanlog <- log(x$mean) - sigma_sq / 2
+    meanlog <- log(x$mean) - sigma_sq / 2L
     list(meanlog = meanlog, sdlog = sdlog)
   })
 }

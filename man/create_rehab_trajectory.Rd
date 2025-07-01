@@ -4,9 +4,12 @@
 \alias{create_rehab_trajectory}
 \title{Create rehab patient trajectory.}
 \usage{
-create_rehab_trajectory(patient_type, param)
+create_rehab_trajectory(env, patient_type, param)
 }
 \arguments{
+\item{env}{Simmer environment object. The simulation environment where
+generators will be added.}
+
 \item{patient_type}{Character string specifying patient category. Must be
 one of: "stroke", "tia", "neuro", or "other". Determines which arrival rate
 parameter is used.}
@@ -21,5 +24,6 @@ Simmer trajectory object. Defines patient journey logic through the
 healthcare system.
 }
 \description{
-Create rehab patient trajectory.
+Represents patient stay on the rehabilitation unit - samples their (1)
+ destination after rehab, and (2) length of stay (LOS) on the unit.
 }
