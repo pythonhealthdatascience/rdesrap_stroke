@@ -13,7 +13,7 @@
 #' probability of routing to each destination (e.g.
 #' \code{param$rehab_routing$stroke$esd = 0.40}).
 #'
-#' @importFrom simmer trajectory
+#' @importFrom simmer get_attribute log_ set_attribute timeout trajectory
 #' @importFrom stats rlnorm
 #'
 #' @return Simmer trajectory object. Defines patient journey logic through the
@@ -25,13 +25,23 @@ create_rehab_trajectory <- function(env, patient_type, param) {
   # Set up simmer trajectory object...
   trajectory(paste0("rehab_", patient_type, "_path")) |>
 
+    log_("🚶 Arrived at rehab") |>
+
     # Sample destination after rehab (as destination influences length of stay)
     set_attribute("post_rehab_destination", function() {
       sample_routing(prob_list = param[["rehab_routing"]][[patient_type]])
     }) |>
 
-    timeout(function() {
+    log_(function() {
+      # Retrieve attribute, and use to get post-rehab destination as a string
+      dest_index <- get_attribute(env, "post_rehab_destination")
+      dest_names <- names(param[["rehab_routing"]][[patient_type]])
+      dest <- dest_names[dest_index]
+      # Create log message
+      paste0("🎯 Planned rehab -> ", dest_index, " (", dest, ")")
+    }) |>
 
+    set_attribute("rehab_los", function() {
       # Retrieve attribute, and use to get post-rehab destination as a string
       dest_index <- get_attribute(env, "post_rehab_destination")
       dest_names <- names(param[["rehab_routing"]][[patient_type]])
@@ -56,5 +66,14 @@ create_rehab_trajectory <- function(env, patient_type, param) {
         meanlog = los_params[["meanlog"]],
         sdlog = los_params[["sdlog"]]
       )
-    })
+    }) |>
+
+    log_(function() {
+      paste0("⏳ Rehab length of stay: ",
+             round(get_attribute(env, "rehab_los"), 3L))
+    }) |>
+
+    timeout(function() get_attribute(env, "rehab_los")) |>
+
+    log_("🏁 Rehab stay completed")
 }

@@ -26,8 +26,8 @@ model <- function(run_number, param, set_seed = TRUE) {
   param[["asu_los_lnorm"]] <- transform_to_lnorm(param[["asu_los"]])
   param[["rehab_los_lnorm"]] <- transform_to_lnorm(param[["rehab_los"]])
 
-  # Create simmer environment
-  env <- simmer("simulation", verbose = verbose)
+  # Create simmer environment - set verbose to FALSE as using custom logs
+  env <- simmer("simulation", verbose = FALSE)
 
   # Add ASU and rehab direct admission patient generators
   for (unit in c("asu", "rehab")) {
@@ -42,7 +42,7 @@ model <- function(run_number, param, set_seed = TRUE) {
 
       # Add patient generator using the created trajectory
       sim_log <- capture.output(
-        env <- add_patient_generator(
+        env <- add_patient_generator( # nolint
           env = env,
           trajectory = traj,
           unit = unit,
@@ -55,7 +55,7 @@ model <- function(run_number, param, set_seed = TRUE) {
 
   # Run the model
   sim_log <- capture.output(
-    env <- env |>
+    env <- env |> # nolint
       simmer::run(20L) |>
       wrap()
   )

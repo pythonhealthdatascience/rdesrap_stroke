@@ -13,7 +13,7 @@
 #' of routing to each destination (e.g.
 #' \code{param$asu_routing$stroke$rehab = 0.24}).
 #'
-#' @importFrom simmer branch trajectory
+#' @importFrom simmer branch get_attribute log_ set_attribute timeout trajectory
 #' @importFrom stats rlnorm
 #'
 #' @return Simmer trajectory object. Defines patient journey logic through the
@@ -25,13 +25,23 @@ create_asu_trajectory <- function(env, patient_type, param) {
   # Set up simmer trajectory object...
   trajectory(paste0("ASU_", patient_type, "_path")) |>
 
+    log_("🚶 Arrived at ASU") |>
+
     # Sample destination after ASU (as destination influences length of stay)
     set_attribute("post_asu_destination", function() {
       sample_routing(prob_list = param[["asu_routing"]][[patient_type]])
     }) |>
 
-    timeout(function() {
+    log_(function() {
+      # Retrieve attribute, and use to get post-ASU destination as a string
+      dest_index <- get_attribute(env, "post_asu_destination")
+      dest_names <- names(param[["asu_routing"]][[patient_type]])
+      dest <- dest_names[dest_index]
+      # Create log message
+      paste0("🎯 Planned ASU -> ", dest_index, " (", dest, ")")
+    }) |>
 
+    set_attribute("asu_los", function() {
       # Retrieve attribute, and use to get post-ASU destination as a string
       dest_index <- get_attribute(env, "post_asu_destination")
       dest_names <- names(param[["asu_routing"]][[patient_type]])
@@ -58,6 +68,15 @@ create_asu_trajectory <- function(env, patient_type, param) {
         sdlog = los_params[["sdlog"]]
       )
     }) |>
+
+    log_(function() {
+      paste0("⏳ ASU length of stay: ",
+             round(get_attribute(env, "asu_los"), 3L))
+    }) |>
+
+    timeout(function() get_attribute(env, "asu_los")) |>
+
+    log_("🏁 ASU stay completed") |>
 
     # If that patient's destination is rehab, then start on that trajectory
     branch(
