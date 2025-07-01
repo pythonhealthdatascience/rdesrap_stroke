@@ -6,8 +6,8 @@
 #' may not wish to do if being set elsewhere - such as done in runner()).
 #' Default is TRUE.
 #'
-#' @importFrom simmer add_generator get_mon_arrivals get_mon_resources simmer
-#' @importFrom simmer timeout trajectory wrap
+#' @importFrom simmer get_mon_arrivals get_mon_resources simmer timeout
+#' @importFrom simmer trajectory wrap
 #'
 #' @return TBC
 #' @export
@@ -23,15 +23,25 @@ model <- function(run_number, param, set_seed = TRUE) {
   env <- simmer("simulation", verbose = TRUE)
 
   # Define the stroke patient trajectory
-  stroke_patient <- trajectory("stroke_patient_path") |>
-    timeout(1)
+  patient <- trajectory("patient_path") |>
+    timeout(1L)
 
-  # Add patient generator
+  # Add ASU and rehab direct admission patient generators
+  for (unit in c("asu", "rehab")) {
+    for (patient_type in names(param[[paste0(unit, "_arrivals")]])) {
+      env <- add_patient_generator(
+        env = env,
+        trajectory = patient,
+        unit = unit,
+        patient_type = patient_type,
+        param = param
+      )
+    }
+  }
+
+  # Run the model
   env <- env |>
-    add_generator("stroke_patient", stroke_patient, function () {
-      rexp(n = 1L, rate = 1L / param[["asu_arrivals"]][["stroke"]])
-    }) |>
-    simmer::run(20) |>
+    simmer::run(20L) |>
     wrap()
 
   # Extract the monitored arrivals and resources information from the simmer

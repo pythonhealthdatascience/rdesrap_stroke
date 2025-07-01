@@ -1,6 +1,11 @@
 ---
 title: "analysis"
-output: html_document
+author: "Amy Heather"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+      toc: true
+      html_preview: false
 ---
 
 ```{r}
