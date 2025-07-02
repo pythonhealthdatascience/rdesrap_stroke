@@ -11,13 +11,18 @@ output:
 ```{r}
 # Load the package from the local directory
 devtools::load_all()
-
-# Load the package
-library(simulation)
 ```
 
+```{r}
+# nolint start: undesirable_function_linter
+# Load the package
+library(dplyr)
+library(simulation)
+# nolint end
+```
 
 ```{r}
 param <- create_parameters(log_to_console = TRUE)
-model(run_number = 1L, param = param, set_seed = TRUE)
+result <- model(run_number = 1L, param = param, set_seed = TRUE)
+arrange(result, start_time)
 ```

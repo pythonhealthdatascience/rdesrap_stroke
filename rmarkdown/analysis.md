@@ -1,7 +1,7 @@
 analysis
 ================
 Amy Heather
-2025-07-01
+2025-07-02
 
 ``` r
 # Load the package from the local directory
@@ -11,13 +11,30 @@ devtools::load_all()
     ## ℹ Loading simulation
 
 ``` r
+# nolint start: undesirable_function_linter
 # Load the package
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(simulation)
+# nolint end
 ```
 
 ``` r
 param <- create_parameters(log_to_console = TRUE)
-model(run_number = 1L, param = param, set_seed = TRUE)
+result <- model(run_number = 1L, param = param, set_seed = TRUE)
 ```
 
     ##   [1] "Parameters:"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
@@ -174,11 +191,46 @@ model(run_number = 1L, param = param, set_seed = TRUE)
     ## [152] "19.8821: asu_stroke19: 🎯 Planned ASU -> 3 (other)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
     ## [153] "19.8821: asu_stroke19: ⏳ ASU length of stay: 1.819"
 
-    ## $arrivals
-    ## [1] name          start_time    end_time      activity_time resource     
-    ## <0 rows> (or 0-length row.names)
-    ## 
-    ## $resources
-    ## [1] resource   time       server     queue      capacity   queue_size system    
-    ## [8] limit     
-    ## <0 rows> (or 0-length row.names)
+``` r
+arrange(result, start_time)
+```
+
+    ##             name start_time  end_time activity_time finished replication
+    ## 1     asu_other0  0.4473448  2.676165     2.2288198     TRUE           1
+    ## 2     asu_neuro0  0.5245442  4.171772     3.6472278     TRUE           1
+    ## 3    asu_stroke0  0.9062182  1.422308     0.5160899     TRUE           1
+    ## 4    asu_stroke1  1.1893125  5.509324     4.3200113     TRUE           1
+    ## 5     asu_other1  1.2902898  6.502389     5.2120987     TRUE           1
+    ## 6    asu_stroke2  1.9750085 12.640820    10.6658111     TRUE           1
+    ## 7    asu_stroke3  2.6540471  7.370079     4.7160317     TRUE           1
+    ## 8     asu_other2  2.7220399  6.960086     4.2380463     TRUE           1
+    ## 9     asu_neuro1  3.2678517  3.867813     0.5999612     TRUE           1
+    ## 10    asu_other3  5.9118414  9.356139     3.4442981     TRUE           1
+    ## 11    asu_other4  6.5630745  9.901922     3.3388479     TRUE           1
+    ## 12    asu_neuro2  6.7174941        NA            NA    FALSE           1
+    ## 13   asu_stroke4  7.4047666 11.548437     4.1436706     TRUE           1
+    ## 14   asu_stroke5  7.7291507 10.492783     2.7636327     TRUE           1
+    ## 15    asu_other5  8.9680111  9.644429     0.6764179     TRUE           1
+    ## 16   asu_stroke6  9.2809003 10.249020     0.9681194     TRUE           1
+    ## 17 rehab_stroke0  9.5062960        NA            NA    FALSE           1
+    ## 18   asu_stroke7  9.9287833 18.114076     8.1852931     TRUE           1
+    ## 19   asu_stroke8 10.0363922        NA            NA    FALSE           1
+    ## 20   asu_stroke9 10.3331093 10.844631     0.5115214     TRUE           1
+    ## 21    asu_neuro3 10.6050662 14.143857     3.5387909     TRUE           1
+    ## 22      asu_tia0 10.9892778 12.129621     1.1403433     TRUE           1
+    ## 23    asu_neuro4 13.5331919        NA            NA    FALSE           1
+    ## 24  asu_stroke10 13.6095765 16.845102     3.2355256     TRUE           1
+    ## 25    asu_neuro5 13.7205915 15.051997     1.3314053     TRUE           1
+    ## 26  asu_stroke11 13.8532754        NA            NA    FALSE           1
+    ## 27    asu_other6 13.8727452 15.859368     1.9866225     TRUE           1
+    ## 28  asu_stroke12 13.9904583 15.084152     1.0936941     TRUE           1
+    ## 29 rehab_stroke1 14.0813875        NA            NA    FALSE           1
+    ## 30  asu_stroke13 15.8908936 18.801468     2.9105743     TRUE           1
+    ## 31    asu_neuro6 16.6529204        NA            NA    FALSE           1
+    ## 32  asu_stroke14 17.1432238        NA            NA    FALSE           1
+    ## 33  asu_stroke15 18.1849052        NA            NA    FALSE           1
+    ## 34  asu_stroke16 18.3422720        NA            NA    FALSE           1
+    ## 35  asu_stroke17 18.8504573        NA            NA    FALSE           1
+    ## 36    asu_other7 19.7390660        NA            NA    FALSE           1
+    ## 37  asu_stroke18 19.8417499        NA            NA    FALSE           1
+    ## 38  asu_stroke19 19.8820623        NA            NA    FALSE           1

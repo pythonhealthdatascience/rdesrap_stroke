@@ -6,6 +6,7 @@
 #' may not wish to do if being set elsewhere - such as done in \code{runner()}).
 #' Default is TRUE.
 #'
+#' @importFrom dplyr filter
 #' @importFrom simmer get_mon_arrivals get_mon_resources simmer wrap
 #' @importFrom utils capture.output
 #'
@@ -27,6 +28,7 @@ model <- function(run_number, param, set_seed = TRUE) {
   param[["rehab_los_lnorm"]] <- transform_to_lnorm(param[["rehab_los"]])
 
   # Create simmer environment - set verbose to FALSE as using custom logs
+  # (but can change to TRUE if want to see default simmer logs as well)
   env <- simmer("simulation", verbose = FALSE)
 
   # Add ASU and rehab direct admission patient generators
@@ -41,14 +43,12 @@ model <- function(run_number, param, set_seed = TRUE) {
       }
 
       # Add patient generator using the created trajectory
-      sim_log <- capture.output(
-        env <- add_patient_generator( # nolint
-          env = env,
-          trajectory = traj,
-          unit = unit,
-          patient_type = patient_type,
-          param = param
-        )
+      env <- add_patient_generator(
+        env = env,
+        trajectory = traj,
+        unit = unit,
+        patient_type = patient_type,
+        param = param
       )
     }
   }
@@ -75,12 +75,11 @@ model <- function(run_number, param, set_seed = TRUE) {
     }
   }
 
-  # Extract the monitored arrivals and resources information from the simmer
-  # environment object
-  result <- list(
-    arrivals = get_mon_arrivals(env, per_resource = TRUE, ongoing = TRUE),
-    resources = get_mon_resources(env)
-  )
+  # Extract the monitored arrivals info from the simmer environment object.
+  # Remove patients with start time of -1, as they are patients whose arrival
+  # was sampled but falls after the end of the smiulation.
+  result <- get_mon_arrivals(env, ongoing = TRUE) |>
+    filter(.data[["start_time"]] != -1L)
 
   return(result)
 }
