@@ -17,6 +17,7 @@
 #'
 #' @return A list of data frames, one per resource, each containing occupancy
 #' statistics.
+#' @export
 
 get_occupancy_stats <- function(occupancy) {
 

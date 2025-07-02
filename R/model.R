@@ -6,7 +6,7 @@
 #' may not wish to do if being set elsewhere - such as done in \code{runner()}).
 #' Default is TRUE.
 #'
-#' @importFrom dplyr filter
+#' @importFrom dplyr filter mutate rowwise ungroup
 #' @importFrom simmer add_resource get_mon_arrivals get_mon_resources simmer
 #' @importFrom simmer wrap
 #' @importFrom utils capture.output
@@ -62,8 +62,7 @@ model <- function(run_number, param, set_seed = TRUE) {
   }
 
   # Run the model
-  sim_length <- 20L
-  # sim_length <- param[["data_collection_period"]] + param[["warm_up_period"]]
+  sim_length <- param[["data_collection_period"]] + param[["warm_up_period"]]
   sim_log <- capture.output(
     env <- env |> # nolint
       simmer::run(sim_length) |>
@@ -97,7 +96,7 @@ model <- function(run_number, param, set_seed = TRUE) {
   # Calculate occupancy at end of each day (i.e. at time 1, 2, 3, 4...)
   # Make dataframe with one row per resource per day to count patients
   occupancy <- expand.grid(
-    resource = unique(arrivals$resource),
+    resource = unique(arrivals[["resource"]]),
     time = days
   ) |>
     rowwise() |>
@@ -107,12 +106,17 @@ model <- function(run_number, param, set_seed = TRUE) {
       # - Have not yet left by this day (end_time > time), or have NA end_time
       #   (still present at simulation end)
       occupancy = sum(
-        arrivals$resource == .data[["resource"]] &
-          arrivals$start_time <= time &
-          (is.na(arrivals$end_time) | arrivals$end_time > time)
+        arrivals[["resource"]] == .data[["resource"]] &
+          arrivals[["start_time"]] <= .data[["time"]] &
+          (is.na(arrivals[["end_time"]]) |
+             arrivals[["end_time"]] > .data[["time"]])
       )
     ) |>
     ungroup()
+
+  # Set replication
+  arrivals <- mutate(arrivals, replication = run_number)
+  occupancy <- mutate(occupancy, replication = run_number)
 
   return(list(arrivals = arrivals, occupancy = occupancy))
 }

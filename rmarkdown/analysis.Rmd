@@ -1,5 +1,5 @@
 ---
-title: "analysis"
+title: "Analysis"
 author: "Amy Heather"
 date: "`r Sys.Date()`"
 output:
@@ -8,25 +8,74 @@ output:
       html_preview: false
 ---
 
+This analysis reproduces the analysis performed in:
+
+> Monks T, Worthington D, Allen M, Pitt M, Stein K, James MA. A modelling tool for capacity planning in acute and community stroke services. BMC Health Serv Res. 2016 Sep 29;16(1):530. doi: 10.1186/s12913-016-1789-4. PMID: 27688152; PMCID: PMC5043535.
+
+It is organised into:
+
+* Set-up
+* Base case
+  * Run the model
+  * Figure 1
+  * Theory: probability of delay
+  * Figure 3
+* Scenario analysis: altering arrivals
+  * Scenario 1
+  * Table 2
+  * Scenario 4
+  * Supplementary table 1
+* Scenario analysis: pooling beds
+  * Theory: pooling beds
+  * Scenario 2
+
+## Set-up
+
+Install the latest version of the local simulation package. If running sequentially, `devtools::load_all()` is sufficient. If running in parallel, you must use `devtools::install()`.
+
 ```{r}
-# Load the package from the local directory
-devtools::load_all()
+devtools::install(upgrade = "never")
 ```
 
 ```{r}
 # nolint start: undesirable_function_linter
-# Load the package
-library(dplyr)
+# Import required packages.
+library(dplyr, warn.conflicts = FALSE)
 library(simulation)
 # nolint end
 ```
 
 ```{r}
-param <- create_parameters(log_to_console = TRUE)
-result <- model(run_number = 1L, param = param, set_seed = TRUE)
-result
+start_time <- Sys.time()
 ```
 
 ```{r}
-get_occupancy_stats(result[["occupancy"]])
+output_dir <- file.path("..", "outputs")
+```
+
+## Base case
+
+### Run the model
+
+```{r}
+# Run 150 replications in parallel with nine cores
+param <- create_parameters(cores = 9)
+results <- runner(param = param)
+```
+
+```{r}
+get_occupancy_stats(results[["occupancy"]])
+```
+
+## Calculate run time
+
+```{r end_timer}
+# Get run time in seconds
+end_time <- Sys.time()
+runtime <- as.numeric(end_time - start_time, units = "secs")
+
+# Display converted to minutes and seconds
+minutes <- as.integer(runtime / 60L)
+seconds <- as.integer(runtime %% 60L)
+cat(sprintf("Notebook run time: %dm %ds", minutes, seconds))
 ```
