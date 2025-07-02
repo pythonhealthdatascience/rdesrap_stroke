@@ -26,3 +26,7 @@ param <- create_parameters(log_to_console = TRUE)
 result <- model(run_number = 1L, param = param, set_seed = TRUE)
 result
 ```
+
+```{r}
+get_occupancy_stats(result[["occupancy"]])
+```

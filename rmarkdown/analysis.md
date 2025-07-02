@@ -228,18 +228,18 @@ result
     ## 29  asu_stroke18 19.8417499        NA            NA   asu_bed           1
     ## 30  asu_stroke16 18.3422720        NA            NA   asu_bed           1
     ## 31  asu_stroke15 18.1849052        NA            NA   asu_bed           1
-    ## 32  asu_stroke11 13.8532754        NA            NA   asu_bed           1
-    ## 33    asu_neuro4 13.5331919        NA            NA   asu_bed           1
-    ## 34    asu_neuro4 16.7128499        NA            NA rehab_bed           1
-    ## 35   asu_stroke8 10.0363922        NA            NA   asu_bed           1
-    ## 36  asu_stroke14 17.1432238        NA            NA   asu_bed           1
-    ## 37    asu_neuro2  6.7174941        NA            NA   asu_bed           1
-    ## 38    asu_neuro2  8.3881898        NA            NA rehab_bed           1
-    ## 39    asu_other7 19.7390660        NA            NA   asu_bed           1
-    ## 40 rehab_stroke0  9.5062960        NA            NA rehab_bed           1
-    ## 41  asu_stroke17 18.8504573        NA            NA   asu_bed           1
-    ## 42    asu_neuro6 16.6529204        NA            NA   asu_bed           1
-    ## 43 rehab_stroke1 14.0813875        NA            NA rehab_bed           1
+    ## 32  asu_stroke17 18.8504573        NA            NA   asu_bed           1
+    ## 33  asu_stroke14 17.1432238        NA            NA   asu_bed           1
+    ## 34    asu_other7 19.7390660        NA            NA   asu_bed           1
+    ## 35    asu_neuro4 13.5331919        NA            NA   asu_bed           1
+    ## 36    asu_neuro4 16.7128499        NA            NA rehab_bed           1
+    ## 37   asu_stroke8 10.0363922        NA            NA   asu_bed           1
+    ## 38 rehab_stroke1 14.0813875        NA            NA rehab_bed           1
+    ## 39    asu_neuro2  6.7174941        NA            NA   asu_bed           1
+    ## 40    asu_neuro2  8.3881898        NA            NA rehab_bed           1
+    ## 41  asu_stroke11 13.8532754        NA            NA   asu_bed           1
+    ## 42 rehab_stroke0  9.5062960        NA            NA rehab_bed           1
+    ## 43    asu_neuro6 16.6529204        NA            NA   asu_bed           1
     ## 
     ## $occupancy
     ## # A tibble: 42 × 3
@@ -256,3 +256,32 @@ result
     ##  9 asu_bed       4         6
     ## 10 rehab_bed     4         0
     ## # ℹ 32 more rows
+
+``` r
+get_occupancy_stats(result[["occupancy"]])
+```
+
+    ## $asu_bed
+    ##    beds freq        pct      c_pct prob_delay 1_in_n_delay
+    ## 1     0    1 0.04761905 0.04761905 1.00000000            1
+    ## 2     1    0 0.00000000 0.04761905 0.00000000          Inf
+    ## 3     2    0 0.00000000 0.04761905 0.00000000          Inf
+    ## 4     3    1 0.04761905 0.09523810 0.50000000            2
+    ## 5     4    1 0.04761905 0.14285714 0.33333333            3
+    ## 6     5    3 0.14285714 0.28571429 0.50000000            2
+    ## 7     6    6 0.28571429 0.57142857 0.50000000            2
+    ## 8     7    5 0.23809524 0.80952381 0.29411765            3
+    ## 9     8    0 0.00000000 0.80952381 0.00000000          Inf
+    ## 10    9    2 0.09523810 0.90476190 0.10526316           10
+    ## 11   10    1 0.04761905 0.95238095 0.05000000           20
+    ## 12   11    0 0.00000000 0.95238095 0.00000000          Inf
+    ## 13   12    1 0.04761905 1.00000000 0.04761905           21
+    ## 
+    ## $rehab_bed
+    ##   beds freq        pct     c_pct prob_delay 1_in_n_delay
+    ## 1    0    9 0.42857143 0.4285714 1.00000000            1
+    ## 2    1    1 0.04761905 0.4761905 0.10000000           10
+    ## 3    2    4 0.19047619 0.6666667 0.28571429            4
+    ## 4    3    1 0.04761905 0.7142857 0.06666667           15
+    ## 5    4    4 0.19047619 0.9047619 0.21052632            5
+    ## 6    5    2 0.09523810 1.0000000 0.09523810           10
