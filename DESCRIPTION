@@ -20,5 +20,6 @@ RoxygenNote: 7.3.2
 Imports:
     simmer
 Suggests:
-    devtools
+    devtools,
+    dplyr
 Config/testthat/edition: 3
