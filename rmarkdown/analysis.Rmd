@@ -29,6 +29,8 @@ It is organised into:
   * Theory: pooling beds
   * Scenario 2
 
+The generated images are saved and then loaded, so that we view the image as saved (i.e. with the dimensions set in `ggsave()`). This also avoids the creation of a `_files/` directory when knitting the document (which would save all previewed images into that folder also, so they can be rendered and displayed within the output `.md` file, even if we had not specifically saved them). These are viewed using `include_graphics()`, which must be the last command in the cell (or last in the plotting function).
+
 ## Set-up
 
 Install the latest version of the local simulation package. If running sequentially, `devtools::load_all()` is sufficient. If running in parallel, you must use `devtools::install()`.
@@ -41,6 +43,9 @@ devtools::install(upgrade = "never")
 # nolint start: undesirable_function_linter
 # Import required packages.
 library(dplyr, warn.conflicts = FALSE)
+library(ggplot2)
+library(knitr)
+library(scales)
 library(simulation)
 # nolint end
 ```
@@ -59,12 +64,230 @@ output_dir <- file.path("..", "outputs")
 
 ```{r}
 # Run 150 replications in parallel with nine cores
-param <- create_parameters(cores = 9)
+param <- create_parameters(cores = 9L)
 results <- runner(param = param)
 ```
 
 ```{r}
-get_occupancy_stats(results[["occupancy"]])
+occ <- get_occupancy_stats(results[["occupancy"]])
+```
+
+### Figure 1
+
+**Figure 1**. Simulation probability density function for occupancy of an acute stroke unit.
+
+```{r}
+#' Plot the frequency at which each occupancy level was observed in the audit.
+#'
+#' @param df Data frame. Output from \code{get_occupancy_stats()} containing
+#' the frequency each occupancy was observed at.
+#' @param unit String. Name of the unit ("asu" | "rehab").
+#' @param file String. Filename to save the figure to (e.g. "figure.png").
+#' @param path String. Path to save file to (excluding filename).
+
+plot_occupancy_freq <- function(df, unit, file, path = output_dir) {
+  # Get label axis
+  if (unit == "asu") {
+    unit_lab <- "acute"
+  } else if (unit == "rehab") {
+    unit_lab <- "rehabilitation"
+  } else {
+    stop("unit must be either 'acute' or 'rehab'", call. = FALSE)
+  }
+
+  # Create plot
+  p <- ggplot(df, aes(x = .data[["beds"]], y = .data[["pct"]])) +
+    geom_bar(stat = "identity", fill = "black") +
+    scale_x_continuous(breaks = seq(min(df$beds), max(df$beds), by = 1L)) +
+    scale_y_continuous(
+      breaks = seq(0L, 1L, by = 0.02),
+      labels = scales::percent_format(accuracy = 1L)
+    ) +
+    labs(
+      x = paste("No. patients in", unit_lab, "unit"),
+      y = "% observations"
+    ) +
+    theme_bw(base_size = 14L) +
+    theme(
+      panel.border = element_rect(colour = "black", fill = NA, size = 1L),
+      axis.line = element_line(colour = "black"),
+      plot.margin = margin(15L, 15L, 15L, 15L),
+      panel.grid.minor.y = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.x = element_blank()
+    )
+
+  # Save figure
+  if (!dir.exists(path)) dir.create(path, recursive = TRUE)
+  full_path <- file.path(output_dir, file)
+  ggsave(filename = full_path, plot = p,
+         width = 8L, height = 4.5, units = "in", dpi = 300L)
+
+  # View the plot
+  include_graphics(full_path)
+}
+```
+
+**Generate plots...**
+
+(The article just includes a plot for the acute stroke unit).
+
+```{r}
+plot_occupancy_freq(
+  df = occ[["asu_bed"]], unit = "asu", file = "figure1_asu.png"
+)
+plot_occupancy_freq(
+  df = occ[["rehab_bed"]], unit = "rehab", file = "figure1_rehab.png"
+)
+```
+
+### Theory: probability of delay
+
+We can use our frequency and cumulative frequency of occupied beds from the simulation to calculate blocking probability.
+
+For example:
+
+| Beds | `pct` | `c_pct` | Probability of delay |
+| - | - | - | - |
+| 0 | 0.2 | 0.2 | 1.0 |
+| 1 | 0.3 | 0.5 | 0.6 |
+| 2 | 0.4 | 0.9 | 0.44 |
+| 3 | 0.1 | 1.0 | 0.1 |
+
+We can interpret...
+
+* `pct` as the probability of having exactly x beds occupied.
+* `c_pct` as the probability of having x or fewer beds occupied.
+
+We can then calculate `pct/c_pct`, which is the probability of delay when the system has exactly x beds occupied.
+
+Interpretation for 1 bed:
+
+* If we **randomly select a day when the occupancy is 1 or fewer beds**, there's a **60%** chance that the occupancy will be **exactly 1 beds (rather than 0 beds)**.
+
+This can then be connected to the probability of delay by thinking about system capacity:
+
+* If we assume that the unit has a total of 1 beds, then when 1 beds are occupied, the unit is at **full capacity**.
+* Any new patients arriving when 1 beds are occupied would experience a delay.
+* So 0.6 represents the probability that, given we're at or below capacity (0 or 1 beds), we're actually at full capacity (1 beds)
+
+In other words, `pct/c_pct` is the probability that a new arrival will experience a delay when the system has exactly x beds occupied, given that the capacity of the system is x beds.
+
+### Figure 3
+
+**Figure 3**. Simulated trade-off between the probability that a patient is delayed and the no. of acute beds available.
+
+```{r}
+#' Plot the simulated trade-off between the probability of delay and the
+#' number of beds available.
+#'
+#' @param df Data frame. Should contain columns \code{beds} and
+#' \code{prob_delay}.
+#' @param unit String. Name of the unit ("asu" | "rehab").
+#' @param file String. Filename to save the figure to (e.g. "figure.png").
+#' @param path String. Path to save file to (excluding filename).
+
+plot_delay_prob <- function(df, unit, file, path = output_dir) {
+  # Axis label
+  if (unit == "asu") {
+    unit_lab <- "acute"
+  } else if (unit == "rehab") {
+    unit_lab <- "rehabilitation"
+  } else {
+    stop("unit must be either 'acute' or 'rehab'", call. = FALSE)
+  }
+
+  # Create step plot
+  p <- ggplot(df, aes(x = .data[["beds"]], y = .data[["prob_delay"]])) +
+    geom_step(direction = "hv", color = "black", linewidth = 1L) +
+    scale_x_continuous(
+      breaks = seq(min(df$beds), max(df$beds), by = 1L),
+      expand = expansion(mult = c(0L, 0.01))
+    ) +
+    scale_y_continuous(
+      breaks = seq(0L, 1L, by = 0.1),
+      limits = c(0L, 1L),
+      expand = c(0L, 0L)
+    ) +
+    labs(
+      x = paste("No. of", unit_lab, "beds available"),
+      y = "Probability of delay"
+    ) +
+    theme_bw(base_size = 14L) +
+    theme(
+      panel.border = element_rect(colour = "black", fill = NA, size = 1L),
+      axis.line = element_line(colour = "black"),
+      plot.margin = margin(15L, 15L, 15L, 15L),
+      panel.grid.minor = element_blank()
+    )
+
+  # Save figure
+  if (!dir.exists(path)) dir.create(path, recursive = TRUE)
+  full_path <- file.path(output_dir, file)
+  ggsave(filename = full_path, plot = p,
+         width = 8L, height = 4.5, units = "in", dpi = 300L)
+
+  # View the plot
+  include_graphics(full_path)
+}
+```
+
+```{r}
+plot_delay_prob(occ[["asu_bed"]], unit = "asu", file = "figure3_asu.png")
+plot_delay_prob(occ[["rehab_bed"]], unit = "rehab", file = "figure3_rehab.png")
+```
+
+## Scenario analysis: altering arrivals
+
+### Scenario 1
+
+**5% more admissions.** A 5% increase in admissions across all patient subgroups.
+
+```{r}
+```
+
+### Table 2
+
+**Table 2** Likelihood of delay. Current admissions versus 5% more admissions.
+
+This table presents results from the base case and scenario 1 for acute beds 9-14 and rehab beds 10-16.
+
+```{r}
+```
+
+### Scenario 4
+
+**No complex-neurological cases.** Complex neurological patients are excluded from the pathway in order to assess their impact on bed requirements.
+
+```{r}
+```
+
+### Supplementary table 1
+
+**Supplementary Table 1.** Likelihood of delay. Current admissions versus No Complex neurological patients.
+
+```{r}
+```
+
+## Scenario analysis: pooling beds
+
+### Scenario 2
+
+Scenario 2: **Pooling of acute and rehab beds.** The acute and rehab wards are co-located at same site. Beds are pooled and can be used by either acute or rehabilitation patients. Pooling of the total bed stock of 22 is compared to the pooling of an increased bed stock of 26.
+
+```{r}
+```
+
+### Scenario 3
+
+Scenario 3: **Partial pooling of acute and rehab beds.** The acute and rehab wards are co-located at same site. A subset of the 26 beds are pooled and can be used by either acute or rehab patients.
+
+```{r}
+```
+
+### Table 3
+
+```{r}
 ```
 
 ## Calculate run time

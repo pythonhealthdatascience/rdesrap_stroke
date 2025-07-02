@@ -23,5 +23,7 @@ Imports:
     future.apply,
     simmer
 Suggests:
-    devtools
+    devtools,
+    ggplot2,
+    scales
 Config/testthat/edition: 3
