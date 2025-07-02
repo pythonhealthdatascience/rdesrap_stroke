@@ -13,7 +13,8 @@
 #' probability of routing to each destination (e.g.
 #' \code{param$rehab_routing$stroke$esd = 0.40}).
 #'
-#' @importFrom simmer get_attribute log_ set_attribute timeout trajectory
+#' @importFrom simmer get_attribute log_ release seize set_attribute timeout
+#' @importFrom simmer trajectory
 #' @importFrom stats rlnorm
 #'
 #' @return Simmer trajectory object. Defines patient journey logic through the
@@ -26,6 +27,8 @@ create_rehab_trajectory <- function(env, patient_type, param) {
   trajectory(paste0("rehab_", patient_type, "_path")) |>
 
     log_("🚶 Arrived at rehab") |>
+
+    seize("rehab_bed", 1L) |>
 
     # Sample destination after rehab (as destination influences length of stay)
     set_attribute("post_rehab_destination", function() {
@@ -75,5 +78,7 @@ create_rehab_trajectory <- function(env, patient_type, param) {
 
     timeout(function() get_attribute(env, "rehab_los")) |>
 
-    log_("🏁 Rehab stay completed")
+    log_("🏁 Rehab stay completed") |>
+
+    release("rehab_bed", 1L)
 }

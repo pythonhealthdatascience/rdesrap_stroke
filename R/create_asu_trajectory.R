@@ -13,7 +13,8 @@
 #' of routing to each destination (e.g.
 #' \code{param$asu_routing$stroke$rehab = 0.24}).
 #'
-#' @importFrom simmer branch get_attribute log_ set_attribute timeout trajectory
+#' @importFrom simmer branch get_attribute log_ release seize set_attribute
+#' @importFrom simmer timeout trajectory
 #' @importFrom stats rlnorm
 #'
 #' @return Simmer trajectory object. Defines patient journey logic through the
@@ -26,6 +27,8 @@ create_asu_trajectory <- function(env, patient_type, param) {
   trajectory(paste0("ASU_", patient_type, "_path")) |>
 
     log_("🚶 Arrived at ASU") |>
+
+    seize("asu_bed", 1L) |>
 
     # Sample destination after ASU (as destination influences length of stay)
     set_attribute("post_asu_destination", function() {
@@ -77,6 +80,8 @@ create_asu_trajectory <- function(env, patient_type, param) {
     timeout(function() get_attribute(env, "asu_los")) |>
 
     log_("🏁 ASU stay completed") |>
+
+    release("asu_bed", 1L) |>
 
     # If that patient's destination is rehab, then start on that trajectory
     branch(

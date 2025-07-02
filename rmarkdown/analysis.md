@@ -192,45 +192,67 @@ result <- model(run_number = 1L, param = param, set_seed = TRUE)
     ## [153] "19.8821: asu_stroke19: ⏳ ASU length of stay: 1.819"
 
 ``` r
-arrange(result, start_time)
+result
 ```
 
-    ##             name start_time  end_time activity_time finished replication
-    ## 1     asu_other0  0.4473448  2.676165     2.2288198     TRUE           1
-    ## 2     asu_neuro0  0.5245442  4.171772     3.6472278     TRUE           1
-    ## 3    asu_stroke0  0.9062182  1.422308     0.5160899     TRUE           1
-    ## 4    asu_stroke1  1.1893125  5.509324     4.3200113     TRUE           1
-    ## 5     asu_other1  1.2902898  6.502389     5.2120987     TRUE           1
-    ## 6    asu_stroke2  1.9750085 12.640820    10.6658111     TRUE           1
-    ## 7    asu_stroke3  2.6540471  7.370079     4.7160317     TRUE           1
-    ## 8     asu_other2  2.7220399  6.960086     4.2380463     TRUE           1
-    ## 9     asu_neuro1  3.2678517  3.867813     0.5999612     TRUE           1
-    ## 10    asu_other3  5.9118414  9.356139     3.4442981     TRUE           1
-    ## 11    asu_other4  6.5630745  9.901922     3.3388479     TRUE           1
-    ## 12    asu_neuro2  6.7174941        NA            NA    FALSE           1
-    ## 13   asu_stroke4  7.4047666 11.548437     4.1436706     TRUE           1
-    ## 14   asu_stroke5  7.7291507 10.492783     2.7636327     TRUE           1
-    ## 15    asu_other5  8.9680111  9.644429     0.6764179     TRUE           1
-    ## 16   asu_stroke6  9.2809003 10.249020     0.9681194     TRUE           1
-    ## 17 rehab_stroke0  9.5062960        NA            NA    FALSE           1
-    ## 18   asu_stroke7  9.9287833 18.114076     8.1852931     TRUE           1
-    ## 19   asu_stroke8 10.0363922        NA            NA    FALSE           1
-    ## 20   asu_stroke9 10.3331093 10.844631     0.5115214     TRUE           1
-    ## 21    asu_neuro3 10.6050662 14.143857     3.5387909     TRUE           1
-    ## 22      asu_tia0 10.9892778 12.129621     1.1403433     TRUE           1
-    ## 23    asu_neuro4 13.5331919        NA            NA    FALSE           1
-    ## 24  asu_stroke10 13.6095765 16.845102     3.2355256     TRUE           1
-    ## 25    asu_neuro5 13.7205915 15.051997     1.3314053     TRUE           1
-    ## 26  asu_stroke11 13.8532754        NA            NA    FALSE           1
-    ## 27    asu_other6 13.8727452 15.859368     1.9866225     TRUE           1
-    ## 28  asu_stroke12 13.9904583 15.084152     1.0936941     TRUE           1
-    ## 29 rehab_stroke1 14.0813875        NA            NA    FALSE           1
-    ## 30  asu_stroke13 15.8908936 18.801468     2.9105743     TRUE           1
-    ## 31    asu_neuro6 16.6529204        NA            NA    FALSE           1
-    ## 32  asu_stroke14 17.1432238        NA            NA    FALSE           1
-    ## 33  asu_stroke15 18.1849052        NA            NA    FALSE           1
-    ## 34  asu_stroke16 18.3422720        NA            NA    FALSE           1
-    ## 35  asu_stroke17 18.8504573        NA            NA    FALSE           1
-    ## 36    asu_other7 19.7390660        NA            NA    FALSE           1
-    ## 37  asu_stroke18 19.8417499        NA            NA    FALSE           1
-    ## 38  asu_stroke19 19.8820623        NA            NA    FALSE           1
+    ## $arrivals
+    ##             name start_time  end_time activity_time  resource replication
+    ## 1    asu_stroke0  0.9062182  1.422308     0.5160899   asu_bed           1
+    ## 2     asu_other0  0.4473448  2.676165     2.2288198   asu_bed           1
+    ## 3     asu_neuro1  3.2678517  3.867813     0.5999612   asu_bed           1
+    ## 4     asu_neuro0  0.5245442  4.171772     3.6472278   asu_bed           1
+    ## 5    asu_stroke1  1.1893125  5.509324     4.3200113   asu_bed           1
+    ## 6     asu_other1  1.2902898  6.502389     5.2120987   asu_bed           1
+    ## 7     asu_other2  2.7220399  6.960086     4.2380463   asu_bed           1
+    ## 8    asu_stroke3  2.6540471  7.370079     4.7160317   asu_bed           1
+    ## 9     asu_neuro2  6.7174941  8.388190     1.6706957   asu_bed           1
+    ## 10    asu_other3  5.9118414  9.356139     3.4442981   asu_bed           1
+    ## 11    asu_other5  8.9680111  9.644429     0.6764179   asu_bed           1
+    ## 12    asu_other4  6.5630745  9.901922     3.3388479   asu_bed           1
+    ## 13   asu_stroke6  9.2809003 10.249020     0.9681194   asu_bed           1
+    ## 14   asu_stroke5  7.7291507 10.492783     2.7636327   asu_bed           1
+    ## 15   asu_stroke9 10.3331093 10.844631     0.5115214   asu_bed           1
+    ## 16   asu_stroke4  7.4047666 11.548437     4.1436706   asu_bed           1
+    ## 17      asu_tia0 10.9892778 12.129621     1.1403433   asu_bed           1
+    ## 18   asu_stroke2  1.9750085 12.640820    10.6658111   asu_bed           1
+    ## 19   asu_stroke7  9.9287833 13.332754     3.4039708   asu_bed           1
+    ## 20    asu_neuro3 10.6050662 14.143857     3.5387909   asu_bed           1
+    ## 21    asu_neuro5 13.7205915 15.051997     1.3314053   asu_bed           1
+    ## 22  asu_stroke12 13.9904583 15.084152     1.0936941   asu_bed           1
+    ## 23    asu_other6 13.8727452 15.859368     1.9866225   asu_bed           1
+    ## 24    asu_neuro4 13.5331919 16.712850     3.1796580   asu_bed           1
+    ## 25  asu_stroke10 13.6095765 16.845102     3.2355256   asu_bed           1
+    ## 26   asu_stroke7 13.3327542 18.114076     4.7813223 rehab_bed           1
+    ## 27  asu_stroke13 15.8908936 18.801468     2.9105743   asu_bed           1
+    ## 28  asu_stroke19 19.8820623        NA            NA   asu_bed           1
+    ## 29  asu_stroke18 19.8417499        NA            NA   asu_bed           1
+    ## 30  asu_stroke16 18.3422720        NA            NA   asu_bed           1
+    ## 31  asu_stroke15 18.1849052        NA            NA   asu_bed           1
+    ## 32  asu_stroke11 13.8532754        NA            NA   asu_bed           1
+    ## 33    asu_neuro4 13.5331919        NA            NA   asu_bed           1
+    ## 34    asu_neuro4 16.7128499        NA            NA rehab_bed           1
+    ## 35   asu_stroke8 10.0363922        NA            NA   asu_bed           1
+    ## 36  asu_stroke14 17.1432238        NA            NA   asu_bed           1
+    ## 37    asu_neuro2  6.7174941        NA            NA   asu_bed           1
+    ## 38    asu_neuro2  8.3881898        NA            NA rehab_bed           1
+    ## 39    asu_other7 19.7390660        NA            NA   asu_bed           1
+    ## 40 rehab_stroke0  9.5062960        NA            NA rehab_bed           1
+    ## 41  asu_stroke17 18.8504573        NA            NA   asu_bed           1
+    ## 42    asu_neuro6 16.6529204        NA            NA   asu_bed           1
+    ## 43 rehab_stroke1 14.0813875        NA            NA rehab_bed           1
+    ## 
+    ## $occupancy
+    ## # A tibble: 42 × 3
+    ##    resource   time occupancy
+    ##    <fct>     <int>     <int>
+    ##  1 asu_bed       0         0
+    ##  2 rehab_bed     0         0
+    ##  3 asu_bed       1         3
+    ##  4 rehab_bed     1         0
+    ##  5 asu_bed       2         5
+    ##  6 rehab_bed     2         0
+    ##  7 asu_bed       3         6
+    ##  8 rehab_bed     3         0
+    ##  9 asu_bed       4         6
+    ## 10 rehab_bed     4         0
+    ## # ℹ 32 more rows

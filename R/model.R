@@ -7,7 +7,8 @@
 #' Default is TRUE.
 #'
 #' @importFrom dplyr filter
-#' @importFrom simmer get_mon_arrivals get_mon_resources simmer wrap
+#' @importFrom simmer add_resource get_mon_arrivals get_mon_resources simmer
+#' @importFrom simmer wrap
 #' @importFrom utils capture.output
 #'
 #' @return TBC
@@ -33,6 +34,13 @@ model <- function(run_number, param, set_seed = TRUE) {
 
   # Add ASU and rehab direct admission patient generators
   for (unit in c("asu", "rehab")) {
+
+    # Add beds resource with inifinite capacity (required so we can get metrics
+    # on occupancy etc. based on count of patients with each resource)
+    env <- add_resource(
+      .env = env, name = paste0(unit, "_bed"), capacity = Inf
+    )
+
     for (patient_type in names(param[[paste0(unit, "_arrivals")]])) {
 
       # Create patient trajectory
@@ -54,9 +62,11 @@ model <- function(run_number, param, set_seed = TRUE) {
   }
 
   # Run the model
+  sim_length <- 20L
+  # sim_length <- param[["data_collection_period"]] + param[["warm_up_period"]]
   sim_log <- capture.output(
     env <- env |> # nolint
-      simmer::run(20L) |>
+      simmer::run(sim_length) |>
       wrap()
   )
 
@@ -77,9 +87,32 @@ model <- function(run_number, param, set_seed = TRUE) {
 
   # Extract the monitored arrivals info from the simmer environment object.
   # Remove patients with start time of -1, as they are patients whose arrival
-  # was sampled but falls after the end of the smiulation.
-  result <- get_mon_arrivals(env, ongoing = TRUE) |>
+  # was sampled but falls after the end of the simulation.
+  arrivals <- get_mon_arrivals(env, per_resource = TRUE, ongoing = TRUE) |>
     filter(.data[["start_time"]] != -1L)
 
-  return(result)
+  # Create sequence of days from 0 to end of simulation
+  days <- seq(0L, ceiling(sim_length))
+
+  # Calculate occupancy at end of each day (i.e. at time 1, 2, 3, 4...)
+  # Make dataframe with one row per resource per day to count patients
+  occupancy <- expand.grid(
+    resource = unique(arrivals$resource),
+    time = days
+  ) |>
+    rowwise() |>
+    mutate(
+      # For each resource and day, count patients who:
+      # - Arrived on or before this day (start_time <= time)
+      # - Have not yet left by this day (end_time > time), or have NA end_time
+      #   (still present at simulation end)
+      occupancy = sum(
+        arrivals$resource == .data[["resource"]] &
+          arrivals$start_time <= time &
+          (is.na(arrivals$end_time) | arrivals$end_time > time)
+      )
+    ) |>
+    ungroup()
+
+  return(list(arrivals = arrivals, occupancy = occupancy))
 }
