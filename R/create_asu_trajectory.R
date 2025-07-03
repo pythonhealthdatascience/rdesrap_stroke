@@ -26,7 +26,7 @@ create_asu_trajectory <- function(env, patient_type, param) {
   # Set up simmer trajectory object...
   trajectory(paste0("ASU_", patient_type, "_path")) |>
 
-    log_("🚶 Arrived at ASU") |>
+    log_("🚶 Arrived at ASU", level = 1) |>
 
     seize("asu_bed", 1L) |>
 
@@ -42,7 +42,7 @@ create_asu_trajectory <- function(env, patient_type, param) {
       dest <- dest_names[dest_index]
       # Create log message
       paste0("🎯 Planned ASU -> ", dest_index, " (", dest, ")")
-    }) |>
+    }, level = 1) |>
 
     set_attribute("asu_los", function() {
       # Retrieve attribute, and use to get post-ASU destination as a string
@@ -75,11 +75,11 @@ create_asu_trajectory <- function(env, patient_type, param) {
     log_(function() {
       paste0("⏳ ASU length of stay: ",
              round(get_attribute(env, "asu_los"), 3L))
-    }) |>
+    }, level = 1) |>
 
     timeout(function() get_attribute(env, "asu_los")) |>
 
-    log_("🏁 ASU stay completed") |>
+    log_("🏁 ASU stay completed", level = 1) |>
 
     release("asu_bed", 1L) |>
 

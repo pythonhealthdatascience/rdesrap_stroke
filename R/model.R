@@ -22,7 +22,8 @@ model <- function(run_number, param, set_seed = TRUE) {
   }
 
   # Determine whether to get verbose activity logs
-  verbose <- any(c(param[["log_to_console"]], param[["log_to_file"]]))
+  param[["verbose"]] <- any(c(param[["log_to_console"]],
+                              param[["log_to_file"]]))
 
   # Transform LOS parameters to lognormal scale
   param[["asu_los_lnorm"]] <- transform_to_lnorm(param[["asu_los"]])
@@ -30,7 +31,8 @@ model <- function(run_number, param, set_seed = TRUE) {
 
   # Create simmer environment - set verbose to FALSE as using custom logs
   # (but can change to TRUE if want to see default simmer logs as well)
-  env <- simmer("simulation", verbose = FALSE)
+  env <- simmer("simulation", verbose = FALSE,
+                log_level = if (param[["verbose"]]) 1 else 0)
 
   # Add ASU and rehab direct admission patient generators
   for (unit in c("asu", "rehab")) {
@@ -70,7 +72,7 @@ model <- function(run_number, param, set_seed = TRUE) {
   )
 
   # Save and/or display the log
-  if (isTRUE(verbose)) {
+  if (isTRUE(param[["verbose"]])) {
     # Create full log message by adding parameters
     param_string <- paste(names(param), param, sep = "=", collapse = ";\n ")
     full_log <- append(c("Parameters:", param_string, "Log:"), sim_log)

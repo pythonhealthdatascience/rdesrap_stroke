@@ -54,7 +54,7 @@ get_occupancy_stats <- function(occupancy) {
     occ_stats[["pct"]] <- occ_stats[["freq"]] / sum(occ_stats[["freq"]])
     occ_stats[["c_pct"]] <- cumsum(occ_stats[["pct"]])
 
-    # Calculate probability of delay
+    # Calculate probability of delay using the Erlang loss formula
     occ_stats[["prob_delay"]] <- occ_stats[["pct"]] / occ_stats[["c_pct"]]
 
     # Calculate 1 in every n patients delayed
