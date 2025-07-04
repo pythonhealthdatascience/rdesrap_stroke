@@ -6,7 +6,9 @@
 #' may not wish to do if being set elsewhere - such as done in \code{runner()}).
 #' Default is TRUE.
 #'
-#' @importFrom simmer get_mon_arrivals get_mon_resources simmer wrap
+#' @importFrom dplyr filter mutate rowwise ungroup
+#' @importFrom simmer add_resource get_mon_arrivals get_mon_resources simmer
+#' @importFrom simmer wrap
 #' @importFrom utils capture.output
 #'
 #' @return TBC
@@ -20,17 +22,27 @@ model <- function(run_number, param, set_seed = TRUE) {
   }
 
   # Determine whether to get verbose activity logs
-  verbose <- any(c(param[["log_to_console"]], param[["log_to_file"]]))
+  param[["verbose"]] <- any(c(param[["log_to_console"]],
+                              param[["log_to_file"]]))
 
   # Transform LOS parameters to lognormal scale
   param[["asu_los_lnorm"]] <- transform_to_lnorm(param[["asu_los"]])
   param[["rehab_los_lnorm"]] <- transform_to_lnorm(param[["rehab_los"]])
 
   # Create simmer environment - set verbose to FALSE as using custom logs
-  env <- simmer("simulation", verbose = FALSE)
+  # (but can change to TRUE if want to see default simmer logs as well)
+  env <- simmer("simulation", verbose = FALSE,
+                log_level = if (param[["verbose"]]) 1L else 0L)
 
   # Add ASU and rehab direct admission patient generators
   for (unit in c("asu", "rehab")) {
+
+    # Add beds resource with inifinite capacity (required so we can get metrics
+    # on occupancy etc. based on count of patients with each resource)
+    env <- add_resource(
+      .env = env, name = paste0(unit, "_bed"), capacity = Inf
+    )
+
     for (patient_type in names(param[[paste0(unit, "_arrivals")]])) {
 
       # Create patient trajectory
@@ -41,27 +53,26 @@ model <- function(run_number, param, set_seed = TRUE) {
       }
 
       # Add patient generator using the created trajectory
-      sim_log <- capture.output(
-        env <- add_patient_generator( # nolint
-          env = env,
-          trajectory = traj,
-          unit = unit,
-          patient_type = patient_type,
-          param = param
-        )
+      env <- add_patient_generator(
+        env = env,
+        trajectory = traj,
+        unit = unit,
+        patient_type = patient_type,
+        param = param
       )
     }
   }
 
   # Run the model
+  sim_length <- param[["data_collection_period"]] + param[["warm_up_period"]]
   sim_log <- capture.output(
     env <- env |> # nolint
-      simmer::run(20L) |>
+      simmer::run(sim_length) |>
       wrap()
   )
 
   # Save and/or display the log
-  if (isTRUE(verbose)) {
+  if (isTRUE(param[["verbose"]])) {
     # Create full log message by adding parameters
     param_string <- paste(names(param), param, sep = "=", collapse = ";\n ")
     full_log <- append(c("Parameters:", param_string, "Log:"), sim_log)
@@ -75,12 +86,39 @@ model <- function(run_number, param, set_seed = TRUE) {
     }
   }
 
-  # Extract the monitored arrivals and resources information from the simmer
-  # environment object
-  result <- list(
-    arrivals = get_mon_arrivals(env, per_resource = TRUE, ongoing = TRUE),
-    resources = get_mon_resources(env)
-  )
+  # Extract the monitored arrivals info from the simmer environment object.
+  # Remove patients with start time of -1, as they are patients whose arrival
+  # was sampled but falls after the end of the simulation.
+  arrivals <- get_mon_arrivals(env, per_resource = TRUE, ongoing = TRUE) |>
+    filter(.data[["start_time"]] != -1L)
 
-  return(result)
+  # Create sequence of days from 0 to end of simulation
+  days <- seq(0L, ceiling(sim_length))
+
+  # Calculate occupancy at end of each day (i.e. at time 1, 2, 3, 4...)
+  # Make dataframe with one row per resource per day to count patients
+  occupancy <- expand.grid(
+    resource = unique(arrivals[["resource"]]),
+    time = days
+  ) |>
+    rowwise() |>
+    mutate(
+      # For each resource and day, count patients who:
+      # - Arrived on or before this day (start_time <= time)
+      # - Have not yet left by this day (end_time > time), or have NA end_time
+      #   (still present at simulation end)
+      occupancy = sum(
+        arrivals[["resource"]] == .data[["resource"]] &
+          arrivals[["start_time"]] <= .data[["time"]] &
+          (is.na(arrivals[["end_time"]]) |
+             arrivals[["end_time"]] > .data[["time"]])
+      )
+    ) |>
+    ungroup()
+
+  # Set replication
+  arrivals <- mutate(arrivals, replication = run_number)
+  occupancy <- mutate(occupancy, replication = run_number)
+
+  return(list(arrivals = arrivals, occupancy = occupancy))
 }
