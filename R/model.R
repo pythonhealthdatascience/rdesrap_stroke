@@ -32,7 +32,7 @@ model <- function(run_number, param, set_seed = TRUE) {
   # Create simmer environment - set verbose to FALSE as using custom logs
   # (but can change to TRUE if want to see default simmer logs as well)
   env <- simmer("simulation", verbose = FALSE,
-                log_level = if (param[["verbose"]]) 1 else 0)
+                log_level = if (param[["verbose"]]) 1L else 0L)
 
   # Add ASU and rehab direct admission patient generators
   for (unit in c("asu", "rehab")) {
