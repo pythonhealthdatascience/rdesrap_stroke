@@ -113,3 +113,64 @@ test_that("model errors for extra keys in asu_arrivals", {
     "Extra keys: extra."
   )
 })
+
+
+# -----------------------------------------------------------------------------
+# 2. Run results
+# -----------------------------------------------------------------------------
+
+test_that("values are non-negative and not NA", {
+  param <- create_parameters(
+    warm_up_period = 20L, data_collection_period = 20L,
+    cores = 1L, number_of_runs = 1L
+  )
+  results <- runner(param = param)
+
+  # Check that at least one patient was processed
+  expect_gt(nrow(results[["arrivals"]]), 0L)
+
+  # Check that length of stay is greater than 0
+  expect_true(all(results[["arrivals"]][["start_time"]] > 0L))
+
+  # Check that there are no missing values
+  expect_false(any(is.na(
+    results[["arrivals"]][c("name", "start_time", "resource", "replication")]
+  )))
+  expect_false(any(is.na(results[["occupancy"]])))
+  expect_false(any(is.na(results[["occupancy_stats"]][["asu_bed"]])))
+  expect_false(any(is.na(results[["occupancy_stats"]][["rehab_bed"]])))
+})
+
+
+patrick::with_parameters_test_that(
+  "adjusting parameters decreases arrivals",
+  {
+    # Set some defaults
+    default_param <- create_parameters(
+      warm_up_period = 100L, data_collection_period = 200L,
+      cores = 1L, number_of_runs = 1L
+    )
+
+    # Set up parameter sets
+    init_param <- default_param
+    adj_param <- default_param
+    if (is.null(metric)) {
+      init_param[[group]][[patient]] <- init_value
+      adj_param[[group]][[patient]] <- adj_value
+    } else {
+      init_param[[group]][[patient]][[metric]] <- init_value
+      adj_param[[group]][[patient]][[metric]] <- adj_value
+    }
+
+    # Run model and compare number of arrivals
+    init_arrivals <- nrow(runner(param = init_param)[["arrivals"]])
+    adj_arrivals <- nrow(runner(param = adj_param)[["arrivals"]])
+    expect_gt(init_arrivals, adj_arrivals)
+  },
+  patrick::cases(
+    list(group = "asu_arrivals", patient = "stroke", metric = NULL,
+         init_value = 2L, adj_value = 6L),
+    list(group = "rehab_los", patient = "stroke_noesd", metric = "mean",
+         init_value = 30L, adj_value = 10L)
+  )
+)
