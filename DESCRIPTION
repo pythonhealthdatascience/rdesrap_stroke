@@ -28,6 +28,7 @@ Suggests:
     ggplot2,
     lintr,
     mockery,
+    patrick,
     scales,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

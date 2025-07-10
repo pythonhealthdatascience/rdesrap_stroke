@@ -824,6 +824,16 @@
       ],
       "Hash": "96b7fedb0964cc6b86631fb2fee23afa"
     },
+    "mockery": {
+      "Package": "mockery",
+      "Version": "0.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "testthat"
+      ],
+      "Hash": "674d86780fecdee68504452578cb010c"
+    },
     "nlme": {
       "Package": "nlme",
       "Version": "3.1-164",
@@ -859,6 +869,22 @@
         "utils"
       ],
       "Hash": "eec07caa14285c8a9f9de8276473e7a1"
+    },
+    "patrick": {
+      "Package": "patrick",
+      "Version": "0.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "dplyr",
+        "glue",
+        "purrr",
+        "rlang",
+        "testthat",
+        "tibble"
+      ],
+      "Hash": "a1ab7291b1a3321ebacd438ebb73c650"
     },
     "pillar": {
       "Package": "pillar",
@@ -1106,14 +1132,14 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.1.4",
+      "Version": "1.1.6",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "utils"
       ],
-      "Hash": "3eec01f8b1dee337674b2e34ab1f9bc1"
+      "Hash": "892124978869b74935dc3934c42bfe5a"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
