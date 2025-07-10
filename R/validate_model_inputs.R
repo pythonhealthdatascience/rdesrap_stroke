@@ -103,8 +103,8 @@ check_all_param_names <- function(param) {
 
 #' Validate probability vector
 #'
-#' CHecks that values are between 0 and 1 (inclusive), that they sum to 1
-#' (with tolerance of ±0.01).
+#' Checks that values are between 0 and 1 (inclusive), that they sum to 1
+#' (with tolerance of +-0.01).
 #'
 #' @param vec Numeric vector. The probability vector to be checked.
 #' @param name Character string. The name or label for the vector, used in
@@ -122,7 +122,7 @@ check_prob_vector <- function(vec, name) {
          call. = FALSE)
   }
   if (sum(vec) < 0.99 || sum(vec) > 1.01) {
-    stop('Values in routing vector "', name, '" must sum to 1 (±0.01).',
+    stop('Values in routing vector "', name, '" must sum to 1 (+-0.01).',
          call. = FALSE)
   }
 }
@@ -147,7 +147,7 @@ check_param_values <- function(param) {
     "number_of_runs" <= 0L &&
     "number_of_runs" %% 1L == 0L
   ) {
-    stop('The parameter "', p, '" must be integer greater than 0.',
+    stop('The parameter "number_of_runs" must be integer greater than 0.',
          call. = FALSE)
   }
 

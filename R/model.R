@@ -1,3 +1,6 @@
+# To avoid package build warning (name in expand.grid())
+utils::globalVariables(c("time"))
+
 #' Run simulation.
 #'
 #' @param run_number Integer representing index of current simulation run.

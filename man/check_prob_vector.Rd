@@ -16,6 +16,6 @@ error messages.}
 Throws an error if the vector is invalid; otherwise, returns nothing.
 }
 \description{
-CHecks that values are between 0 and 1 (inclusive), that they sum to 1
-(with tolerance of ±0.01).
+Checks that values are between 0 and 1 (inclusive), that they sum to 1
+(with tolerance of +-0.01).
 }
