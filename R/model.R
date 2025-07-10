@@ -6,7 +6,8 @@
 #' may not wish to do if being set elsewhere - such as done in \code{runner()}).
 #' Default is TRUE.
 #'
-#' @importFrom dplyr filter mutate rowwise ungroup
+#' @importFrom dplyr filter group_by mutate rowwise ungroup
+#' @importFrom rlang .data
 #' @importFrom simmer add_resource get_mon_arrivals get_mon_resources simmer
 #' @importFrom simmer wrap
 #' @importFrom utils capture.output
@@ -118,6 +119,16 @@ model <- function(run_number, param, set_seed = TRUE) {
       )
     ) |>
     ungroup()
+
+  # Filter the output results if a warm-up period was specified...
+  if (param[["warm_up_period"]] > 0L) {
+    arrivals <- arrivals |>
+      group_by(.data[["name"]]) |>
+      filter(all(.data[["start_time"]] >= param[["warm_up_period"]])) |>
+      ungroup()
+    occupancy <- occupancy |>
+      filter(time >= param[["warm_up_period"]])
+  }
 
   # Set replication
   arrivals <- mutate(arrivals, replication = run_number)

@@ -307,13 +307,15 @@ results <- runner(param = param)
 head(results[["arrivals"]])
 ```
 
-    ##          name start_time end_time activity_time resource replication
-    ## 1    asu_tia0  1.2840389 3.170685     1.8866462  asu_bed           1
-    ## 2  asu_other1  3.9754223 4.184680     0.2092577  asu_bed           1
-    ## 3    asu_tia1  4.1671467 4.367036     0.1998889  asu_bed           1
-    ## 4 asu_stroke1  4.7009372 6.293953     1.5930162  asu_bed           1
-    ## 5  asu_other0  0.8659035 6.436690     5.5707867  asu_bed           1
-    ## 6  asu_neuro0  5.7762114 6.743039     0.9668279  asu_bed           1
+    ## # A tibble: 6 × 6
+    ##   name          start_time end_time activity_time resource replication
+    ##   <chr>              <dbl>    <dbl>         <dbl> <chr>          <int>
+    ## 1 asu_stroke901      1095.    1098.         2.31  asu_bed            1
+    ## 2 asu_tia133         1098.    1099.         0.191 asu_bed            1
+    ## 3 asu_tia132         1098.    1100.         1.97  asu_bed            1
+    ## 4 asu_stroke908      1100.    1100.         0.419 asu_bed            1
+    ## 5 asu_tia135         1100.    1100.         0.189 asu_bed            1
+    ## 6 asu_tia131         1097.    1100.         3.21  asu_bed            1
 
 ``` r
 write.csv(arrange(results[["arrivals"]], replication, start_time),
@@ -327,12 +329,12 @@ head(results[["occupancy"]])
     ## # A tibble: 6 × 4
     ##   resource   time occupancy replication
     ##   <fct>     <int>     <int>       <int>
-    ## 1 asu_bed       0         0           1
-    ## 2 rehab_bed     0         0           1
-    ## 3 asu_bed       1         1           1
-    ## 4 rehab_bed     1         0           1
-    ## 5 asu_bed       2         2           1
-    ## 6 rehab_bed     2         0           1
+    ## 1 asu_bed    1095        12           1
+    ## 2 rehab_bed  1095        11           1
+    ## 3 asu_bed    1096        13           1
+    ## 4 rehab_bed  1096        10           1
+    ## 5 asu_bed    1097        10           1
+    ## 6 rehab_bed  1097        10           1
 
 ``` r
 write.csv(results[["occupancy"]],
@@ -343,13 +345,13 @@ write.csv(results[["occupancy"]],
 head(results[["occupancy_stats"]][["asu_bed"]])
 ```
 
-    ##   beds freq          pct        c_pct prob_delay 1_in_n_delay
-    ## 1    0    2 0.0003423485 0.0003423485  1.0000000            1
-    ## 2    1    8 0.0013693940 0.0017117426  0.8000000            1
-    ## 3    2   42 0.0071893187 0.0089010613  0.8076923            1
-    ## 4    3  105 0.0179732968 0.0268743581  0.6687898            1
-    ## 5    4  312 0.0534063677 0.0802807258  0.6652452            2
-    ## 6    5  517 0.0884970900 0.1687778158  0.5243408            2
+    ##   beds freq         pct       c_pct prob_delay 1_in_n_delay
+    ## 1    1    5 0.001369113 0.001369113  1.0000000            1
+    ## 2    2   26 0.007119387 0.008488499  0.8387097            1
+    ## 3    3   76 0.020810515 0.029299014  0.7102804            1
+    ## 4    4  225 0.061610077 0.090909091  0.6777108            1
+    ## 5    5  360 0.098576123 0.189485214  0.5202312            2
+    ## 6    6  466 0.127601314 0.317086528  0.4024180            2
 
 ``` r
 write.csv(results[["occupancy_stats"]][["asu_bed"]],
@@ -360,13 +362,13 @@ write.csv(results[["occupancy_stats"]][["asu_bed"]],
 head(results[["occupancy_stats"]][["rehab_bed"]])
 ```
 
-    ##   beds freq         pct       c_pct prob_delay 1_in_n_delay
-    ## 1    0   12 0.002054091 0.002054091  1.0000000            1
-    ## 2    1   12 0.002054091 0.004108182  0.5000000            2
-    ## 3    2    6 0.001027046 0.005135228  0.2000000            5
-    ## 4    3   72 0.012324546 0.017459774  0.7058824            1
-    ## 5    4  169 0.028928449 0.046388223  0.6236162            2
-    ## 6    5  326 0.055802807 0.102191030  0.5460637            2
+    ##   beds freq          pct        c_pct prob_delay 1_in_n_delay
+    ## 1    2    2 0.0005476451 0.0005476451  1.0000000            1
+    ## 2    3   27 0.0073932092 0.0079408543  0.9310345            1
+    ## 3    4   69 0.0188937568 0.0268346112  0.7040816            1
+    ## 4    5  161 0.0440854326 0.0709200438  0.6216216            2
+    ## 5    6  270 0.0739320920 0.1448521358  0.5103970            2
+    ## 6    7  377 0.1032311062 0.2480832421  0.4161148            2
 
 ``` r
 write.csv(results[["occupancy_stats"]][["rehab_bed"]],
