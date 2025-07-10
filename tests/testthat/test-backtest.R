@@ -2,6 +2,8 @@
 #
 # These check that the model code produces results consistent with prior code.
 
+library(dplyr)
+
 
 test_that("results from a new run match those previously generated", {
   # Run the model for 2 replications
@@ -9,7 +11,9 @@ test_that("results from a new run match those previously generated", {
   results <- runner(param = param)
 
   # Extract and format the results (e.g. sort, dataframe, column type)
-  arrivals <- arrange(results[["arrivals"]], replication, start_time)
+  arrivals <- as.data.frame(arrange(
+    results[["arrivals"]], replication, start_time)
+  )
   occ <- as.data.frame(results[["occupancy"]])
   occ[["resource"]] <- as.character(occ[["resource"]])
   occ_asu <- results[["occupancy_stats"]][["asu_bed"]]
