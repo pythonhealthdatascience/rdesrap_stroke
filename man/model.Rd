@@ -16,7 +16,7 @@ may not wish to do if being set elsewhere - such as done in \code{runner()}).
 Default is TRUE.}
 }
 \value{
-TBC
+Named list with two tables: arrivals and occupancy.
 }
 \description{
 Run simulation.
