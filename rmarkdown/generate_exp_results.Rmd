@@ -1,0 +1,94 @@
+---
+title: "Generate expected results"
+author: "Amy Heather"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+      toc: true
+      html_preview: false
+---
+
+This notebook is used to run a specific version of the model and save each results dataframe as a csv. These are used in `test-backtest.R` to verify that the model produces consistent results.
+
+The `.Rmd` file is provided as it is possible that results may change due to alterations to the model structure and operations. Once it has been confirmed that changes are intentional and not any introduced errors, this script can be run to regenerate the `.csv` files used in the test.
+
+The run time is provided at the end of this notebook.
+
+## Set-up
+
+Install the latest version of the local simulation package. If running sequentially, `devtools::load_all()` is sufficient. If running in parallel, you must use `devtools::install()`.
+
+```{r}
+devtools::load_all()
+```
+
+Load required packages.
+
+```{r setup}
+# nolint start: undesirable_function_linter.
+library(dplyr)
+library(simulation)
+# nolint end
+```
+
+Start timer.
+
+```{r start_timer}
+start_time <- Sys.time()
+```
+
+Define path to expected results.
+
+```{r path}
+testdata_dir <- file.path("..", "tests", "testthat", "testdata")
+```
+
+## Base case
+
+```{r}
+param <- create_parameters(cores = 1L, number_of_runs = 2L)
+print(param)
+```
+
+```{r}
+results <- runner(param = param)
+```
+
+```{r}
+# Arrivals
+head(results[["arrivals"]])
+write.csv(arrange(results[["arrivals"]], replication, start_time),
+          file.path(testdata_dir, "base_arrivals.csv"),
+          row.names = FALSE)
+
+# Occupancy
+head(results[["occupancy"]])
+write.csv(results[["occupancy"]],
+          file.path(testdata_dir, "base_occ.csv"),
+          row.names = FALSE)
+
+# Occupancy stats (acute stroke unit)
+head(results[["occupancy_stats"]][["asu_bed"]])
+write.csv(results[["occupancy_stats"]][["asu_bed"]],
+          file.path(testdata_dir, "base_occ_asu.csv"),
+          row.names = FALSE)
+
+# Occupancy stats (rehab unit)
+head(results[["occupancy_stats"]][["rehab_bed"]])
+write.csv(results[["occupancy_stats"]][["rehab_bed"]],
+          file.path(testdata_dir, "base_occ_rehab.csv"),
+          row.names = FALSE)
+```
+
+## Calculate run time
+
+```{r end_timer}
+# Get run time in seconds
+end_time <- Sys.time()
+runtime <- as.numeric(end_time - start_time, units = "secs")
+
+# Display converted to minutes and seconds
+minutes <- as.integer(runtime / 60L)
+seconds <- as.integer(runtime %% 60L)
+cat(sprintf("Notebook run time: %dm %ds", minutes, seconds))
+```
