@@ -11,10 +11,13 @@
 #' @importFrom simmer wrap
 #' @importFrom utils capture.output
 #'
-#' @return TBC
+#' @return Named list with two tables: arrivals and occupancy.
 #' @export
 
 model <- function(run_number, param, set_seed = TRUE) {
+
+  # Check all inputs are valid
+  valid_inputs(run_number, param)
 
   # Set random seed based on run number
   if (set_seed) {
