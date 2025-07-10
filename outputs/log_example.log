@@ -1,0 +1,66 @@
+Parameters:
+asu_arrivals=list(stroke = 1.2, tia = 9.3, neuro = 3.6, other = 3.2);
+ rehab_arrivals=list(stroke = 3, neuro = 31.7, other = 28.6);
+ asu_los=list(stroke_noesd = list(mean = 7.4, sd = 8.61), stroke_esd = list(mean = 4.6, sd = 4.8), stroke_mortality = list(mean = 7, sd = 8.7), tia = list(mean = 1.8, sd = 2.3), neuro = list(mean = 4, sd = 5), other = list(mean = 3.8, sd = 5.2));
+ rehab_los=list(stroke_noesd = list(mean = 28.4, sd = 27.2), stroke_esd = list(mean = 30.3, sd = 23.1), tia = list(mean = 18.7, sd = 23.5), neuro = list(mean = 27.6, sd = 28.4), other = list(mean = 16.1, sd = 14.1));
+ asu_routing=list(stroke = list(rehab = 0.24, esd = 0.13, other = 0.63), tia = list(rehab = 0.01, esd = 0.01, other = 0.98), neuro = list(rehab = 0.11, esd = 0.05, other = 0.84), other = list(rehab = 0.05, esd = 0.1, other = 0.85));
+ rehab_routing=list(stroke = list(esd = 0.4, other = 0.6), tia = list(esd = 0, other = 1), neuro = list(esd = 0.09, other = 0.91), other = list(esd = 0.13, other = 0.88));
+ warm_up_period=3;
+ data_collection_period=5;
+ number_of_runs=1;
+ scenario_name=NULL;
+ cores=1;
+ log_to_console=TRUE;
+ log_to_file=TRUE;
+ file_path=../outputs/log_example.log;
+ verbose=TRUE;
+ asu_los_lnorm=list(stroke_noesd = list(meanlog = 1.57347219029677, sdlog = 0.925211121759084), stroke_esd = list(meanlog = 1.15775021244827, sdlog = 0.858261138636461), stroke_mortality = list(meanlog = 1.47890496960638, sdlog = 0.966442113578391), tia = list(meanlog = 0.103778649052444, sdlog = 0.983878057331979), neuro = list(meanlog = 0.915802688887627, sdlog = 0.970042960112864), other = list(meanlog = 0.807396441784017, sdlog = 1.02723378541433));
+ rehab_los_lnorm=list(stroke_noesd = list(meanlog = 3.02093582638726, sdlog = 0.806787851643665), stroke_esd = list(meanlog = 3.18205014379696, sdlog = 0.676901128257839), tia = list(meanlog = 2.45477304821951, sdlog = 0.973396605337238), neuro = list(meanlog = 2.95675141458562, sdlog = 0.849781569743057), other = list(meanlog = 2.49418211833932, sdlog = 0.754502688730926))
+Log:
+0.865903: asu_other0: 🚶 Arrived at ASU
+0.865903: asu_other0: 🎯 Planned ASU -> 3 (other)
+0.865903: asu_other0: ⏳ ASU length of stay: 5.571
+1.28404: asu_tia0: 🚶 Arrived at ASU
+1.28404: asu_tia0: 🎯 Planned ASU -> 3 (other)
+1.28404: asu_tia0: ⏳ ASU length of stay: 1.887
+2.38768: asu_stroke0: 🚶 Arrived at ASU
+2.38768: asu_stroke0: 🎯 Planned ASU -> 3 (other)
+2.38768: asu_stroke0: ⏳ ASU length of stay: 8.198
+3.17069: asu_tia0: 🏁 ASU stay completed
+3.97542: asu_other1: 🚶 Arrived at ASU
+3.97542: asu_other1: 🎯 Planned ASU -> 3 (other)
+3.97542: asu_other1: ⏳ ASU length of stay: 0.209
+4.16715: asu_tia1: 🚶 Arrived at ASU
+4.16715: asu_tia1: 🎯 Planned ASU -> 3 (other)
+4.16715: asu_tia1: ⏳ ASU length of stay: 0.2
+4.18468: asu_other1: 🏁 ASU stay completed
+4.19181: rehab_stroke0: 🚶 Arrived at rehab
+4.19181: rehab_stroke0: 🎯 Planned rehab -> 1 (esd)
+4.19181: rehab_stroke0: ⏳ Rehab length of stay: 10.714
+4.36704: asu_tia1: 🏁 ASU stay completed
+4.70094: asu_stroke1: 🚶 Arrived at ASU
+4.70094: asu_stroke1: 🎯 Planned ASU -> 3 (other)
+4.70094: asu_stroke1: ⏳ ASU length of stay: 1.704
+5.77621: asu_neuro0: 🚶 Arrived at ASU
+5.77621: asu_neuro0: 🎯 Planned ASU -> 3 (other)
+5.77621: asu_neuro0: ⏳ ASU length of stay: 2.623
+5.82361: asu_stroke2: 🚶 Arrived at ASU
+5.82361: asu_stroke2: 🎯 Planned ASU -> 1 (rehab)
+5.82361: asu_stroke2: ⏳ ASU length of stay: 68.121
+5.97769: asu_other2: 🚶 Arrived at ASU
+5.97769: asu_other2: 🎯 Planned ASU -> 3 (other)
+5.97769: asu_other2: ⏳ ASU length of stay: 3.719
+6.40479: asu_stroke1: 🏁 ASU stay completed
+6.43669: asu_other0: 🏁 ASU stay completed
+6.61333: asu_stroke3: 🚶 Arrived at ASU
+6.61333: asu_stroke3: 🎯 Planned ASU -> 3 (other)
+6.61333: asu_stroke3: ⏳ ASU length of stay: 2.321
+7.12946: asu_stroke4: 🚶 Arrived at ASU
+7.12946: asu_stroke4: 🎯 Planned ASU -> 3 (other)
+7.12946: asu_stroke4: ⏳ ASU length of stay: 12.365
+7.29875: rehab_stroke1: 🚶 Arrived at rehab
+7.29875: rehab_stroke1: 🎯 Planned rehab -> 2 (other)
+7.29875: rehab_stroke1: ⏳ Rehab length of stay: 34.847
+7.77172: asu_other3: 🚶 Arrived at ASU
+7.77172: asu_other3: 🎯 Planned ASU -> 3 (other)
+7.77172: asu_other3: ⏳ ASU length of stay: 0.513

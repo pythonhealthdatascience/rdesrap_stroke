@@ -1,0 +1,63 @@
+---
+title: "Logs"
+author: "Amy Heather"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+      toc: true
+      html_preview: false
+---
+
+Logs will describe events during the simulation.
+
+Logs will output lots of information, so they are best used when running the simulation for a short time with few patients. For example, to illustrate how a simulation work, or to support debugging.
+
+Simmer has built-in functionality to generate logs, which can be activated by setting `verbose` as TRUE. However, this model instead has custom logs, for clarity.
+
+## Set up
+
+Install the latest version of the local simulation package. If running sequentially, `devtools::load_all()` is sufficient. If running in parallel, you must use `devtools::install()`.
+
+```{r}
+devtools::load_all()
+```
+
+Start timer.
+
+```{r}
+start_time <- Sys.time()
+```
+
+## Simulation run with logs printed to the console
+
+We use the built-in simmer logging functionality. Within our `model` function, we accept the parameters:
+
+* `log_to_console` - whether to print the activity log to the console.
+* `log_to_file` - whether to save the activity log to a file.
+* `file_path` - path to save log to file.
+
+Here, we will print to console and save to file:
+
+```{r}
+log_file <- file.path("..", "outputs", "log_example.log")
+
+param <- create_parameters(
+  rehab_arrivals = create_rehab_arrivals(stroke = 3L),
+  warm_up_period = 3L,
+  data_collection_period = 5L,
+  number_of_runs = 1L,
+  cores = 1L,
+  log_to_console = TRUE,
+  log_to_file = TRUE,
+  file_path = log_file
+)
+
+verbose_run <- runner(param = param)
+```
+
+If we import the log file, we'll see it contains the same output:
+
+```{r}
+log_contents <- readLines(log_file)
+print(log_contents, sep = "\n")
+```
