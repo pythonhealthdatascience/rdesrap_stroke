@@ -123,19 +123,16 @@ model <- function(run_number, param, set_seed = TRUE) {
     ) |>
     ungroup()
 
-  # Filter the output results if a warm-up period was specified...
-  if (param[["warm_up_period"]] > 0L) {
-    arrivals <- arrivals |>
-      group_by(.data[["name"]]) |>
-      filter(all(.data[["start_time"]] >= param[["warm_up_period"]])) |>
-      ungroup()
-    occupancy <- occupancy |>
-      filter(time >= param[["warm_up_period"]])
-  }
-
   # Set replication
   arrivals <- mutate(arrivals, replication = run_number)
   occupancy <- mutate(occupancy, replication = run_number)
 
-  return(list(arrivals = arrivals, occupancy = occupancy))
+  result <- list(arrivals = arrivals, occupancy = occupancy)
+
+  # Filter the output results if a warm-up period was specified...
+  result <- filter_warmup(
+    result = result, warm_up_period = param[["warm_up_period"]]
+  )
+
+  return(result)
 }

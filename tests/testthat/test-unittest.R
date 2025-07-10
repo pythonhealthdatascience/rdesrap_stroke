@@ -9,6 +9,10 @@
 # error we are checking for).
 
 
+# -----------------------------------------------------------------------------
+# 1. Parallel processing
+# -----------------------------------------------------------------------------
+
 test_that("parallel processing runs successfully", {
 
   # Mock simulation model function so it can run without other dependencies
@@ -48,4 +52,40 @@ test_that("parallel processing runs successfully", {
   expect_true("arrivals" %in% names(result))
   expect_true("occupancy" %in% names(result))
   expect_true("occupancy_stats" %in% names(result))
+})
+
+
+# -----------------------------------------------------------------------------
+# 2. Warm-up
+# -----------------------------------------------------------------------------
+
+test_that("warm-up filtering works as expected", {
+  mock_result <- list(
+    arrivals = data.frame(name = c("p1", "p2", "p3"),
+                          start_time = c(5L, 10L, 14L),
+                          stringsAsFactors = FALSE),
+    occupancy = data.frame(name = "asu_bed",
+                           time = c(5L, 14L),
+                           stringsAsFactors = FALSE)
+  )
+
+  # With no warm-up...
+  # > Check that no entries are removed
+  no_warm_up <- filter_warmup(mock_result, warm_up_period = 0L)
+  expect_identical(no_warm_up, mock_result)
+
+  # With warm-up of 10...
+  # > Check that two arrivals remain (10 + 14)
+  # > Check that one occupancy record remains (14)
+  filtered <- filter_warmup(mock_result, warm_up_period = 10L)
+  expect_identical(nrow(filtered[["arrivals"]]), 2L)
+  expect_identical(filtered[["arrivals"]][["start_time"]], c(10L, 14L))
+  expect_identical(nrow(filtered[["occupancy"]]), 1L)
+  expect_identical(filtered[["occupancy"]][["time"]], c(14L))
+
+  # Emulating run with no data collection period...
+  # > Check that no data remains
+  full_length <- filter_warmup(mock_result, warm_up_period = 15L)
+  expect_identical(nrow(full_length[["arrivals"]]), 0L)
+  expect_identical(nrow(full_length[["occupancy"]]), 0L)
 })
