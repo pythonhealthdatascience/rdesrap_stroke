@@ -81,7 +81,7 @@ test_that("warm-up filtering works as expected", {
   expect_identical(nrow(filtered[["arrivals"]]), 2L)
   expect_identical(filtered[["arrivals"]][["start_time"]], c(10L, 14L))
   expect_identical(nrow(filtered[["occupancy"]]), 1L)
-  expect_identical(filtered[["occupancy"]][["time"]], c(14L))
+  expect_identical(filtered[["occupancy"]][["time"]], 14L)
 
   # Emulating run with no data collection period...
   # > Check that no data remains

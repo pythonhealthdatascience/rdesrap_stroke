@@ -1,5 +1,5 @@
 # To avoid package build warning (name in expand.grid())
-utils::globalVariables(c("time"))
+utils::globalVariables("time")
 
 #' Run simulation.
 #'

@@ -15,8 +15,8 @@ filter_warmup <- function(result, warm_up_period) {
       group_by(.data[["name"]]) |>
       filter(all(.data[["start_time"]] >= warm_up_period)) |>
       ungroup()
-    result[["occupancy"]] <- result[["occupancy"]] |>
-      filter(time >= warm_up_period)
+    result[["occupancy"]] <- filter(result[["occupancy"]],
+                                    time >= warm_up_period)
   }
-  return(result)
+  result
 }

@@ -117,7 +117,7 @@ check_prob_vector <- function(vec, name) {
   if (!is.numeric(vec)) {
     stop('Routing vector "', name, '" must be numeric.', call. = FALSE)
   }
-  if (any(vec < 0 | vec > 1)) {
+  if (any(vec < 0L | vec > 1L)) {
     stop('All values in routing vector "', name, '" must be between 0 and 1.',
          call. = FALSE)
   }
@@ -128,54 +128,88 @@ check_prob_vector <- function(vec, name) {
 }
 
 
-#' Validate parameter values.
+#' Check if a value is a positive integer
 #'
-#' Ensure that specific parameters are positive numbers, or non-negative
-#' integers, and that probability vectors are in [0, 1] and sum to 1 (within
-#' tolerance).
+#' Throws an error if the value is not a positive integer (> 0).
+#'
+#' @param x The value to check.
+#' @param name The name of the parameter (for error messages).
+#'
+#' @return None. Throws an error if the check fails.
+#' @export
+
+check_positive_integer <- function(x, name) {
+  if (is.null(x) || x <= 0L || x %% 1L != 0L) {
+    stop(
+      sprintf('The parameter "%s" must be an integer greater than 0.', name),
+      call. = FALSE
+    )
+  }
+}
+
+#' Check if all values are positive
+#'
+#' Throws an error if any value in the input is not positive (> 0).
+#'
+#' @param x The vector or list of values to check.
+#' @param name The name of the parameter (for error messages).
+#'
+#' @return None. Throws an error if the check fails.
+#' @export
+
+check_all_positive <- function(x, name) {
+  if (!is.null(x) && any(unlist(x) <= 0L)) {
+    stop(
+      sprintf('All values in "%s" must be greater than 0.', name),
+      call. = FALSE
+    )
+  }
+}
+
+#' Check if a value is a non-negative integer
+#'
+#' Throws an error if the value is not a non-negative integer (>= 0).
+#'
+#' @param x The value to check.
+#' @param name The name of the parameter (for error messages).
+#'
+#' @return None. Throws an error if the check fails.
+#' @export
+
+check_nonneg_integer <- function(x, name) {
+  if (is.null(x) || x < 0L || x %% 1L != 0L) {
+    stop(
+      sprintf('The parameter "%s" must be an integer >= 0.', name),
+      call. = FALSE
+    )
+  }
+}
+
+#' Validate parameter values
+#'
+#' Ensures that specific parameters are positive numbers, non-negative integers,
+#' and that probability vectors are in [0, 1] and sum to 1 (within tolerance).
 #'
 #' @param param List containing parameters for the simulation.
 #'
-#' @return Throws an error if any specified parameter value is invalid.
+#' @return None. Throws an error if any specified parameter value is invalid.
 #' @export
 
 check_param_values <- function(param) {
+  check_positive_integer(param[["number_of_runs"]], "number_of_runs")
 
-  # Check that number of runs is positive integer
-  if (
-    !is.null("number_of_runs") &&
-    "number_of_runs" <= 0L &&
-    "number_of_runs" %% 1L == 0L
-  ) {
-    stop('The parameter "number_of_runs" must be integer greater than 0.',
-         call. = FALSE)
-  }
+  lapply(c("asu_arrivals", "rehab_arrivals", "asu_los", "rehab_los"),
+         function(nm) check_all_positive(param[[nm]], nm))
 
-  # Check that listed parameters are not negative (i.e. must be 0+)
-  non_neg <- c("asu_arrivals", "rehab_arrivals", "asu_los", "rehab_los")
-  for (sub in non_neg) {
-    if (!is.null(param[[sub]])) {
-      vals <- unlist(param[[sub]])
-      if (any(vals <= 0L)) {
-        stop('All values in "', sub, '" must be greater than 0.', call. = FALSE)
-      }
-    }
-  }
+  lapply(c("warm_up_period", "data_collection_period"),
+         function(nm) check_nonneg_integer(param[[nm]], nm))
 
-  # Check that listed parameters are non-negative integers
-  n_list <- c("warm_up_period", "data_collection_period")
-  for (n in n_list) {
-    if (param[[n]] < 0L || param[[n]] %% 1L != 0L) {
-      stop('The parameter "', n,
-           '" must be an integer greater than or equal to 0.', call. = FALSE)
-    }
-  }
-
-  # Check that listed parameters are between 0 and 1 and sum to 1 (+- 0.01)
   for (routing in c("asu_routing", "rehab_routing")) {
-    for (name in names(param[[routing]])) {
-      vec <- unlist(param[[routing]][[name]], use.names = FALSE)
-      check_prob_vector(vec, paste0(routing, "$", name))
+    if (!is.null(param[[routing]])) {
+      lapply(names(param[[routing]]), function(name) {
+        vec <- unlist(param[[routing]][[name]], use.names = FALSE)
+        check_prob_vector(vec, paste0(routing, "$", name))
+      })
     }
   }
 }

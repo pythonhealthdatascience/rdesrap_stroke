@@ -1,7 +1,7 @@
 Analysis
 ================
 Amy Heather
-2025-07-10
+2025-07-11
 
 - [Set-up](#set-up)
 - [Base case](#base-case)
@@ -74,7 +74,7 @@ devtools::install(upgrade = "never")
     ##   ─  building ‘simulation_0.1.0.tar.gz’
     ##      
     ## Running /opt/R/4.4.1/lib/R/bin/R CMD INSTALL \
-    ##   /tmp/Rtmp1JySin/simulation_0.1.0.tar.gz --install-tests 
+    ##   /tmp/RtmpH3Tbtm/simulation_0.1.0.tar.gz --install-tests 
     ## * installing to library ‘/home/amy/.cache/R/renv/library/rdesrap_stroke-34041c45/linux-ubuntu-noble/R-4.4/x86_64-pc-linux-gnu’
     ## * installing *source* package ‘simulation’ ...
     ## ** using staged installation
@@ -415,14 +415,14 @@ make_delay_table <- function(
 
     # Extract and filter base and scenario data
     base_df <- base[[unit_name]] |>
-      filter(beds %in% unit_beds) |>
-      select(beds, .data[["prob_delay"]], .data[["1_in_n_delay"]]) |>
+      filter(.data[["beds"]] %in% unit_beds) |>
+      select(.data[["beds"]], .data[["prob_delay"]], .data[["1_in_n_delay"]]) |>
       rename_with(~paste0(., "_", base_name),
                   c("prob_delay", "1_in_n_delay"))
 
     scenario_df <- scenario[[unit_name]] |>
-      filter(beds %in% unit_beds) |>
-      select(beds, .data[["prob_delay"]], .data[["1_in_n_delay"]]) |>
+      filter(.data[["beds"]] %in% unit_beds) |>
+      select(.data[["beds"]], .data[["prob_delay"]], .data[["1_in_n_delay"]]) |>
       rename_with(~paste0(., "_", scenario_name),
                   c("prob_delay", "1_in_n_delay"))
 
@@ -438,7 +438,7 @@ make_delay_table <- function(
 
   # Combine and return
   bind_rows(asu_table, rehab_table) |>
-    arrange(unit, beds)
+    arrange(unit, .data[["beds"]])
 }
 ```
 
@@ -1048,4 +1048,4 @@ seconds <- as.integer(runtime %% 60L)
 cat(sprintf("Notebook run time: %dm %ds", minutes, seconds))
 ```
 
-    ## Notebook run time: 1m 34s
+    ## Notebook run time: 1m 38s

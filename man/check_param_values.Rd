@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_model_inputs.R
 \name{check_param_values}
 \alias{check_param_values}
-\title{Validate parameter values.}
+\title{Validate parameter values}
 \usage{
 check_param_values(param)
 }
@@ -10,10 +10,9 @@ check_param_values(param)
 \item{param}{List containing parameters for the simulation.}
 }
 \value{
-Throws an error if any specified parameter value is invalid.
+None. Throws an error if any specified parameter value is invalid.
 }
 \description{
-Ensure that specific parameters are positive numbers, or non-negative
-integers, and that probability vectors are in [0, 1] and sum to 1 (within
-tolerance).
+Ensures that specific parameters are positive numbers, non-negative integers,
+and that probability vectors are in [0, 1] and sum to 1 (within tolerance).
 }
