@@ -173,3 +173,131 @@ patrick::with_parameters_test_that(
          init_value = 30L, adj_value = 10L)
   )
 )
+
+
+# -----------------------------------------------------------------------------
+# 3. Seeds
+# -----------------------------------------------------------------------------
+
+test_that("the same seed returns the same result", {
+
+  param <- create_parameters(
+    warm_up_period = 20L, data_collection_period = 20L,
+    cores = 1L, number_of_runs = 3L
+  )
+
+  # Run model twice using same run number (which will set the seed)
+  same1 <- model(run_number = 0L, param = param)[["occupancy"]]
+  same2 <- model(run_number = 0L, param = param)[["occupancy"]]
+  expect_identical(same1, same2)
+
+  # Conversely, if run with different run number, expect different
+  diff <- model(run_number = 1L, param = param)[["occupancy"]]
+  expect_failure(expect_identical(same1, diff))
+
+  # Repeat experiment, but with multiple replications
+  same_repeat1 <- runner(param = param)[["occupancy"]]
+  same_repeat2 <- runner(param = param)[["occupancy"]]
+  expect_identical(same_repeat1, same_repeat2)
+})
+
+
+test_that("model and runner produce same results if override future.seed", {
+
+  param <- create_parameters(
+    warm_up_period = 20L, data_collection_period = 20L,
+    cores = 1L, number_of_runs = 3L
+  )
+
+  # Get result from runner, using future seeding
+  futureseed_res <- runner(param, use_future_seeding = TRUE)[["occupancy"]]
+
+  # Get results from runner - with run numbers as seeds (future seed = FALSE)
+  runnumber_res <- runner(param, use_future_seeding = FALSE)[["occupancy"]]
+
+  # Get results from model run in a loop
+  model_res <- bind_rows(lapply(1L:param$number_of_runs, function(i) {
+    model(run_number = i, param = param, set_seed = TRUE)[["occupancy"]]
+  }))
+
+  # Expect model to differ from runner with future seeding, but match other
+  expect_failure(expect_identical(futureseed_res, model_res))
+  expect_identical(runnumber_res, model_res)
+})
+
+
+# -----------------------------------------------------------------------------
+# 4. Warm-up
+# -----------------------------------------------------------------------------
+
+test_that("results are as expected if model runs with only a warm-up", {
+
+  # Run with only warm-up and no data collection period
+  param <- create_parameters(
+    warm_up_period = 100L, data_collection_period = 0L,
+    cores = 1L, number_of_runs = 1L
+  )
+  result <- runner(param = param)
+
+  # Arrivals should be empty
+  expect_identical(nrow(result[["arrivals"]]), 0L)
+
+  # Occupancy will have one record for each unit, from the final time of
+  # warm-up (which would be the start of data collection, if existing)
+  expect_identical(nrow(result[["occupancy"]]), 2L)
+  expect_identical(nrow(result[["occupancy_stats"]][["asu_bed"]]), 1L)
+  expect_identical(nrow(result[["occupancy_stats"]][["rehab_bed"]]), 1L)
+})
+
+
+test_that("running with warm-up leads to different results than without", {
+  # Run without warm-up, expect first audit to have time and occupancy of 0
+  param <- create_parameters(
+    warm_up_period = 0L, data_collection_period = 20L,
+    cores = 1L, number_of_runs = 1L
+  )
+  result <- runner(param = param)
+  first_audit <- result[["occupancy"]] |>
+    dplyr::arrange(time) |>
+    dplyr::slice(1L:2L)
+  expect_true(all(first_audit[["time"]] == 0L))
+  expect_true(all(first_audit[["occupancy"]] == 0L))
+
+  # Run with warm-up, expect first audit to have time and occupancy > 0
+  param <- create_parameters(
+    warm_up_period = 50L, data_collection_period = 20L,
+    cores = 1L, number_of_runs = 1L
+  )
+  result <- runner(param = param)
+  first_audit <- result[["occupancy"]] |>
+    dplyr::arrange(time) |>
+    dplyr::slice(1L:2L)
+  expect_true(all(first_audit[["time"]] > 0L))
+  expect_true(all(first_audit[["occupancy"]] > 0L))
+})
+
+
+# -----------------------------------------------------------------------------
+# 5. Logs
+# -----------------------------------------------------------------------------
+
+test_that("log to console and file work correctly", {
+  # Set parameters and create temporary file for log
+  log_file <- tempfile(fileext = ".log")
+  param <- create_parameters(
+    warm_up_period = 0L,
+    data_collection_period = 20L,
+    log_to_console = TRUE,
+    log_to_file = TRUE,
+    file_path = log_file
+  )
+
+  # Check if "Parameters:" and "Log:" are in the console output
+  expect_output(model(run_number = 1L, param = param),
+                "Parameters:.*Log:", fixed = FALSE)
+
+  # Check if "Parameters:" and "Log:" are in the file output
+  expect_true(file.exists(log_file))
+  expect_match(readLines(log_file), "Parameters:", all = FALSE)
+  expect_match(readLines(log_file), "Log:", all = FALSE)
+})
