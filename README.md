@@ -59,7 +59,9 @@ The simulation code is in the `R/` folder as a local package. There are files ex
 **Install the local package:**
 
 ```{.r}
-devtools::install()
+devtools::install()  # Needed if running in parallel
+devtools::load_all()  # Sufficient if running sequentially
+
 library(simulation)
 ```
 
