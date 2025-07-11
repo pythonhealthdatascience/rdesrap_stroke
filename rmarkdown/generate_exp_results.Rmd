@@ -27,7 +27,6 @@ Load required packages.
 ```{r setup}
 # nolint start: undesirable_function_linter.
 library(dplyr)
-library(simulation)
 # nolint end
 ```
 

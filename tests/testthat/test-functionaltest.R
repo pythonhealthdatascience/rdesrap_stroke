@@ -28,8 +28,8 @@ test_that("model errors for invalid asu_arrivals values", {
 
 test_that("model errors for invalid asu_los values", {
   param <- create_parameters()
-  # Negative mean for stroke_noesd
-  param$asu_los$stroke_noesd$mean <- -5L
+  # Negative mean for stroke_no_esd
+  param$asu_los$stroke_no_esd$mean <- -5L
   expect_error(
     model(param = param, run_number = 1L),
     'All values in "asu_los" must be greater than 0.'
@@ -169,7 +169,7 @@ patrick::with_parameters_test_that(
   patrick::cases(
     list(group = "asu_arrivals", patient = "stroke", metric = NULL,
          init_value = 2L, adj_value = 6L),
-    list(group = "rehab_los", patient = "stroke_noesd", metric = "mean",
+    list(group = "rehab_los", patient = "stroke_no_esd", metric = "mean",
          init_value = 30L, adj_value = 10L)
   )
 )

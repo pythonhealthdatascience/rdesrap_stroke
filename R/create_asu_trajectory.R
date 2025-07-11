@@ -55,7 +55,7 @@ create_asu_trajectory <- function(env, patient_type, param) {
         los_params <- switch(
           dest,
           esd = param[["asu_los_lnorm"]][["stroke_esd"]],
-          rehab = param[["asu_los_lnorm"]][["stroke_noesd"]],
+          rehab = param[["asu_los_lnorm"]][["stroke_no_esd"]],
           other = param[["asu_los_lnorm"]][["stroke_mortality"]],
           stop("Stroke post-asu destination '", dest, "' invalid",
                call. = FALSE)

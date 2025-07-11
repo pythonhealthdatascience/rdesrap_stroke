@@ -40,9 +40,9 @@ create_rehab_arrivals <- function(
 #'
 #' Mean and standard deviation (SD) of LOS in days in the ASU.
 #'
-#' @param stroke_noesd_mean Numeric. Mean LOS for stroke patients without early
+#' @param stroke_no_esd_mean Numeric. Mean LOS for stroke patients without early
 #' supported discharged (ESD).
-#' @param stroke_noesd_sd Numeric. SD LOS for stroke patients without ESD.
+#' @param stroke_no_esd_sd Numeric. SD LOS for stroke patients without ESD.
 #' @param stroke_esd_mean Numeric. Mean LOS for stroke patients with ESD.
 #' @param stroke_esd_sd Numeric. SD LOS for stroke patients with ESD.
 #' @param stroke_mortality_mean Numeric. Mean LOS for stroke patients who pass
@@ -61,7 +61,7 @@ create_rehab_arrivals <- function(
 #' @export
 
 create_asu_los <- function(
-  stroke_noesd_mean = 7.4, stroke_noesd_sd = 8.61,
+  stroke_no_esd_mean = 7.4, stroke_no_esd_sd = 8.61,
   stroke_esd_mean = 4.6, stroke_esd_sd = 4.8,
   stroke_mortality_mean = 7.0, stroke_mortality_sd = 8.7,
   tia_mean = 1.8, tia_sd = 2.3,
@@ -69,7 +69,7 @@ create_asu_los <- function(
   other_mean = 3.8, other_sd = 5.2
 ) {
   list(
-    stroke_noesd = list(mean = stroke_noesd_mean, sd = stroke_noesd_sd),
+    stroke_no_esd = list(mean = stroke_no_esd_mean, sd = stroke_no_esd_sd),
     stroke_esd = list(mean = stroke_esd_mean, sd = stroke_esd_sd),
     stroke_mortality = list(mean = stroke_mortality_mean,
                             sd = stroke_mortality_sd),
@@ -81,9 +81,9 @@ create_asu_los <- function(
 
 #' Rehabilitation unit length of stay (LOS) distributions (days).
 #'
-#' @param stroke_noesd_mean Numeric. Mean LOS for stroke patients without early
+#' @param stroke_no_esd_mean Numeric. Mean LOS for stroke patients without early
 #' supported discharged (ESD).
-#' @param stroke_noesd_sd Numeric. SD LOS for stroke patients without ESD.
+#' @param stroke_no_esd_sd Numeric. SD LOS for stroke patients without ESD.
 #' @param stroke_esd_mean Numeric. Mean LOS for stroke patients with ESD.
 #' @param stroke_esd_sd Numeric. SD LOS for stroke patients with ESD.
 #' @param tia_mean Numeric. Mean LOS for transient ischemic attack (TIA)
@@ -98,14 +98,14 @@ create_asu_los <- function(
 #' @export
 
 create_rehab_los <- function(
-  stroke_noesd_mean = 28.4, stroke_noesd_sd = 27.2,
+  stroke_no_esd_mean = 28.4, stroke_no_esd_sd = 27.2,
   stroke_esd_mean = 30.3, stroke_esd_sd = 23.1,
   tia_mean = 18.7, tia_sd = 23.5,
   neuro_mean = 27.6, neuro_sd = 28.4,
   other_mean = 16.1, other_sd = 14.1
 ) {
   list(
-    stroke_noesd = list(mean = stroke_noesd_mean, sd = stroke_noesd_sd),
+    stroke_no_esd = list(mean = stroke_no_esd_mean, sd = stroke_no_esd_sd),
     stroke_esd = list(mean = stroke_esd_mean, sd = stroke_esd_sd),
     tia = list(mean = tia_mean, sd = tia_sd),
     neuro = list(mean = neuro_mean, sd = neuro_sd),

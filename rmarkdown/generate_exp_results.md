@@ -1,7 +1,7 @@
 Generate expected results
 ================
 Amy Heather
-2025-07-10
+2025-07-11
 
 - [Set-up](#set-up)
 - [Base case](#base-case)
@@ -54,7 +54,6 @@ library(dplyr)
     ##     intersect, setdiff, setequal, union
 
 ``` r
-library(simulation)
 # nolint end
 ```
 
@@ -103,11 +102,11 @@ print(param)
     ## 
     ## 
     ## $asu_los
-    ## $asu_los$stroke_noesd
-    ## $asu_los$stroke_noesd$mean
+    ## $asu_los$stroke_no_esd
+    ## $asu_los$stroke_no_esd$mean
     ## [1] 7.4
     ## 
-    ## $asu_los$stroke_noesd$sd
+    ## $asu_los$stroke_no_esd$sd
     ## [1] 8.61
     ## 
     ## 
@@ -153,11 +152,11 @@ print(param)
     ## 
     ## 
     ## $rehab_los
-    ## $rehab_los$stroke_noesd
-    ## $rehab_los$stroke_noesd$mean
+    ## $rehab_los$stroke_no_esd
+    ## $rehab_los$stroke_no_esd$mean
     ## [1] 28.4
     ## 
-    ## $rehab_los$stroke_noesd$sd
+    ## $rehab_los$stroke_no_esd$sd
     ## [1] 27.2
     ## 
     ## 
@@ -389,4 +388,4 @@ seconds <- as.integer(runtime %% 60L)
 cat(sprintf("Notebook run time: %dm %ds", minutes, seconds))
 ```
 
-    ## Notebook run time: 0m 1s
+    ## Notebook run time: 0m 3s

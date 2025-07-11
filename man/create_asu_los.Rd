@@ -5,8 +5,8 @@
 \title{Acute Stroke Unit (ASU) length of stay (LOS) distributions (days).}
 \usage{
 create_asu_los(
-  stroke_noesd_mean = 7.4,
-  stroke_noesd_sd = 8.61,
+  stroke_no_esd_mean = 7.4,
+  stroke_no_esd_sd = 8.61,
   stroke_esd_mean = 4.6,
   stroke_esd_sd = 4.8,
   stroke_mortality_mean = 7,
@@ -20,10 +20,10 @@ create_asu_los(
 )
 }
 \arguments{
-\item{stroke_noesd_mean}{Numeric. Mean LOS for stroke patients without early
+\item{stroke_no_esd_mean}{Numeric. Mean LOS for stroke patients without early
 supported discharged (ESD).}
 
-\item{stroke_noesd_sd}{Numeric. SD LOS for stroke patients without ESD.}
+\item{stroke_no_esd_sd}{Numeric. SD LOS for stroke patients without ESD.}
 
 \item{stroke_esd_mean}{Numeric. Mean LOS for stroke patients with ESD.}
 

@@ -55,7 +55,7 @@ create_rehab_trajectory <- function(env, patient_type, param) {
         los_params <- switch(
           dest,
           esd = param[["rehab_los_lnorm"]][["stroke_esd"]],
-          other = param[["rehab_los_lnorm"]][["stroke_noesd"]],
+          other = param[["rehab_los_lnorm"]][["stroke_no_esd"]],
           stop("Stroke post-rehab destination '", dest, "' invalid",
                call. = FALSE)
         )
