@@ -20,4 +20,4 @@ abstract: >-
   Reproducible analytical pipeline (RAP) for R discrete-event simulation (DES)
   implementing the Stroke Capacity Planning Model from Monks et al. 2016.
 version: 0.1.0
-date-released: '2025-06-30'
+date-released: '2025-07-11'
