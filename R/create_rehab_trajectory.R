@@ -26,7 +26,7 @@ create_rehab_trajectory <- function(env, patient_type, param) {
   # Set up simmer trajectory object...
   trajectory(paste0("rehab_", patient_type, "_path")) |>
 
-    log_("🚶 Arrived at rehab", level = 1L) |>
+    log_("\U0001F6B6 Arrived at rehab", level = 1L) |>
 
     seize("rehab_bed", 1L) |>
 
@@ -41,7 +41,7 @@ create_rehab_trajectory <- function(env, patient_type, param) {
       dest_names <- names(param[["rehab_routing"]][[patient_type]])
       dest <- dest_names[dest_index]
       # Create log message
-      paste0("🎯 Planned rehab -> ", dest_index, " (", dest, ")")
+      paste0("\U0001F3AF Planned rehab -> ", dest_index, " (", dest, ")")
     }, level = 1L) |>
 
     set_attribute("rehab_los", function() {
@@ -72,13 +72,13 @@ create_rehab_trajectory <- function(env, patient_type, param) {
     }) |>
 
     log_(function() {
-      paste0("⏳ Rehab length of stay: ",
+      paste0("\U000023F3 Rehab length of stay: ",
              round(get_attribute(env, "rehab_los"), 3L))
     }, level = 1L) |>
 
     timeout(function() get_attribute(env, "rehab_los")) |>
 
-    log_("🏁 Rehab stay completed", level = 1L) |>
+    log_("\U0001F3C1 Rehab stay completed", level = 1L) |>
 
     release("rehab_bed", 1L)
 }

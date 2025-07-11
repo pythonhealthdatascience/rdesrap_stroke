@@ -21,9 +21,14 @@ Imports:
     dplyr,
     future,
     future.apply,
+    rlang,
     simmer
 Suggests:
     devtools,
     ggplot2,
-    scales
+    lintr,
+    mockery,
+    patrick,
+    scales,
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3

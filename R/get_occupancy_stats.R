@@ -12,8 +12,11 @@
 #'   \item The "1 in every n" patients delayed (inverse of probability of delay)
 #' }
 #'
+#'
 #' @param occupancy DataFrame with three columns: \code{resource}, \code{time},
 #' and \code{occupancy}.
+#'
+#' @importFrom rlang .data
 #'
 #' @return A list of data frames, one per resource, each containing occupancy
 #' statistics.

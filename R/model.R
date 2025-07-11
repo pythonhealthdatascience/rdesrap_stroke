@@ -1,3 +1,6 @@
+# To avoid package build warning (name in expand.grid())
+utils::globalVariables("time")
+
 #' Run simulation.
 #'
 #' @param run_number Integer representing index of current simulation run.
@@ -6,15 +9,19 @@
 #' may not wish to do if being set elsewhere - such as done in \code{runner()}).
 #' Default is TRUE.
 #'
-#' @importFrom dplyr filter mutate rowwise ungroup
+#' @importFrom dplyr filter group_by mutate rowwise ungroup
+#' @importFrom rlang .data
 #' @importFrom simmer add_resource get_mon_arrivals get_mon_resources simmer
 #' @importFrom simmer wrap
 #' @importFrom utils capture.output
 #'
-#' @return TBC
+#' @return Named list with two tables: arrivals and occupancy.
 #' @export
 
 model <- function(run_number, param, set_seed = TRUE) {
+
+  # Check all inputs are valid
+  valid_inputs(run_number, param)
 
   # Set random seed based on run number
   if (set_seed) {
@@ -120,5 +127,12 @@ model <- function(run_number, param, set_seed = TRUE) {
   arrivals <- mutate(arrivals, replication = run_number)
   occupancy <- mutate(occupancy, replication = run_number)
 
-  return(list(arrivals = arrivals, occupancy = occupancy))
+  result <- list(arrivals = arrivals, occupancy = occupancy)
+
+  # Filter the output results if a warm-up period was specified...
+  result <- filter_warmup(
+    result = result, warm_up_period = param[["warm_up_period"]]
+  )
+
+  return(result)
 }

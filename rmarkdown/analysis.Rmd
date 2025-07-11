@@ -302,14 +302,14 @@ make_delay_table <- function(
 
     # Extract and filter base and scenario data
     base_df <- base[[unit_name]] |>
-      filter(beds %in% unit_beds) |>
-      select(beds, .data[["prob_delay"]], .data[["1_in_n_delay"]]) |>
+      filter(.data[["beds"]] %in% unit_beds) |>
+      select(.data[["beds"]], .data[["prob_delay"]], .data[["1_in_n_delay"]]) |>
       rename_with(~paste0(., "_", base_name),
                   c("prob_delay", "1_in_n_delay"))
 
     scenario_df <- scenario[[unit_name]] |>
-      filter(beds %in% unit_beds) |>
-      select(beds, .data[["prob_delay"]], .data[["1_in_n_delay"]]) |>
+      filter(.data[["beds"]] %in% unit_beds) |>
+      select(.data[["beds"]], .data[["prob_delay"]], .data[["1_in_n_delay"]]) |>
       rename_with(~paste0(., "_", scenario_name),
                   c("prob_delay", "1_in_n_delay"))
 
@@ -325,7 +325,7 @@ make_delay_table <- function(
 
   # Combine and return
   bind_rows(asu_table, rehab_table) |>
-    arrange(unit, beds)
+    arrange(unit, .data[["beds"]])
 }
 ```
 
