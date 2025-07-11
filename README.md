@@ -56,16 +56,43 @@ renv::snapshot()
 
 The simulation code is in the `R/` folder as a local package. There are files executing the model and analysing the results in `rmarkdown/`.
 
-To run the model with base parameters once or with replications:
+**Install the local package:**
 
 ```{.r}
-# TODO
+devtools::install()
+library(simulation)
 ```
 
-Example altering the model parameters:
+**Run a single simulation:**
 
 ```{.r}
-# TODO
+param <- create_parameters(number_of_runs = 1L)
+single_results <- runner(param = param)
+```
+
+**Run multiple replications:**
+
+```{.r}
+param <- create_parameters(number_of_runs = 5L)
+single_results <- runner(param = param)
+```
+
+**Run all analyses (from command line):**
+
+```{.r}
+bash run_rmarkdown.sh
+```
+
+**Run tests:**
+
+```{.r}
+devtools::test()
+```
+
+**Lint code:**
+
+```{.r}
+lintr::lint_dir()
 ```
 
 ### Generating the results from the article
@@ -87,23 +114,27 @@ To generate these, simply execute `rmarkdown/analysis.Rmd`.
 
 Original:
 
+![](docs/article/fig1.png)
+
 From this repository:
 
-**TODO**
+![](outputs/figure1_asu.png)
 
 **Figure 3**
 
 Original:
 
+![](docs/article/fig3.png)
+
 From this repository:
 
-**TODO**
+![](outputs/figure3_asu.png)
 
 <br>
 
 ## Run time and machine specification
 
-The run time for this analysis (`notebooks/analysis.Rm`) is **TODO** seconds. This was on an Intel Core i7-12700H, 32GB RAM, Ubuntu 24.04.1.
+The run time for this analysis (`notebooks/analysis.Rmd`) is **1m 38s** seconds. This was on an Intel Core i7-12700H, 32GB RAM, Ubuntu 24.04.1.
 
 The other notebooks generate results for tests and illustrate other functionality (e.g. importing parameters from csv, running with logs), and these just take a second or two.
 
