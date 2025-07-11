@@ -5,7 +5,7 @@
 <!-- badges: start -->
 ![R 4.4.1](https://img.shields.io/badge/-R_4.4.1-276DC2?&logo=r&logoColor=white)
 ![MIT Licence](https://img.shields.io/badge/Licence-MIT-green.svg?&labelColor=gray)
-<!--TODO: Add DOI-->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15863376.svg)](https://doi.org/10.5281/zenodo.15863376)
 [![R-CMD-check](https://github.com/pythonhealthdatascience/rdesrap_stroke/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pythonhealthdatascience/rdesrap_stroke/actions/workflows/R-CMD-check.yaml)
 [![Lint](https://github.com/pythonhealthdatascience/rdesrap_stroke/actions/workflows/lint.yaml/badge.svg)](https://github.com/pythonhealthdatascience/rdesrap_stroke/actions/workflows/lint.yaml)
 [![ORCID](https://img.shields.io/badge/ORCID_Amy_Heather-0000--0002--6596--3479-A6CE39?&logo=orcid&logoColor=white)](https://orcid.org/0000-0002-6596-3479)
@@ -148,7 +148,7 @@ If you use this repository, please cite either the GitHub repository or Zenodo:
 
 > Heather, A. (2025). Stroke capacity planning model: R DES RAP. GitHub. https://github.com/pythonhealthdatascience/rdesrap_stroke.
 >
-> **TODO: Zenodo**
+> Heather, A. (2025). Stroke capacity planning model: R DES RAP. Zenodo. https://doi.org/10.5281/zenodo.15863376.
 
 **Contributors:**
 
