@@ -31,5 +31,6 @@ Suggests:
     patrick,
     scales,
     testthat (>= 3.0.0),
-    covr
+    covr,
+    DT
 Config/testthat/edition: 3
