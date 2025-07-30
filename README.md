@@ -9,6 +9,7 @@
 [![R-CMD-check](https://github.com/pythonhealthdatascience/rdesrap_stroke/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pythonhealthdatascience/rdesrap_stroke/actions/workflows/R-CMD-check.yaml)
 [![Lint](https://github.com/pythonhealthdatascience/rdesrap_stroke/actions/workflows/lint.yaml/badge.svg)](https://github.com/pythonhealthdatascience/rdesrap_stroke/actions/workflows/lint.yaml)
 [![ORCID](https://img.shields.io/badge/ORCID_Amy_Heather-0000--0002--6596--3479-A6CE39?&logo=orcid&logoColor=white)](https://orcid.org/0000-0002-6596-3479)
+[![Codecov test coverage](https://codecov.io/gh/pythonhealthdatascience/rdesrap_stroke/graph/badge.svg)](https://app.codecov.io/gh/pythonhealthdatascience/rdesrap_stroke)
 <!-- badges: end -->
 </div>
 
@@ -89,6 +90,12 @@ bash run_rmarkdown.sh
 
 ```{.r}
 devtools::test()
+```
+
+**Compute test coverage:**
+
+```{.r}
+devtools::test_coverage()
 ```
 
 **Lint code:**
