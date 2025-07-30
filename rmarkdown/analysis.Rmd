@@ -33,7 +33,7 @@ The generated images are saved and then loaded, so that we view the image as sav
 
 ## Set-up
 
-Install the latest version of the local simulation package. If running sequentially, `devtools::load_all()` is sufficient. If running in parallel, you must use `devtools::install()`.
+Install the latest version of the local simulation package. If running sequentially, `devtools::load_all()` is sufficient. If running in parallel, you must use `devtools::install()` and then `library(simulation)`.
 
 ```{r}
 devtools::install(upgrade = "never")
