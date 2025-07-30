@@ -7,7 +7,7 @@ Amy Heather
 
 Install the latest version of the local simulation package. If running
 sequentially, `devtools::load_all()` is sufficient. If running in
-parallel, you must use `devtools::install()`.
+parallel, you must use `devtools::install()` and then `library(simulation)`.
 
 ``` r
 devtools::load_all()

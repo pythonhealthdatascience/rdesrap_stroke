@@ -10,6 +10,7 @@ valid_inputs <- function(run_number, param) {
   check_run_number(run_number)
   check_all_param_names(param)
   check_param_values(param)
+  check_log_file_path(param)
 }
 
 
@@ -211,5 +212,25 @@ check_param_values <- function(param) {
         check_prob_vector(vec, paste0(routing, "$", name))
       })
     }
+  }
+}
+
+#' Check logging file path
+#'
+#' @param param List containing parameters for the simulation.
+#'
+#' @return None. Throws an error if valid file path not provided, when
+#' log_to_file = TRUE.
+#' @export
+
+check_log_file_path <- function(param) {
+  log_to_file <- param[["log_to_file"]]
+  file_path <- param[["file_path"]]
+  if (isTRUE(log_to_file) && (is.null(file_path) || !nzchar(file_path))) {
+    stop(
+      "If 'log_to_file' is TRUE, you must provide a non-NULL, ",
+      "non-empty 'file_path'.",
+      call. = FALSE
+    )
   }
 }
