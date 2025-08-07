@@ -3,6 +3,7 @@
 export(add_patient_generator)
 export(check_all_param_names)
 export(check_all_positive)
+export(check_log_file_path)
 export(check_nonneg_integer)
 export(check_param_names)
 export(check_param_values)
