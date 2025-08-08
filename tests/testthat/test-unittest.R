@@ -89,3 +89,50 @@ test_that("warm-up filtering works as expected", {
   expect_identical(nrow(full_length[["arrivals"]]), 0L)
   expect_identical(nrow(full_length[["occupancy"]]), 0L)
 })
+
+
+# -----------------------------------------------------------------------------
+# 3. DistributionRegistry
+# -----------------------------------------------------------------------------
+
+test_that("initialize creates common distributions", {
+  reg <- DistributionRegistry$new()
+  expect_true("normal" %in% names(reg$registry))
+  expect_true("uniform" %in% names(reg$registry))
+  expect_true("binomial" %in% names(reg$registry))
+})
+
+test_that("get retrieves a distribution generator", {
+  reg <- DistributionRegistry$new()
+  g <- reg$get("normal")
+  expect_type(g, "closure")
+})
+
+test_that("create returns a sampler that samples correctly", {
+  reg <- DistributionRegistry$new()
+  sampler <- reg$create("normal", mean = 10, sd = 2)
+  samples <- sampler(size = 5)
+  expect_length(samples, 5)
+  expect_true(is.numeric(samples))
+})
+
+test_that("register adds and retrieves custom distribution", {
+  reg <- DistributionRegistry$new()
+  reg$register("const", function(val) function(size = 1L) rep(val, size))
+  sampler <- reg$create("const", val = 42)
+  samples <- sampler(3)
+  expect_equal(samples, c(42, 42, 42))
+})
+
+test_that("create_batch creates multiple samplers", {
+  reg <- DistributionRegistry$new()
+  batch <- reg$create_batch(list(
+    list(class_name = "normal", params = list(mean = 0, sd = 1)),
+    list(class_name = "binomial", params = list(size_param = 10, prob = 0.5))
+  ))
+  expect_length(batch, 2)
+  expect_type(batch[[1]], "closure")
+  expect_type(batch[[2]], "closure")
+  expect_true(is.numeric(batch[[1]](2)))
+  expect_true(is.numeric(batch[[2]](2)))
+})
