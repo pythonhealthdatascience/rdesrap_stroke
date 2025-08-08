@@ -32,44 +32,30 @@ create_asu_trajectory <- function(env, patient_type, param) {
 
     # Sample destination after ASU (as destination influences length of stay)
     set_attribute("post_asu_destination", function() {
-      sample_routing(prob_list = param[["asu_routing"]][[patient_type]])
+      param[["dist"]][["routing"]][["asu"]][[patient_type]]()
     }) |>
 
     log_(function() {
-      # Retrieve attribute, and use to get post-ASU destination as a string
-      dest_index <- get_attribute(env, "post_asu_destination")
-      dest_names <- names(param[["asu_routing"]][[patient_type]])
-      dest <- dest_names[dest_index]
-      # Create log message
-      paste0("\U0001F3AF Planned ASU -> ", dest_index, " (", dest, ")")
+      dest <- get_attribute(env, "post_asu_destination")
+      paste0("\U0001F3AF Planned ASU -> ", dest)
     }, level = 1L) |>
 
+    # Sample ASU LOS. For stroke patients, LOS distribution is based on
+    # the planned destination after the ASU.
     set_attribute("asu_los", function() {
-      # Retrieve attribute, and use to get post-ASU destination as a string
-      dest_index <- get_attribute(env, "post_asu_destination")
-      dest_names <- names(param[["asu_routing"]][[patient_type]])
-      dest <- dest_names[dest_index]
-
-      # Determine which LOS distribution to use
+      dest <- get_attribute(env, "post_asu_destination")
       if (patient_type == "stroke") {
-        los_params <- switch(
+        switch(
           dest,
-          esd = param[["asu_los_lnorm"]][["stroke_esd"]],
-          rehab = param[["asu_los_lnorm"]][["stroke_no_esd"]],
-          other = param[["asu_los_lnorm"]][["stroke_mortality"]],
+          esd = param[["dest"]][["los"]][["asu"]][["stroke_esd"]],
+          rehab = param[["dest"]][["los"]][["asu"]][["stroke_no_esd"]],
+          other = param[["dest"]][["los"]][["asu"]][["stroke_mortality"]],
           stop("Stroke post-asu destination '", dest, "' invalid",
                call. = FALSE)
         )
       } else {
-        los_params <- param[["asu_los_lnorm"]][[patient_type]]
+        param[["dest"]][["los"]][["asu"]][[patient_type]]()
       }
-
-      # Sample LOS from lognormal
-      rlnorm(
-        n = 1L,
-        meanlog = los_params[["meanlog"]],
-        sdlog = los_params[["sdlog"]]
-      )
     }) |>
 
     log_(function() {
@@ -86,12 +72,7 @@ create_asu_trajectory <- function(env, patient_type, param) {
     # If that patient's destination is rehab, then start on that trajectory
     branch(
       option = function() {
-        # Retrieve attribute, and use to get post-ASU destination as a string
-        dest_index <- get_attribute(env, "post_asu_destination")
-        dest_names <- names(param[["asu_routing"]][[patient_type]])
-        dest <- dest_names[dest_index]
-        # Return 1 for rehab and 0 otherwise
-        if (dest == "rehab") 1L else 0L
+        if (get_attribute(env, "post_asu_destination") == "rehab") 1L else 0L
       },
       continue = FALSE,  # Do not continue main trajectory after branch
       create_rehab_trajectory(env, patient_type, param)

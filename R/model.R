@@ -32,9 +32,20 @@ model <- function(run_number, param, set_seed = TRUE) {
   param[["verbose"]] <- any(c(param[["log_to_console"]],
                               param[["log_to_file"]]))
 
-  # Transform LOS parameters to lognormal scale
-  param[["asu_los_lnorm"]] <- transform_to_lnorm(param[["asu_los"]])
-  param[["rehab_los_lnorm"]] <- transform_to_lnorm(param[["rehab_los"]])
+  # Set up sampling distributions
+  registry <- simulation::DistributionRegistry$new()
+  param[["dist"]] <- registry$create_batch(as.list(param[["dist_config"]]))
+
+  # Restructure as dist[type][unit][patient]
+  dist <- list()
+  for (key in names(param[["dist"]])) {
+    parts <- strsplit(key, "_")[[1]]
+    dist_type <- parts[2]
+    unit <- parts[1]
+    patient <- paste(parts[-(1:2)], collapse = "_")
+    dist[[dist_type]][[unit]][[patient]] <- param[["dist"]][[key]]
+  }
+  param[["dist"]] <- dist
 
   # Create simmer environment - set verbose to FALSE as using custom logs
   # (but can change to TRUE if want to see default simmer logs as well)
