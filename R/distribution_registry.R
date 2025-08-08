@@ -30,8 +30,27 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
     self$register("uniform", function(min, max) {
       function(size = 1L) runif(size, min = min, max = max)
     })
+    self$register("discrete", function(values, prob) {
+      values <- unlist(values)
+      prob <- unlist(prob)
+      # Validation (as not using a pre-made distribution function)
+      stopifnot(length(values) == length(prob))
+      stopifnot(all(prob >= 0))
+      if (round(abs(sum(prob) - 1), 2) > 0.01) {
+        stop(sprintf(
+          "'prob' must sum to 1 ± 0.01. Sum: %s", abs(sum(unlist(prob)))
+        ))
+      }
+      # Sampling function
+      function(size = 1L) sample(
+        values, size = size, replace = TRUE, prob = prob
+      )
+    })
     self$register("normal", function(mean, sd) {
       function(size = 1L) rnorm(size, mean = mean, sd = sd)
+    })
+    self$register("lognormal", function(meanlog, sdlog) {
+      function(size = 1L) rlnorm(size, meanlog = meanlog, sdlog = sdlog)
     })
     self$register("poisson", function(lambda) {
       function(size = 1L) rpois(size, lambda = lambda)
@@ -76,8 +95,29 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
   #' @return Generator function for the distribution.
   get = function(name) {
     if (!(name %in% names(self$registry)))
-      stop(sprintf("Distribution '%s' not found", name), call. = FALSE)
+      stop(
+        sprintf(
+          c("Distribution '%s' not found.\nAvailable distributions:\n\t%s\n",
+            "Use register() to add new distributions."),
+          name, paste(names(self$registry), collapse = ",\n\t")
+        ),
+      call. = FALSE)
     self$registry[[name]]
+  },
+
+  #' @description
+  #' Convert mean/sd to lognormal parameters, returning the corresponding
+  #' \code{meanlog} and \code{sdlog} parameters used by R's \code{rlnorm()}.
+  #'
+  #' @param params Named list with two elements: mean and sd.
+  #' @return A named list of the same structure, but with elements
+  #' \code{meanlog} and \code{sdlog} for each patient type.
+  transform_to_lnorm = function(params) {
+    variance <- params$sd^2L
+    sigma_sq <- log(variance / (params$mean^2L) + 1L)
+    sdlog <- sqrt(sigma_sq)
+    meanlog <- log(params$mean) - sigma_sq / 2L
+    list(meanlog = meanlog, sdlog = sdlog)
   },
 
   #' @description
@@ -86,12 +126,28 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
   #' The returned function draws random samples of a specified size from
   #' the given distribution with fixed parameters.
   #'
+  #' For "lognormal", if "meanlog" and "sdlog" are present in the parameters,
+  #' they will be used as-is. If not, but "mean" and "sd" are provided, these
+  #' will be transformed into "meanlog"/"sdlog" automatically.
+  #'
   #' @param name Distribution name
   #' @param ... Parameters for the generator
   #' @return A function that draws samples when called.
   create = function(name, ...) {
+    dots <- list(...)
+    if (name == "lognormal") {
+      if (!is.null(dots$meanlog) && !is.null(dots$sdlog)) {
+        dots <- dots
+      } else if (!is.null(dots$mean) && !is.null(dots$sd)) {
+        transformed <- self$transform_to_lnorm(dots)
+        dots <- c(transformed, dots[setdiff(names(dots), c("mean", "sd"))])
+      } else {
+        stop("Please supply either 'meanlog' and 'sdlog', or 'mean' and 'sd' ",
+             "for a lognormal distribution.")
+      }
+    }
     generator <- self$get(name)
-    generator(...)
+    do.call(generator, dots)
   },
 
   #' @description
@@ -105,11 +161,7 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
   #'   'class_name' and 'params'.
   #' @return List of parameterised samplers (named if config is named).
   create_batch = function(config) {
-    if (is.list(config) && is.null(names(config))) {
-      lapply(config, function(cfg) {
-        do.call(self$create, c(cfg$class_name, cfg$params))
-      })
-    } else if (is.list(config)) {
+    if (is.list(config)) {
       lapply(config, function(cfg) {
         do.call(self$create, c(cfg$class_name, cfg$params))
       })

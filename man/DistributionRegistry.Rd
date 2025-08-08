@@ -29,6 +29,7 @@ at any time, use `register()`.
 \item \href{#method-DistributionRegistry-new}{\code{DistributionRegistry$new()}}
 \item \href{#method-DistributionRegistry-register}{\code{DistributionRegistry$register()}}
 \item \href{#method-DistributionRegistry-get}{\code{DistributionRegistry$get()}}
+\item \href{#method-DistributionRegistry-transform_to_lnorm}{\code{DistributionRegistry$transform_to_lnorm()}}
 \item \href{#method-DistributionRegistry-create}{\code{DistributionRegistry$create()}}
 \item \href{#method-DistributionRegistry-create_batch}{\code{DistributionRegistry$create_batch()}}
 \item \href{#method-DistributionRegistry-clone}{\code{DistributionRegistry$clone()}}
@@ -88,6 +89,28 @@ Generator function for the distribution.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DistributionRegistry-transform_to_lnorm"></a>}}
+\if{latex}{\out{\hypertarget{method-DistributionRegistry-transform_to_lnorm}{}}}
+\subsection{Method \code{transform_to_lnorm()}}{
+Convert mean/sd to lognormal parameters, returning the corresponding
+\code{meanlog} and \code{sdlog} parameters used by R's \code{rlnorm()}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DistributionRegistry$transform_to_lnorm(params)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{params}}{Named list with two elements: mean and sd.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A named list of the same structure, but with elements
+\code{meanlog} and \code{sdlog} for each patient type.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DistributionRegistry-create"></a>}}
 \if{latex}{\out{\hypertarget{method-DistributionRegistry-create}{}}}
 \subsection{Method \code{create()}}{
@@ -95,6 +118,10 @@ Create a parameterised sampler for a distribution.
 
 The returned function draws random samples of a specified size from
 the given distribution with fixed parameters.
+
+For "lognormal", if "meanlog" and "sdlog" are present in the parameters,
+they will be used as-is. If not, but "mean" and "sd" are provided, these
+will be transformed into "meanlog"/"sdlog" automatically.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DistributionRegistry$create(name, ...)}\if{html}{\out{</div>}}
 }

@@ -1,0 +1,136 @@
+{
+    "simulation_parameters": {
+      "asu_arrival_stroke": {
+        "class_name": "exponential",
+        "params": {"mean": 1.2}
+      },
+      "asu_arrival_tia": {
+        "class_name": "exponential",
+        "params": {"mean": 9.3}
+      },
+      "asu_arrival_neuro": {
+        "class_name": "exponential",
+        "params": {"mean": 3.6}
+      },
+      "asu_arrival_other": {
+        "class_name": "exponential",
+        "params": {"mean": 3.2}
+      },
+      "rehab_arrival_stroke": {
+        "class_name": "exponential",
+        "params": {"mean": 21.8}
+      },
+      "rehab_arrival_neuro": {
+        "class_name": "exponential",
+        "params": {"mean": 31.7}
+      },
+      "rehab_arrival_other": {
+        "class_name": "exponential",
+        "params": {"mean": 28.6}
+      },
+
+      "asu_los_stroke_noesd": {
+        "class_name": "lognormal",
+        "params": {"mean": 7.4, "sd": 8.61}
+      },
+      "asu_los_stroke_esd": {
+        "class_name": "lognormal",
+        "params": {"mean": 4.6, "sd": 4.8}
+      },
+      "asu_los_stroke_mortality": {
+        "class_name": "lognormal",
+        "params": {"mean": 7.0, "sd": 8.7}
+      },
+      "asu_los_tia": {
+        "class_name": "lognormal",
+        "params": {"mean": 1.8, "sd": 2.3}
+      },
+      "asu_los_neuro": {
+        "class_name": "lognormal",
+        "params": {"mean": 4.0, "sd": 5.0}
+      },
+      "asu_los_other": {
+        "class_name": "lognormal",
+        "params": {"mean": 3.8, "sd": 5.2}
+      },
+
+      "rehab_los_stroke_noesd": {
+        "class_name": "lognormal",
+        "params": {"mean": 28.4, "sd": 27.2}
+      },
+      "rehab_los_stroke_esd": {
+        "class_name": "lognormal",
+        "params": {"mean": 30.3, "sd": 23.1}
+      },
+      "rehab_los_tia": {
+        "class_name": "lognormal",
+        "params": {"mean": 18.7, "sd": 23.5}
+      },
+      "rehab_los_neuro": {
+        "class_name": "lognormal",
+        "params": {"mean": 27.6, "sd": 28.4}
+      },
+      "rehab_los_other": {
+        "class_name": "lognormal",
+        "params": {"mean": 16.1, "sd": 14.1}
+      },
+
+      "asu_routing_stroke": {
+        "class_name": "discrete",
+        "params": {
+          "values": ["rehab", "esd", "other"],
+          "prob": [0.24, 0.13, 0.63]
+        }
+      },
+      "asu_routing_tia": {
+        "class_name": "discrete",
+        "params": {
+          "values": ["rehab", "esd", "other"],
+          "prob": [0.01, 0.01, 0.98]
+        }
+      },
+      "asu_routing_neuro": {
+        "class_name": "discrete",
+        "params": {
+          "values": ["rehab", "esd", "other"],
+          "prob": [0.11, 0.05, 0.84]
+        }
+      },
+      "asu_routing_other": {
+        "class_name": "discrete",
+        "params": {
+          "values": ["rehab", "esd", "other"],
+          "prob": [0.05, 0.10, 0.85]
+        }
+      },
+
+      "rehab_routing_stroke": {
+        "class_name": "discrete",
+        "params": {
+          "values": ["esd", "other"],
+          "prob": [0.40, 0.60]
+        }
+      },
+      "rehab_routing_tia": {
+        "class_name": "discrete",
+        "params": {
+          "values": ["other"],
+          "prob": [1.0]
+        }
+      },
+      "rehab_routing_neuro": {
+        "class_name": "discrete",
+        "params": {
+          "values": ["esd", "other"],
+          "prob": [0.09, 0.91]
+        }
+      },
+      "rehab_routing_other": {
+        "class_name": "discrete",
+        "params": {
+          "values": ["esd", "other"],
+          "prob": [0.13, 0.88]
+        }
+      }
+    }
+  }
