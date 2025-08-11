@@ -5,7 +5,7 @@
 
 test_that("results from a new run match those previously generated", {
   # Run the model for 2 replications
-  param <- create_parameters(cores = 1L, number_of_runs = 2L)
+  param <- parameters(cores = 1L, number_of_runs = 2L)
   results <- runner(param = param)
 
   # Extract and format the results (e.g. sort, dataframe, column type)

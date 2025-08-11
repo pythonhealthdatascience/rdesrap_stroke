@@ -113,7 +113,7 @@ test_that("create returns a sampler that samples correctly", {
   sampler <- reg$create("normal", mean = 10L, sd = 2L)
   samples <- sampler(size = 5L)
   expect_length(samples, 5L)
-  expect_type(samples, "numeric")
+  expect_type(samples, "double")
 })
 
 test_that("register adds and retrieves custom distribution", {
@@ -133,6 +133,6 @@ test_that("create_batch creates multiple samplers", {
   expect_length(batch, 2L)
   expect_type(batch[[1L]], "closure")
   expect_type(batch[[2L]], "closure")
-  expect_type(batch[[1L]](2L), "numeric")
-  expect_true(batch[[2L]](2L), "numeric")
+  expect_type(batch[[1L]](size = 2L), "double")
+  expect_type(batch[[2L]](size = 2L), "integer")
 })
