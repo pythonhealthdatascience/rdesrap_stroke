@@ -51,9 +51,15 @@ Pre-registers a set of common base R distribution generators.
 \subsection{Method \code{register()}}{
 Register a distribution generator under a name.
 
-Typically, the generator should be a function that takes
-distribution-specific parameters and returns a function of `size` (the
-sample size).
+Typically, the generator should be a function that:
+1. Accepts parameters for a distribution.
+2. Returns another function - the *sampler* - which takes a `size`
+argument and produces that many random values from the specified
+distribution.
+
+By storing generators rather than fixed samplers, you can create as many
+different samplers as you want later, each with different parameters,
+while reusing the same generator code.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DistributionRegistry$register(name, generator)}\if{html}{\out{</div>}}
 }

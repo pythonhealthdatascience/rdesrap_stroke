@@ -32,9 +32,29 @@ model <- function(run_number, param, set_seed = TRUE) {
   param[["verbose"]] <- any(c(param[["log_to_console"]],
                               param[["log_to_file"]]))
 
+  # Convert discrete categories from character to numeric (as will store using
+  # set.attribute(), which doesn't accept strings)
+  # Identify discrete configs
+  discrete_cfg <- Filter(\(x) x$class_name == "discrete", param$dist_config)
+  # Get all the unique "values" (categories)
+  all_vals <- unique(unlist(lapply(discrete_cfg, \(x) unlist(x$params$values))))
+  # Build mapping
+  param[["map_val2num"]] <- setNames(seq_along(all_vals), all_vals)
+  param[["map_num2val"]] <- setNames(all_vals, seq_along(all_vals))
+  # Replace discrete values with numeric codes in a copy
+  param$dist_config_num <- lapply(param$dist_config, \(cfg) {
+    if (cfg$class_name == "discrete") {
+      # Flatten, map to numbers, drop names
+      cfg$params$values <- unname(
+        param[["map_val2num"]][unlist(cfg$params$values)]
+      )
+    }
+    cfg
+  })
+
   # Set up sampling distributions
   registry <- simulation::DistributionRegistry$new()
-  param[["dist"]] <- registry$create_batch(as.list(param[["dist_config"]]))
+  param[["dist"]] <- registry$create_batch(as.list(param[["dist_config_num"]]))
 
   # Restructure as dist[type][unit][patient]
   dist <- list()
@@ -61,7 +81,7 @@ model <- function(run_number, param, set_seed = TRUE) {
       .env = env, name = paste0(unit, "_bed"), capacity = Inf
     )
 
-    for (patient_type in names(param[[paste0(unit, "_arrivals")]])) {
+    for (patient_type in names(param[["dist"]][["arrival"]][[unit]])) {
 
       # Create patient trajectory
       traj <- if (unit == "asu") {

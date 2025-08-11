@@ -36,24 +36,26 @@ create_rehab_trajectory <- function(env, patient_type, param) {
     }) |>
 
     log_(function() {
-      dest <- get_attribute(env, "post_rehab_destination")
-      paste0("\U0001F3AF Planned rehab -> ", dest_index, " (", dest, ")")
+      dest_num <- get_attribute(env, "post_rehab_destination")
+      dest <- param[["map_num2val"]][as.character(dest_num)]
+      paste0("\U0001F3AF Planned rehab -> ", dest_num, " (", dest, ")")
     }, level = 1L) |>
 
     # Sample rehab LOS. For stroke patients, LOS distribution is based on
     # the planned destination after the rehab
     set_attribute("rehab_los", function() {
-      dest <- get_attribute(env, "post_rehab_destination")
+      dest_num <- get_attribute(env, "post_rehab_destination")
+      dest <- param[["map_num2val"]][as.character(dest_num)]
       if (patient_type == "stroke") {
         switch(
           dest,
-          esd = param[["los"]][["rehab"]][["stroke_esd"]](),
-          other = param[["los"]][["rehab"]][["stroke_no_esd"]](),
+          esd = param[["dist"]][["los"]][["rehab"]][["stroke_esd"]](),
+          other = param[["dist"]][["los"]][["rehab"]][["stroke_noesd"]](),
           stop("Stroke post-rehab destination '", dest, "' invalid",
                call. = FALSE)
         )
       } else {
-        param[["los"]][["rehab"]][[patient_type]]()
+        param[["dist"]][["los"]][["rehab"]][[patient_type]]()
       }
     }) |>
 

@@ -78,9 +78,15 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
   #' @description
   #' Register a distribution generator under a name.
   #'
-  #' Typically, the generator should be a function that takes
-  #' distribution-specific parameters and returns a function of `size` (the
-  #' sample size).
+  #' Typically, the generator should be a function that:
+  #' 1. Accepts parameters for a distribution.
+  #' 2. Returns another function - the *sampler* - which takes a `size`
+  #' argument and produces that many random values from the specified
+  #' distribution.
+  #'
+  #' By storing generators rather than fixed samplers, you can create as many
+  #' different samplers as you want later, each with different parameters,
+  #' while reusing the same generator code.
   #'
   #' @param name Distribution name (string)
   #' @param generator Function to create a sampler given its parameters.
@@ -146,6 +152,8 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
              "for a lognormal distribution.")
       }
     }
+    # Calls the `get()` method above which finds the distribution generator
+    # function, then do.call() populates it with dots (a list of arguments).
     generator <- self$get(name)
     do.call(generator, dots)
   },
@@ -162,6 +170,7 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
   #' @return List of parameterised samplers (named if config is named).
   create_batch = function(config) {
     if (is.list(config)) {
+      # Calls `create()` for each distribution specified in config
       lapply(config, function(cfg) {
         do.call(self$create, c(cfg$class_name, cfg$params))
       })

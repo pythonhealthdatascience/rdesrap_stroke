@@ -36,25 +36,27 @@ create_asu_trajectory <- function(env, patient_type, param) {
     }) |>
 
     log_(function() {
-      dest <- get_attribute(env, "post_asu_destination")
-      paste0("\U0001F3AF Planned ASU -> ", dest)
+      dest_num <- get_attribute(env, "post_asu_destination")
+      dest <- param[["map_num2val"]][as.character(dest_num)]
+      paste0("\U0001F3AF Planned ASU -> ", dest_num, " (", dest, ")")
     }, level = 1L) |>
 
     # Sample ASU LOS. For stroke patients, LOS distribution is based on
     # the planned destination after the ASU.
     set_attribute("asu_los", function() {
-      dest <- get_attribute(env, "post_asu_destination")
+      dest_num <- get_attribute(env, "post_asu_destination")
+      dest <- param[["map_num2val"]][as.character(dest_num)]
       if (patient_type == "stroke") {
         switch(
           dest,
-          esd = param[["dest"]][["los"]][["asu"]][["stroke_esd"]],
-          rehab = param[["dest"]][["los"]][["asu"]][["stroke_no_esd"]],
-          other = param[["dest"]][["los"]][["asu"]][["stroke_mortality"]],
+          esd = param[["dist"]][["los"]][["asu"]][["stroke_esd"]](),
+          rehab = param[["dist"]][["los"]][["asu"]][["stroke_noesd"]](),
+          other = param[["dist"]][["los"]][["asu"]][["stroke_mortality"]](),
           stop("Stroke post-asu destination '", dest, "' invalid",
                call. = FALSE)
         )
       } else {
-        param[["dest"]][["los"]][["asu"]][[patient_type]]()
+        param[["dist"]][["los"]][["asu"]][[patient_type]]()
       }
     }) |>
 
@@ -72,7 +74,9 @@ create_asu_trajectory <- function(env, patient_type, param) {
     # If that patient's destination is rehab, then start on that trajectory
     branch(
       option = function() {
-        if (get_attribute(env, "post_asu_destination") == "rehab") 1L else 0L
+        dest_num <- get_attribute(env, "post_asu_destination")
+        dest <- param[["map_num2val"]][as.character(dest_num)]
+        if (dest == "rehab") 1L else 0L
       },
       continue = FALSE,  # Do not continue main trajectory after branch
       create_rehab_trajectory(env, patient_type, param)

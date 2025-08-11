@@ -29,7 +29,7 @@ add_patient_generator <- function(env, trajectory, unit, patient_type, param) {
     name_prefix = paste0(unit, "_", patient_type),
     trajectory = trajectory,
     distribution = function() {
-      param[["dist"]][["arrivals"]][[unit]][[patient_type]]()
+      param[["dist"]][["arrival"]][[unit]][[patient_type]]()
     }
   )
 }

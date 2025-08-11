@@ -114,8 +114,8 @@
       "rehab_routing_tia": {
         "class_name": "discrete",
         "params": {
-          "values": ["other"],
-          "prob": [1.0]
+          "values": ["esd", "other"],
+          "prob": [0.0, 1.0]
         }
       },
       "rehab_routing_neuro": {
