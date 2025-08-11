@@ -67,7 +67,7 @@ cores <- 9L
 ### Run the model
 
 ```{r}
-param <- create_parameters(cores = cores)
+param <- parameters(cores = cores)
 base_results <- runner(param = param)
 ```
 
@@ -249,13 +249,19 @@ plot_delay_prob(
 **5% more admissions.** A 5% increase in admissions across all patient subgroups.
 
 ```{r}
-s1_param <- create_parameters(
-  asu_arrivals = lapply(create_asu_arrivals(), FUN = function(x) x * 0.95),
-  rehab_arrivals = lapply(create_rehab_arrivals(), FUN = function(x) x * 0.95),
-  cores = cores
-)
-print(s1_param$asu_arrivals)
-print(s1_param$rehab_arrivals)
+s1_param <- parameters(cores = cores)
+for (key in names(s1_param$dist_config)) {
+  if (grepl("arrival", key)) {
+    s1_param$dist_config[[key]]$params$mean <- (
+      s1_param$dist_config[[key]]$params$mean * 0.95
+    )
+  }
+}
+# View an example
+print("Before:")
+print(unlist(param$dist_config$asu_arrival_stroke))
+print("After:")
+print(unlist(s1_param$dist_config$asu_arrival_stroke))
 ```
 
 ```{r}
@@ -371,11 +377,15 @@ write.csv(adj_full_tab_2, file.path(output_dir, "table2.csv"))
 
 ```{r}
 # Set IAT very high, essentially meaning that we have no neuro arrivals
-s4_param <- create_parameters(
-  asu_arrivals = create_asu_arrivals(neuro = 10000000000),
-  rehab_arrivals = create_rehab_arrivals(neuro = 10000000000),
-  cores = 9L
-)
+s4_param <- parameters(cores = 9L)
+s4_param$dist_config$asu_arrival_neuro$params$mean = 10000000000
+s4_param$dist_config$rehab_arrival_neuro$params$mean = 10000000000
+
+# View an example
+print("Before:")
+print(unlist(param$dist_config$asu_arrival_neuro))
+print("After:")
+print(unlist(s4_param$dist_config$asu_arrival_neuro))
 ```
 
 ```{r}

@@ -1,7 +1,7 @@
 Analysis
 ================
 Amy Heather
-2025-07-11
+2025-08-11
 
 - [Set-up](#set-up)
 - [Base case](#base-case)
@@ -58,7 +58,8 @@ last in the plotting function).
 
 Install the latest version of the local simulation package. If running
 sequentially, `devtools::load_all()` is sufficient. If running in
-parallel, you must use `devtools::install()` and then `library(simulation)`.
+parallel, you must use `devtools::install()` and then
+`library(simulation)`.
 
 ``` r
 devtools::install(upgrade = "never")
@@ -75,11 +76,12 @@ devtools::install(upgrade = "never")
     ##   ─  building ‘simulation_0.1.0.tar.gz’
     ##      
     ## Running /opt/R/4.4.1/lib/R/bin/R CMD INSTALL \
-    ##   /tmp/Rtmpz9aafi/simulation_0.1.0.tar.gz --install-tests 
+    ##   /tmp/RtmpLULkF1/simulation_0.1.0.tar.gz --install-tests 
     ## * installing to library ‘/home/amy/.cache/R/renv/library/rdesrap_stroke-34041c45/linux-ubuntu-noble/R-4.4/x86_64-pc-linux-gnu’
     ## * installing *source* package ‘simulation’ ...
     ## ** using staged installation
     ## ** R
+    ## ** inst
     ## ** tests
     ## ** byte-compile and prepare package for lazy loading
     ## ** help
@@ -128,7 +130,7 @@ cores <- 9L
 ### Run the model
 
 ``` r
-param <- create_parameters(cores = cores)
+param <- parameters(cores = cores)
 base_results <- runner(param = param)
 ```
 
@@ -337,38 +339,39 @@ plot_delay_prob(
 subgroups.
 
 ``` r
-s1_param <- create_parameters(
-  asu_arrivals = lapply(create_asu_arrivals(), FUN = function(x) x * 0.95),
-  rehab_arrivals = lapply(create_rehab_arrivals(), FUN = function(x) x * 0.95),
-  cores = cores
-)
-print(s1_param$asu_arrivals)
+s1_param <- parameters(cores = cores)
+for (key in names(s1_param$dist_config)) {
+  if (grepl("arrival", key)) {
+    s1_param$dist_config[[key]]$params$mean <- (
+      s1_param$dist_config[[key]]$params$mean * 0.95
+    )
+  }
+}
+# View an example
+print("Before:")
 ```
 
-    ## $stroke
-    ## [1] 1.14
-    ## 
-    ## $tia
-    ## [1] 8.835
-    ## 
-    ## $neuro
-    ## [1] 3.42
-    ## 
-    ## $other
-    ## [1] 3.04
+    ## [1] "Before:"
 
 ``` r
-print(s1_param$rehab_arrivals)
+print(unlist(param$dist_config$asu_arrival_stroke))
 ```
 
-    ## $stroke
-    ## [1] 20.71
-    ## 
-    ## $neuro
-    ## [1] 30.115
-    ## 
-    ## $other
-    ## [1] 27.17
+    ##    class_name   params.mean 
+    ## "exponential"         "1.2"
+
+``` r
+print("After:")
+```
+
+    ## [1] "After:"
+
+``` r
+print(unlist(s1_param$dist_config$asu_arrival_stroke))
+```
+
+    ##    class_name   params.mean 
+    ## "exponential"        "1.14"
 
 ``` r
 s1_results <- runner(param = s1_param)
@@ -556,12 +559,35 @@ requirements.
 
 ``` r
 # Set IAT very high, essentially meaning that we have no neuro arrivals
-s4_param <- create_parameters(
-  asu_arrivals = create_asu_arrivals(neuro = 10000000000),
-  rehab_arrivals = create_rehab_arrivals(neuro = 10000000000),
-  cores = 9L
-)
+s4_param <- parameters(cores = 9L)
+s4_param$dist_config$asu_arrival_neuro$params$mean = 10000000000
+s4_param$dist_config$rehab_arrival_neuro$params$mean = 10000000000
+
+# View an example
+print("Before:")
 ```
+
+    ## [1] "Before:"
+
+``` r
+print(unlist(param$dist_config$asu_arrival_neuro))
+```
+
+    ##    class_name   params.mean 
+    ## "exponential"         "3.6"
+
+``` r
+print("After:")
+```
+
+    ## [1] "After:"
+
+``` r
+print(unlist(s4_param$dist_config$asu_arrival_neuro))
+```
+
+    ##    class_name   params.mean 
+    ## "exponential"       "1e+10"
 
 ``` r
 s4_results <- runner(param = s4_param)
@@ -1049,4 +1075,4 @@ seconds <- as.integer(runtime %% 60L)
 cat(sprintf("Notebook run time: %dm %ds", minutes, seconds))
 ```
 
-    ## Notebook run time: 2m 33s
+    ## Notebook run time: 1m 33s
