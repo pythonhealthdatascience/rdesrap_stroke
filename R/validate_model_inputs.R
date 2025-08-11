@@ -77,7 +77,7 @@ check_param_names <- function(param) {
   extra_names <- setdiff(names(param[["dist_config"]]), required)
   if (length(missing_names) > 0L || length(extra_names) > 0L)
     stop("Problem in param$dist_config. Missing: ", missing_names, ". ",
-         "Extra: ", extra_names, call. = FALSE)
+         "Extra: ", extra_names, ".", call. = FALSE)
 
   # Check the names in param
   missing_names <- setdiff(names(parameters()), names(param))
@@ -226,7 +226,7 @@ check_param_values <- function(param) {
                          allowed_names = c("class_name", "params"))
 
     if (type == "exponential") {
-      check_all_positive(params$mean, paste0(dist_name, "$mean"))
+      check_all_positive(params$mean, paste0(dist_name, "$params$mean"))
       check_allowed_params(
         object_name = paste0("param$dist_config$", dist_name, "$params"),
         actual_names = names(params),
@@ -235,8 +235,8 @@ check_param_values <- function(param) {
     }
 
     if (type == "lognormal") {
-      check_all_positive(params$mean, paste0(dist_name, "$mean"))
-      check_all_positive(params$sd,   paste0(dist_name, "$sd"))
+      check_all_positive(params$mean, paste0(dist_name, "$params$mean"))
+      check_all_positive(params$sd,   paste0(dist_name, "$params$sd"))
       check_allowed_params(
         object_name = paste0("param$dist_config$", dist_name, "$params"),
         actual_names = names(params),
@@ -251,7 +251,7 @@ check_param_values <- function(param) {
         stop(sprintf("Discrete dist '%s' values and prob length mismatch",
                      dist_name), call. = FALSE)
       }
-      check_prob_vector(prob, paste0(dist_name, "$prob"))
+      check_prob_vector(prob, paste0(dist_name, "$params$prob"))
       check_allowed_params(
         object_name = paste0("param$dist_config$", dist_name, "$params"),
         actual_names = names(params),
