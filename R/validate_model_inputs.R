@@ -76,12 +76,15 @@ check_param_names <- function(param) {
   missing_names <- setdiff(required, names(param[["dist_config"]]))
   extra_names <- setdiff(names(param[["dist_config"]]), required)
   if (length(missing_names) > 0L || length(extra_names) > 0L)
-    stop("Missing:", missing_names, "Extra:", extra_names, call. = FALSE)
+    stop("Problem in param$dist_config. Missing: ", missing_names, ". ",
+         "Extra: ", extra_names, call. = FALSE)
 
-  # Check the names in param (fine to have extra, but not missing)
+  # Check the names in param
   missing_names <- setdiff(names(parameters()), names(param))
-  if (length(missing_names) > 0L)
-    stop("Missing from param:", missing_names, call. = FALSE)
+  extra_names <- setdiff(names(param), names(parameters()))
+  if (length(missing_names) > 0L || length(extra_names) > 0L)
+    stop("Problem in param. Missing: ", missing_names, ". ",
+         "Extra: ", extra_names, ".", call. = FALSE)
 }
 
 
@@ -170,6 +173,31 @@ check_nonneg_integer <- function(x, name) {
 }
 
 
+#' Check that a parameter list contains only allowed names
+#'
+#' @param object_name String name of object (for error messages).
+#' @param actual_names Character vector of parameter names.
+#' @param allowed_names Character vector of allowed parameter names.
+#'
+#' @return None. Throws an error if unrecognised parameters are present.
+#' @export
+
+check_allowed_params <- function(object_name, actual_names, allowed_names) {
+  extra_names  <- setdiff(actual_names, allowed_names)
+  missing_names <- setdiff(allowed_names, actual_names)
+  if (length(extra_names) > 0L) {
+    stop("Unrecognised parameter(s) in ", object_name, ": ",
+         paste(extra_names, collapse = ", "), ". Allowed: ",
+         paste(allowed_names, collapse = ", "), call. = FALSE)
+  }
+  if (length(missing_names) > 0L) {
+    stop("Missing required parameter(s) in ", object_name, ": ",
+         paste(missing_names, collapse = ", "), ". Allowed: ",
+         paste(allowed_names, collapse = ", "), call. = FALSE)
+  }
+}
+
+
 #' Validate parameter values
 #'
 #' Ensures that specific parameters are positive numbers, non-negative integers,
@@ -192,13 +220,30 @@ check_param_values <- function(param) {
     entry  <- param$dist_config[[dist_name]]
     type   <- entry$class_name
     params <- entry$params
+
+    check_allowed_params(object_name = paste0("param$dist_config", dist_name),
+                         actual_names = names(entry),
+                         allowed_names = c("class_name", "params"))
+
     if (type == "exponential") {
       check_all_positive(params$mean, paste0(dist_name, "$mean"))
+      check_allowed_params(
+        object_name = paste0("param$dist_config$", dist_name, "$params"),
+        actual_names = names(params),
+        allowed_names = c("mean")
+      )
     }
+
     if (type == "lognormal") {
       check_all_positive(params$mean, paste0(dist_name, "$mean"))
       check_all_positive(params$sd,   paste0(dist_name, "$sd"))
+      check_allowed_params(
+        object_name = paste0("param$dist_config$", dist_name, "$params"),
+        actual_names = names(params),
+        allowed_names = c("mean", "sd")
+      )
     }
+
     if (type == "discrete") {
       vals <- unlist(params$values)
       prob <- unlist(params$prob)
@@ -207,6 +252,11 @@ check_param_values <- function(param) {
                      dist_name), call. = FALSE)
       }
       check_prob_vector(prob, paste0(dist_name, "$prob"))
+      check_allowed_params(
+        object_name = paste0("param$dist_config$", dist_name, "$params"),
+        actual_names = names(params),
+        allowed_names = c("values", "prob")
+      )
     }
   }
 }
