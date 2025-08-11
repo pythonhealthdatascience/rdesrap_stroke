@@ -32,43 +32,31 @@ create_rehab_trajectory <- function(env, patient_type, param) {
 
     # Sample destination after rehab (as destination influences length of stay)
     set_attribute("post_rehab_destination", function() {
-      sample_routing(prob_list = param[["rehab_routing"]][[patient_type]])
+      param[["dist"]][["routing"]][["rehab"]][[patient_type]]()
     }) |>
 
     log_(function() {
-      # Retrieve attribute, and use to get post-rehab destination as a string
-      dest_index <- get_attribute(env, "post_rehab_destination")
-      dest_names <- names(param[["rehab_routing"]][[patient_type]])
-      dest <- dest_names[dest_index]
-      # Create log message
-      paste0("\U0001F3AF Planned rehab -> ", dest_index, " (", dest, ")")
+      dest_num <- get_attribute(env, "post_rehab_destination")
+      dest <- param[["map_num2val"]][as.character(dest_num)]
+      paste0("\U0001F3AF Planned rehab -> ", dest_num, " (", dest, ")")
     }, level = 1L) |>
 
+    # Sample rehab LOS. For stroke patients, LOS distribution is based on
+    # the planned destination after the rehab
     set_attribute("rehab_los", function() {
-      # Retrieve attribute, and use to get post-rehab destination as a string
-      dest_index <- get_attribute(env, "post_rehab_destination")
-      dest_names <- names(param[["rehab_routing"]][[patient_type]])
-      dest <- dest_names[dest_index]
-
-      # Determine which LOS distribution to use
+      dest_num <- get_attribute(env, "post_rehab_destination")
+      dest <- param[["map_num2val"]][as.character(dest_num)]
       if (patient_type == "stroke") {
-        los_params <- switch(
+        switch(
           dest,
-          esd = param[["rehab_los_lnorm"]][["stroke_esd"]],
-          other = param[["rehab_los_lnorm"]][["stroke_no_esd"]],
+          esd = param[["dist"]][["los"]][["rehab"]][["stroke_esd"]](),
+          other = param[["dist"]][["los"]][["rehab"]][["stroke_noesd"]](),
           stop("Stroke post-rehab destination '", dest, "' invalid",
                call. = FALSE)
         )
       } else {
-        los_params <- param[["rehab_los_lnorm"]][[patient_type]]
+        param[["dist"]][["los"]][["rehab"]][[patient_type]]()
       }
-
-      # Sample LOS from lognormal
-      rlnorm(
-        n = 1L,
-        meanlog = los_params[["meanlog"]],
-        sdlog = los_params[["sdlog"]]
-      )
     }) |>
 
     log_(function() {

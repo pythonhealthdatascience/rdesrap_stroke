@@ -172,14 +172,6 @@ MIT Licence. See `LICENSE.md` for details.
 
 <br>
 
-## Acknowledgements
-
-This repository was developed with thanks to a few others sources. These are acknowledged throughout in the relevant scipts, and also summarised here:
-
-**TODO**
-
-<br>
-
 ## Funding
 
 This project was developed as part of the project STARS: Sharing Tools and Artefacts for Reproducible Simulations. It is supported by the Medical Research Council [grant number [MR/Z503915/1](https://gtr.ukri.org/projects?ref=MR%2FZ503915%2F1)].

@@ -1,7 +1,7 @@
 Generate expected results
 ================
 Amy Heather
-2025-07-11
+2025-08-11
 
 - [Set-up](#set-up)
 - [Base case](#base-case)
@@ -23,7 +23,8 @@ The run time is provided at the end of this notebook.
 
 Install the latest version of the local simulation package. If running
 sequentially, `devtools::load_all()` is sufficient. If running in
-parallel, you must use `devtools::install()` and then `library(simulation)`.
+parallel, you must use `devtools::install()` and then
+`library(simulation)`.
 
 ``` r
 devtools::load_all()
@@ -72,204 +73,430 @@ testdata_dir <- file.path("..", "tests", "testthat", "testdata")
 ## Base case
 
 ``` r
-param <- create_parameters(cores = 1L, number_of_runs = 2L)
+param <- parameters(cores = 1L, number_of_runs = 2L)
 print(param)
 ```
 
-    ## $asu_arrivals
-    ## $asu_arrivals$stroke
+    ## $dist_config
+    ## $dist_config$asu_arrival_stroke
+    ## $dist_config$asu_arrival_stroke$class_name
+    ## [1] "exponential"
+    ## 
+    ## $dist_config$asu_arrival_stroke$params
+    ## $dist_config$asu_arrival_stroke$params$mean
     ## [1] 1.2
     ## 
-    ## $asu_arrivals$tia
+    ## 
+    ## 
+    ## $dist_config$asu_arrival_tia
+    ## $dist_config$asu_arrival_tia$class_name
+    ## [1] "exponential"
+    ## 
+    ## $dist_config$asu_arrival_tia$params
+    ## $dist_config$asu_arrival_tia$params$mean
     ## [1] 9.3
     ## 
-    ## $asu_arrivals$neuro
+    ## 
+    ## 
+    ## $dist_config$asu_arrival_neuro
+    ## $dist_config$asu_arrival_neuro$class_name
+    ## [1] "exponential"
+    ## 
+    ## $dist_config$asu_arrival_neuro$params
+    ## $dist_config$asu_arrival_neuro$params$mean
     ## [1] 3.6
     ## 
-    ## $asu_arrivals$other
+    ## 
+    ## 
+    ## $dist_config$asu_arrival_other
+    ## $dist_config$asu_arrival_other$class_name
+    ## [1] "exponential"
+    ## 
+    ## $dist_config$asu_arrival_other$params
+    ## $dist_config$asu_arrival_other$params$mean
     ## [1] 3.2
     ## 
     ## 
-    ## $rehab_arrivals
-    ## $rehab_arrivals$stroke
+    ## 
+    ## $dist_config$rehab_arrival_stroke
+    ## $dist_config$rehab_arrival_stroke$class_name
+    ## [1] "exponential"
+    ## 
+    ## $dist_config$rehab_arrival_stroke$params
+    ## $dist_config$rehab_arrival_stroke$params$mean
     ## [1] 21.8
     ## 
-    ## $rehab_arrivals$neuro
+    ## 
+    ## 
+    ## $dist_config$rehab_arrival_neuro
+    ## $dist_config$rehab_arrival_neuro$class_name
+    ## [1] "exponential"
+    ## 
+    ## $dist_config$rehab_arrival_neuro$params
+    ## $dist_config$rehab_arrival_neuro$params$mean
     ## [1] 31.7
     ## 
-    ## $rehab_arrivals$other
+    ## 
+    ## 
+    ## $dist_config$rehab_arrival_other
+    ## $dist_config$rehab_arrival_other$class_name
+    ## [1] "exponential"
+    ## 
+    ## $dist_config$rehab_arrival_other$params
+    ## $dist_config$rehab_arrival_other$params$mean
     ## [1] 28.6
     ## 
     ## 
-    ## $asu_los
-    ## $asu_los$stroke_no_esd
-    ## $asu_los$stroke_no_esd$mean
+    ## 
+    ## $dist_config$asu_los_stroke_noesd
+    ## $dist_config$asu_los_stroke_noesd$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$asu_los_stroke_noesd$params
+    ## $dist_config$asu_los_stroke_noesd$params$mean
     ## [1] 7.4
     ## 
-    ## $asu_los$stroke_no_esd$sd
+    ## $dist_config$asu_los_stroke_noesd$params$sd
     ## [1] 8.61
     ## 
     ## 
-    ## $asu_los$stroke_esd
-    ## $asu_los$stroke_esd$mean
+    ## 
+    ## $dist_config$asu_los_stroke_esd
+    ## $dist_config$asu_los_stroke_esd$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$asu_los_stroke_esd$params
+    ## $dist_config$asu_los_stroke_esd$params$mean
     ## [1] 4.6
     ## 
-    ## $asu_los$stroke_esd$sd
+    ## $dist_config$asu_los_stroke_esd$params$sd
     ## [1] 4.8
     ## 
     ## 
-    ## $asu_los$stroke_mortality
-    ## $asu_los$stroke_mortality$mean
+    ## 
+    ## $dist_config$asu_los_stroke_mortality
+    ## $dist_config$asu_los_stroke_mortality$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$asu_los_stroke_mortality$params
+    ## $dist_config$asu_los_stroke_mortality$params$mean
     ## [1] 7
     ## 
-    ## $asu_los$stroke_mortality$sd
+    ## $dist_config$asu_los_stroke_mortality$params$sd
     ## [1] 8.7
     ## 
     ## 
-    ## $asu_los$tia
-    ## $asu_los$tia$mean
+    ## 
+    ## $dist_config$asu_los_tia
+    ## $dist_config$asu_los_tia$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$asu_los_tia$params
+    ## $dist_config$asu_los_tia$params$mean
     ## [1] 1.8
     ## 
-    ## $asu_los$tia$sd
+    ## $dist_config$asu_los_tia$params$sd
     ## [1] 2.3
     ## 
     ## 
-    ## $asu_los$neuro
-    ## $asu_los$neuro$mean
+    ## 
+    ## $dist_config$asu_los_neuro
+    ## $dist_config$asu_los_neuro$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$asu_los_neuro$params
+    ## $dist_config$asu_los_neuro$params$mean
     ## [1] 4
     ## 
-    ## $asu_los$neuro$sd
+    ## $dist_config$asu_los_neuro$params$sd
     ## [1] 5
     ## 
     ## 
-    ## $asu_los$other
-    ## $asu_los$other$mean
+    ## 
+    ## $dist_config$asu_los_other
+    ## $dist_config$asu_los_other$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$asu_los_other$params
+    ## $dist_config$asu_los_other$params$mean
     ## [1] 3.8
     ## 
-    ## $asu_los$other$sd
+    ## $dist_config$asu_los_other$params$sd
     ## [1] 5.2
     ## 
     ## 
     ## 
-    ## $rehab_los
-    ## $rehab_los$stroke_no_esd
-    ## $rehab_los$stroke_no_esd$mean
+    ## $dist_config$rehab_los_stroke_noesd
+    ## $dist_config$rehab_los_stroke_noesd$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$rehab_los_stroke_noesd$params
+    ## $dist_config$rehab_los_stroke_noesd$params$mean
     ## [1] 28.4
     ## 
-    ## $rehab_los$stroke_no_esd$sd
+    ## $dist_config$rehab_los_stroke_noesd$params$sd
     ## [1] 27.2
     ## 
     ## 
-    ## $rehab_los$stroke_esd
-    ## $rehab_los$stroke_esd$mean
+    ## 
+    ## $dist_config$rehab_los_stroke_esd
+    ## $dist_config$rehab_los_stroke_esd$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$rehab_los_stroke_esd$params
+    ## $dist_config$rehab_los_stroke_esd$params$mean
     ## [1] 30.3
     ## 
-    ## $rehab_los$stroke_esd$sd
+    ## $dist_config$rehab_los_stroke_esd$params$sd
     ## [1] 23.1
     ## 
     ## 
-    ## $rehab_los$tia
-    ## $rehab_los$tia$mean
+    ## 
+    ## $dist_config$rehab_los_tia
+    ## $dist_config$rehab_los_tia$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$rehab_los_tia$params
+    ## $dist_config$rehab_los_tia$params$mean
     ## [1] 18.7
     ## 
-    ## $rehab_los$tia$sd
+    ## $dist_config$rehab_los_tia$params$sd
     ## [1] 23.5
     ## 
     ## 
-    ## $rehab_los$neuro
-    ## $rehab_los$neuro$mean
+    ## 
+    ## $dist_config$rehab_los_neuro
+    ## $dist_config$rehab_los_neuro$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$rehab_los_neuro$params
+    ## $dist_config$rehab_los_neuro$params$mean
     ## [1] 27.6
     ## 
-    ## $rehab_los$neuro$sd
+    ## $dist_config$rehab_los_neuro$params$sd
     ## [1] 28.4
     ## 
     ## 
-    ## $rehab_los$other
-    ## $rehab_los$other$mean
+    ## 
+    ## $dist_config$rehab_los_other
+    ## $dist_config$rehab_los_other$class_name
+    ## [1] "lognormal"
+    ## 
+    ## $dist_config$rehab_los_other$params
+    ## $dist_config$rehab_los_other$params$mean
     ## [1] 16.1
     ## 
-    ## $rehab_los$other$sd
+    ## $dist_config$rehab_los_other$params$sd
     ## [1] 14.1
     ## 
     ## 
     ## 
-    ## $asu_routing
-    ## $asu_routing$stroke
-    ## $asu_routing$stroke$rehab
+    ## $dist_config$asu_routing_stroke
+    ## $dist_config$asu_routing_stroke$class_name
+    ## [1] "discrete"
+    ## 
+    ## $dist_config$asu_routing_stroke$params
+    ## $dist_config$asu_routing_stroke$params$values
+    ## $dist_config$asu_routing_stroke$params$values[[1]]
+    ## [1] "rehab"
+    ## 
+    ## $dist_config$asu_routing_stroke$params$values[[2]]
+    ## [1] "esd"
+    ## 
+    ## $dist_config$asu_routing_stroke$params$values[[3]]
+    ## [1] "other"
+    ## 
+    ## 
+    ## $dist_config$asu_routing_stroke$params$prob
+    ## $dist_config$asu_routing_stroke$params$prob[[1]]
     ## [1] 0.24
     ## 
-    ## $asu_routing$stroke$esd
+    ## $dist_config$asu_routing_stroke$params$prob[[2]]
     ## [1] 0.13
     ## 
-    ## $asu_routing$stroke$other
+    ## $dist_config$asu_routing_stroke$params$prob[[3]]
     ## [1] 0.63
     ## 
     ## 
-    ## $asu_routing$tia
-    ## $asu_routing$tia$rehab
+    ## 
+    ## 
+    ## $dist_config$asu_routing_tia
+    ## $dist_config$asu_routing_tia$class_name
+    ## [1] "discrete"
+    ## 
+    ## $dist_config$asu_routing_tia$params
+    ## $dist_config$asu_routing_tia$params$values
+    ## $dist_config$asu_routing_tia$params$values[[1]]
+    ## [1] "rehab"
+    ## 
+    ## $dist_config$asu_routing_tia$params$values[[2]]
+    ## [1] "esd"
+    ## 
+    ## $dist_config$asu_routing_tia$params$values[[3]]
+    ## [1] "other"
+    ## 
+    ## 
+    ## $dist_config$asu_routing_tia$params$prob
+    ## $dist_config$asu_routing_tia$params$prob[[1]]
     ## [1] 0.01
     ## 
-    ## $asu_routing$tia$esd
+    ## $dist_config$asu_routing_tia$params$prob[[2]]
     ## [1] 0.01
     ## 
-    ## $asu_routing$tia$other
+    ## $dist_config$asu_routing_tia$params$prob[[3]]
     ## [1] 0.98
     ## 
     ## 
-    ## $asu_routing$neuro
-    ## $asu_routing$neuro$rehab
+    ## 
+    ## 
+    ## $dist_config$asu_routing_neuro
+    ## $dist_config$asu_routing_neuro$class_name
+    ## [1] "discrete"
+    ## 
+    ## $dist_config$asu_routing_neuro$params
+    ## $dist_config$asu_routing_neuro$params$values
+    ## $dist_config$asu_routing_neuro$params$values[[1]]
+    ## [1] "rehab"
+    ## 
+    ## $dist_config$asu_routing_neuro$params$values[[2]]
+    ## [1] "esd"
+    ## 
+    ## $dist_config$asu_routing_neuro$params$values[[3]]
+    ## [1] "other"
+    ## 
+    ## 
+    ## $dist_config$asu_routing_neuro$params$prob
+    ## $dist_config$asu_routing_neuro$params$prob[[1]]
     ## [1] 0.11
     ## 
-    ## $asu_routing$neuro$esd
+    ## $dist_config$asu_routing_neuro$params$prob[[2]]
     ## [1] 0.05
     ## 
-    ## $asu_routing$neuro$other
+    ## $dist_config$asu_routing_neuro$params$prob[[3]]
     ## [1] 0.84
     ## 
     ## 
-    ## $asu_routing$other
-    ## $asu_routing$other$rehab
+    ## 
+    ## 
+    ## $dist_config$asu_routing_other
+    ## $dist_config$asu_routing_other$class_name
+    ## [1] "discrete"
+    ## 
+    ## $dist_config$asu_routing_other$params
+    ## $dist_config$asu_routing_other$params$values
+    ## $dist_config$asu_routing_other$params$values[[1]]
+    ## [1] "rehab"
+    ## 
+    ## $dist_config$asu_routing_other$params$values[[2]]
+    ## [1] "esd"
+    ## 
+    ## $dist_config$asu_routing_other$params$values[[3]]
+    ## [1] "other"
+    ## 
+    ## 
+    ## $dist_config$asu_routing_other$params$prob
+    ## $dist_config$asu_routing_other$params$prob[[1]]
     ## [1] 0.05
     ## 
-    ## $asu_routing$other$esd
+    ## $dist_config$asu_routing_other$params$prob[[2]]
     ## [1] 0.1
     ## 
-    ## $asu_routing$other$other
+    ## $dist_config$asu_routing_other$params$prob[[3]]
     ## [1] 0.85
     ## 
     ## 
     ## 
-    ## $rehab_routing
-    ## $rehab_routing$stroke
-    ## $rehab_routing$stroke$esd
+    ## 
+    ## $dist_config$rehab_routing_stroke
+    ## $dist_config$rehab_routing_stroke$class_name
+    ## [1] "discrete"
+    ## 
+    ## $dist_config$rehab_routing_stroke$params
+    ## $dist_config$rehab_routing_stroke$params$values
+    ## $dist_config$rehab_routing_stroke$params$values[[1]]
+    ## [1] "esd"
+    ## 
+    ## $dist_config$rehab_routing_stroke$params$values[[2]]
+    ## [1] "other"
+    ## 
+    ## 
+    ## $dist_config$rehab_routing_stroke$params$prob
+    ## $dist_config$rehab_routing_stroke$params$prob[[1]]
     ## [1] 0.4
     ## 
-    ## $rehab_routing$stroke$other
+    ## $dist_config$rehab_routing_stroke$params$prob[[2]]
     ## [1] 0.6
     ## 
     ## 
-    ## $rehab_routing$tia
-    ## $rehab_routing$tia$esd
+    ## 
+    ## 
+    ## $dist_config$rehab_routing_tia
+    ## $dist_config$rehab_routing_tia$class_name
+    ## [1] "discrete"
+    ## 
+    ## $dist_config$rehab_routing_tia$params
+    ## $dist_config$rehab_routing_tia$params$values
+    ## $dist_config$rehab_routing_tia$params$values[[1]]
+    ## [1] "esd"
+    ## 
+    ## $dist_config$rehab_routing_tia$params$values[[2]]
+    ## [1] "other"
+    ## 
+    ## 
+    ## $dist_config$rehab_routing_tia$params$prob
+    ## $dist_config$rehab_routing_tia$params$prob[[1]]
     ## [1] 0
     ## 
-    ## $rehab_routing$tia$other
+    ## $dist_config$rehab_routing_tia$params$prob[[2]]
     ## [1] 1
     ## 
     ## 
-    ## $rehab_routing$neuro
-    ## $rehab_routing$neuro$esd
+    ## 
+    ## 
+    ## $dist_config$rehab_routing_neuro
+    ## $dist_config$rehab_routing_neuro$class_name
+    ## [1] "discrete"
+    ## 
+    ## $dist_config$rehab_routing_neuro$params
+    ## $dist_config$rehab_routing_neuro$params$values
+    ## $dist_config$rehab_routing_neuro$params$values[[1]]
+    ## [1] "esd"
+    ## 
+    ## $dist_config$rehab_routing_neuro$params$values[[2]]
+    ## [1] "other"
+    ## 
+    ## 
+    ## $dist_config$rehab_routing_neuro$params$prob
+    ## $dist_config$rehab_routing_neuro$params$prob[[1]]
     ## [1] 0.09
     ## 
-    ## $rehab_routing$neuro$other
+    ## $dist_config$rehab_routing_neuro$params$prob[[2]]
     ## [1] 0.91
     ## 
     ## 
-    ## $rehab_routing$other
-    ## $rehab_routing$other$esd
+    ## 
+    ## 
+    ## $dist_config$rehab_routing_other
+    ## $dist_config$rehab_routing_other$class_name
+    ## [1] "discrete"
+    ## 
+    ## $dist_config$rehab_routing_other$params
+    ## $dist_config$rehab_routing_other$params$values
+    ## $dist_config$rehab_routing_other$params$values[[1]]
+    ## [1] "esd"
+    ## 
+    ## $dist_config$rehab_routing_other$params$values[[2]]
+    ## [1] "other"
+    ## 
+    ## 
+    ## $dist_config$rehab_routing_other$params$prob
+    ## $dist_config$rehab_routing_other$params$prob[[1]]
     ## [1] 0.13
     ## 
-    ## $rehab_routing$other$other
+    ## $dist_config$rehab_routing_other$params$prob[[2]]
     ## [1] 0.88
+    ## 
+    ## 
     ## 
     ## 
     ## 
@@ -295,6 +522,12 @@ print(param)
     ## [1] FALSE
     ## 
     ## $file_path
+    ## NULL
+    ## 
+    ## $verbose
+    ## NULL
+    ## 
+    ## $dist
     ## NULL
 
 ``` r
@@ -388,4 +621,4 @@ seconds <- as.integer(runtime %% 60L)
 cat(sprintf("Notebook run time: %dm %ds", minutes, seconds))
 ```
 
-    ## Notebook run time: 0m 3s
+    ## Notebook run time: 0m 1s

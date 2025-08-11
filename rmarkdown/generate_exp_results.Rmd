@@ -45,7 +45,7 @@ testdata_dir <- file.path("..", "tests", "testthat", "testdata")
 ## Base case
 
 ```{r}
-param <- create_parameters(cores = 1L, number_of_runs = 2L)
+param <- parameters(cores = 1L, number_of_runs = 2L)
 print(param)
 ```
 

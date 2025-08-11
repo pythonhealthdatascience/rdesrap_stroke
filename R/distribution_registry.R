@@ -1,0 +1,182 @@
+#' Registry for parametrised probability distributions
+#'
+#' @description
+#' The DistributionRegistry manages and generates parameterized samplers for a
+#' variety of probability distributions. Common distributions are included by
+#' default, and more can be added.
+#'
+#' Once defined, you can create sampler objects for each distribution -
+#' individually (`create`) or in batches (`create_batch`) - and then easily
+#' draw random samples from these objects.
+#'
+#' To add more built-in distributions, edit `initialize()`. To add custom ones
+#' at any time, use `register()`.
+#'
+#' @docType class
+#' @importFrom R6 R6Class
+#' @export
+
+DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_name_linter
+
+  #' @field registry Named list of registered distribution generator functions.
+  registry = list(),
+
+  #' @description
+  #' Pre-registers a set of common base R distribution generators.
+  initialize = function() {
+    self$register("exponential", function(mean) {
+      function(size = 1L) rexp(size, rate = 1L / mean)
+    })
+    self$register("uniform", function(min, max) {
+      function(size = 1L) runif(size, min = min, max = max)
+    })
+    self$register("discrete", function(values, prob) {
+      values <- unlist(values)
+      prob <- unlist(prob)
+      # Validation (as not using a pre-made distribution function)
+      stopifnot(length(values) == length(prob))
+      stopifnot(all(prob >= 0))
+      if (round(abs(sum(prob) - 1), 2) > 0.01) {
+        stop(sprintf(
+          "'prob' must sum to 1 ± 0.01. Sum: %s", abs(sum(unlist(prob)))
+        ))
+      }
+      # Sampling function
+      function(size = 1L) sample(
+        values, size = size, replace = TRUE, prob = prob
+      )
+    })
+    self$register("normal", function(mean, sd) {
+      function(size = 1L) rnorm(size, mean = mean, sd = sd)
+    })
+    self$register("lognormal", function(meanlog, sdlog) {
+      function(size = 1L) rlnorm(size, meanlog = meanlog, sdlog = sdlog)
+    })
+    self$register("poisson", function(lambda) {
+      function(size = 1L) rpois(size, lambda = lambda)
+    })
+    self$register("binomial", function(size_param, prob) {
+      function(size = 1L) rbinom(size, size = size_param, prob = prob)
+    })
+    self$register("geometric", function(prob) {
+      function(size = 1L) rgeom(size, prob = prob)
+    })
+    self$register("beta", function(shape1, shape2) {
+      function(size = 1L) rbeta(size, shape1 = shape1, shape2 = shape2)
+    })
+    self$register("gamma", function(shape, rate) {
+      function(size = 1L) rgamma(size, shape = shape, rate = rate)
+    })
+    self$register("chisq", function(df) {
+      function(size = 1L) rchisq(size, df = df)
+    })
+    self$register("t", function(df) {
+      function(size = 1L) rt(size, df = df)
+    })
+  },
+
+  #' @description
+  #' Register a distribution generator under a name.
+  #'
+  #' Typically, the generator should be a function that:
+  #' 1. Accepts parameters for a distribution.
+  #' 2. Returns another function - the *sampler* - which takes a `size`
+  #' argument and produces that many random values from the specified
+  #' distribution.
+  #'
+  #' By storing generators rather than fixed samplers, you can create as many
+  #' different samplers as you want later, each with different parameters,
+  #' while reusing the same generator code.
+  #'
+  #' @param name Distribution name (string)
+  #' @param generator Function to create a sampler given its parameters.
+  register = function(name, generator) {
+    self$registry[[name]] <- generator
+  },
+
+  #' @description
+  #' Get a registered distribution generator by name.
+  #'
+  #' @param name Distribution name (string)
+  #' @return Generator function for the distribution.
+  get = function(name) {
+    if (!(name %in% names(self$registry)))
+      stop(
+        sprintf(
+          c("Distribution '%s' not found.\nAvailable distributions:\n\t%s\n",
+            "Use register() to add new distributions."),
+          name, paste(names(self$registry), collapse = ",\n\t")
+        ),
+      call. = FALSE)
+    self$registry[[name]]
+  },
+
+  #' @description
+  #' Convert mean/sd to lognormal parameters, returning the corresponding
+  #' \code{meanlog} and \code{sdlog} parameters used by R's \code{rlnorm()}.
+  #'
+  #' @param params Named list with two elements: mean and sd.
+  #' @return A named list of the same structure, but with elements
+  #' \code{meanlog} and \code{sdlog} for each patient type.
+  transform_to_lnorm = function(params) {
+    variance <- params$sd^2L
+    sigma_sq <- log(variance / (params$mean^2L) + 1L)
+    sdlog <- sqrt(sigma_sq)
+    meanlog <- log(params$mean) - sigma_sq / 2L
+    list(meanlog = meanlog, sdlog = sdlog)
+  },
+
+  #' @description
+  #' Create a parameterised sampler for a distribution.
+  #'
+  #' The returned function draws random samples of a specified size from
+  #' the given distribution with fixed parameters.
+  #'
+  #' For "lognormal", if "meanlog" and "sdlog" are present in the parameters,
+  #' they will be used as-is. If not, but "mean" and "sd" are provided, these
+  #' will be transformed into "meanlog"/"sdlog" automatically.
+  #'
+  #' @param name Distribution name
+  #' @param ... Parameters for the generator
+  #' @return A function that draws samples when called.
+  create = function(name, ...) {
+    dots <- list(...)
+    if (name == "lognormal") {
+      if (!is.null(dots$meanlog) && !is.null(dots$sdlog)) {
+        dots <- dots
+      } else if (!is.null(dots$mean) && !is.null(dots$sd)) {
+        transformed <- self$transform_to_lnorm(dots)
+        dots <- c(transformed, dots[setdiff(names(dots), c("mean", "sd"))])
+      } else {
+        stop("Please supply either 'meanlog' and 'sdlog', or 'mean' and 'sd' ",
+             "for a lognormal distribution.")
+      }
+    }
+    # Calls the `get()` method above which finds the distribution generator
+    # function, then do.call() populates it with dots (a list of arguments).
+    generator <- self$get(name)
+    do.call(generator, dots)
+  },
+
+  #' @description
+  #' Batch-create samplers from a configuration list.
+  #'
+  #' The configuration should be a list of lists, each sublist specifying a
+  #' `class_name` (distribution) and `params` (parameter list for that
+  #' distribution).
+  #'
+  #' @param config Named or unnamed list. Each entry is a list with
+  #'   'class_name' and 'params'.
+  #' @return List of parameterised samplers (named if config is named).
+  create_batch = function(config) {
+    if (is.list(config)) {
+      # Calls `create()` for each distribution specified in config
+      lapply(config, function(cfg) {
+        do.call(self$create, c(cfg$class_name, cfg$params))
+      })
+    } else {
+      stop("config must be a list (named or unnamed)", call. = FALSE)
+    }
+  }
+)
+)

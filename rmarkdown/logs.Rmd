@@ -41,8 +41,7 @@ Here, we will print to console and save to file:
 ```{r}
 log_file <- file.path("..", "outputs", "log_example.log")
 
-param <- create_parameters(
-  rehab_arrivals = create_rehab_arrivals(stroke = 3L),
+param <- parameters(
   warm_up_period = 3L,
   data_collection_period = 5L,
   number_of_runs = 1L,
@@ -51,6 +50,10 @@ param <- create_parameters(
   log_to_file = TRUE,
   file_path = log_file
 )
+
+# Increase inter-arrival time for stroke rehab patients so they are observed in
+# log within short run times
+param$dist_config$rehab_arrival_stroke$params$mean <- 3
 
 verbose_run <- runner(param = param)
 ```
