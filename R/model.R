@@ -57,15 +57,15 @@ model <- function(run_number, param, set_seed = TRUE) {
   param[["dist"]] <- registry$create_batch(as.list(param[["dist_config_num"]]))
 
   # Restructure as dist[type][unit][patient]
-  dist <- list()
+  dist_refactor <- list()
   for (key in names(param[["dist"]])) {
-    parts <- strsplit(key, "_")[[1]]
-    dist_type <- parts[2]
-    unit <- parts[1]
-    patient <- paste(parts[-(1:2)], collapse = "_")
-    dist[[dist_type]][[unit]][[patient]] <- param[["dist"]][[key]]
+    parts <- strsplit(key, "_", fixed = TRUE)[[1L]]
+    dist_type <- parts[2L]
+    unit <- parts[1L]
+    patient <- paste(parts[-(1L:2L)], collapse = "_")
+    dist_refactor[[dist_type]][[unit]][[patient]] <- param[["dist"]][[key]]
   }
-  param[["dist"]] <- dist
+  param[["dist"]] <- dist_refactor
 
   # Create simmer environment - set verbose to FALSE as using custom logs
   # (but can change to TRUE if want to see default simmer logs as well)

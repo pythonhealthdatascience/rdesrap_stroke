@@ -251,17 +251,17 @@ plot_delay_prob(
 ```{r}
 s1_param <- parameters(cores = cores)
 for (key in names(s1_param$dist_config)) {
-  if (grepl("arrival", key)) {
+  if (grepl("arrival", key, fixed = TRUE)) {
     s1_param$dist_config[[key]]$params$mean <- (
       s1_param$dist_config[[key]]$params$mean * 0.95
     )
   }
 }
 # View an example
-print("Before:")
-print(unlist(param$dist_config$asu_arrival_stroke))
-print("After:")
-print(unlist(s1_param$dist_config$asu_arrival_stroke))
+cat("Before:")
+cat(unlist(param$dist_config$asu_arrival_stroke))
+cat("After:")
+cat(unlist(s1_param$dist_config$asu_arrival_stroke))
 ```
 
 ```{r}
@@ -378,14 +378,14 @@ write.csv(adj_full_tab_2, file.path(output_dir, "table2.csv"))
 ```{r}
 # Set IAT very high, essentially meaning that we have no neuro arrivals
 s4_param <- parameters(cores = 9L)
-s4_param$dist_config$asu_arrival_neuro$params$mean = 10000000000
-s4_param$dist_config$rehab_arrival_neuro$params$mean = 10000000000
+s4_param$dist_config$asu_arrival_neuro$params$mean <- 10000000000
+s4_param$dist_config$rehab_arrival_neuro$params$mean <- 10000000000
 
 # View an example
-print("Before:")
-print(unlist(param$dist_config$asu_arrival_neuro))
-print("After:")
-print(unlist(s4_param$dist_config$asu_arrival_neuro))
+cat("Before:")
+cat(unlist(param$dist_config$asu_arrival_neuro))
+cat("After:")
+cat(unlist(s4_param$dist_config$asu_arrival_neuro))
 ```
 
 ```{r}

@@ -73,15 +73,15 @@ check_param_names <- function(param) {
   required <- names(config)
 
   # Check what names are within param, if any missing or extra
-  missing <- setdiff(required, names(param[["dist_config"]]))
-  extra <- setdiff(names(param[["dist_config"]]), required)
-  if (length(missing) > 0 || length(extra) > 0)
-    stop("Missing:", paste(missing), "Extra:", paste(extra))
+  missing_names <- setdiff(required, names(param[["dist_config"]]))
+  extra_names <- setdiff(names(param[["dist_config"]]), required)
+  if (length(missing_names) > 0L || length(extra_names) > 0L)
+    stop("Missing:", missing_names, "Extra:", extra_names, call. = FALSE)
 
   # Check the names in param (fine to have extra, but not missing)
-  missing <- setdiff(names(parameters()), names(param))
-  if (length(missing) > 0)
-    stop("Missing from param:", paste(missing))
+  missing_names <- setdiff(names(parameters()), names(param))
+  if (length(missing_names) > 0L)
+    stop("Missing from param:", missing_names, call. = FALSE)
 }
 
 
@@ -203,8 +203,8 @@ check_param_values <- function(param) {
       vals <- unlist(params$values)
       prob <- unlist(params$prob)
       if (length(vals) != length(prob)) {
-        stop(sprintf("Discrete dist '%s' values/prob length mismatch",
-                     dist_name))
+        stop(sprintf("Discrete dist '%s' values and prob length mismatch",
+                     dist_name), call. = FALSE)
       }
       check_prob_vector(prob, paste0(dist_name, "$prob"))
     }

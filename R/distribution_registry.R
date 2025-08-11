@@ -33,18 +33,16 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
     self$register("discrete", function(values, prob) {
       values <- unlist(values)
       prob <- unlist(prob)
-      # Validation (as not using a pre-made distribution function)
-      stopifnot(length(values) == length(prob))
-      stopifnot(all(prob >= 0))
-      if (round(abs(sum(prob) - 1), 2) > 0.01) {
+      stopifnot(length(values) == length(prob), prob >= 0L)
+      if (round(abs(sum(prob) - 1L), 2L) > 0.01) {
         stop(sprintf(
           "'prob' must sum to 1 ± 0.01. Sum: %s", abs(sum(unlist(prob)))
-        ))
+        ), call. = FALSE)
       }
       # Sampling function
-      function(size = 1L) sample(
-        values, size = size, replace = TRUE, prob = prob
-      )
+      function(size = 1L) {
+        sample(values, size = size, replace = TRUE, prob = prob)
+      }
     })
     self$register("normal", function(mean, sd) {
       function(size = 1L) rnorm(size, mean = mean, sd = sd)
@@ -107,7 +105,8 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
             "Use register() to add new distributions."),
           name, paste(names(self$registry), collapse = ",\n\t")
         ),
-      call. = FALSE)
+        call. = FALSE
+      )
     self$registry[[name]]
   },
 
@@ -149,7 +148,7 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
         dots <- c(transformed, dots[setdiff(names(dots), c("mean", "sd"))])
       } else {
         stop("Please supply either 'meanlog' and 'sdlog', or 'mean' and 'sd' ",
-             "for a lognormal distribution.")
+             "for a lognormal distribution.", call. = FALSE)
       }
     }
     # Calls the `get()` method above which finds the distribution generator
@@ -169,14 +168,13 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
   #'   'class_name' and 'params'.
   #' @return List of parameterised samplers (named if config is named).
   create_batch = function(config) {
-    if (is.list(config)) {
-      # Calls `create()` for each distribution specified in config
-      lapply(config, function(cfg) {
-        do.call(self$create, c(cfg$class_name, cfg$params))
-      })
-    } else {
+    if (!is.list(config)) {
       stop("config must be a list (named or unnamed)", call. = FALSE)
     }
+    # Calls `create()` for each distribution specified in config
+    lapply(config, function(cfg) {
+      do.call(self$create, c(cfg$class_name, cfg$params))
+    })
   }
 )
 )

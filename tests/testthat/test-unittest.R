@@ -110,29 +110,29 @@ test_that("get retrieves a distribution generator", {
 
 test_that("create returns a sampler that samples correctly", {
   reg <- DistributionRegistry$new()
-  sampler <- reg$create("normal", mean = 10, sd = 2)
-  samples <- sampler(size = 5)
-  expect_length(samples, 5)
-  expect_true(is.numeric(samples))
+  sampler <- reg$create("normal", mean = 10L, sd = 2L)
+  samples <- sampler(size = 5L)
+  expect_length(samples, 5L)
+  expect_type(samples, "numeric")
 })
 
 test_that("register adds and retrieves custom distribution", {
   reg <- DistributionRegistry$new()
   reg$register("const", function(val) function(size = 1L) rep(val, size))
-  sampler <- reg$create("const", val = 42)
-  samples <- sampler(3)
-  expect_equal(samples, c(42, 42, 42))
+  sampler <- reg$create("const", val = 42L)
+  samples <- sampler(3L)
+  expect_identical(samples, c(42L, 42L, 42L))
 })
 
 test_that("create_batch creates multiple samplers", {
   reg <- DistributionRegistry$new()
   batch <- reg$create_batch(list(
-    list(class_name = "normal", params = list(mean = 0, sd = 1)),
-    list(class_name = "binomial", params = list(size_param = 10, prob = 0.5))
+    list(class_name = "normal", params = list(mean = 0L, sd = 1L)),
+    list(class_name = "binomial", params = list(size_param = 10L, prob = 0.5))
   ))
-  expect_length(batch, 2)
-  expect_type(batch[[1]], "closure")
-  expect_type(batch[[2]], "closure")
-  expect_true(is.numeric(batch[[1]](2)))
-  expect_true(is.numeric(batch[[2]](2)))
+  expect_length(batch, 2L)
+  expect_type(batch[[1L]], "closure")
+  expect_type(batch[[2L]], "closure")
+  expect_type(batch[[1L]](2L), "numeric")
+  expect_true(batch[[2L]](2L), "numeric")
 })

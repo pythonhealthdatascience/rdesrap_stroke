@@ -53,7 +53,7 @@ param <- parameters(
 
 # Increase inter-arrival time for stroke rehab patients so they are observed in
 # log within short run times
-param$dist_config$rehab_arrival_stroke$params$mean <- 3
+param$dist_config$rehab_arrival_stroke$params$mean <- 3L
 
 verbose_run <- runner(param = param)
 ```
