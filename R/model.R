@@ -13,6 +13,7 @@ utils::globalVariables("time")
 #' @importFrom rlang .data
 #' @importFrom simmer add_resource get_mon_arrivals get_mon_resources simmer
 #' @importFrom simmer wrap
+#' @importFrom stats setNames
 #' @importFrom utils capture.output
 #'
 #' @return Named list with two tables: arrivals and occupancy.

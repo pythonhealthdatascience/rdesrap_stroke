@@ -21,6 +21,8 @@ Imports:
     dplyr,
     future,
     future.apply,
+    jsonlite,
+    R6,
     rlang,
     simmer
 Suggests:

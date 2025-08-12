@@ -36,7 +36,7 @@ DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_n
       stopifnot(length(values) == length(prob), prob >= 0L)
       if (round(abs(sum(prob) - 1L), 2L) > 0.01) {
         stop(sprintf(
-          "'prob' must sum to 1 ± 0.01. Sum: %s", abs(sum(unlist(prob)))
+          "'prob' must sum to 1 +- 0.01. Sum: %s", abs(sum(unlist(prob)))
         ), call. = FALSE)
       }
       # Sampling function
