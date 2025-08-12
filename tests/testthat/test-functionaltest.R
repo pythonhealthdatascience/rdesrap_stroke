@@ -5,121 +5,207 @@
 
 
 # -----------------------------------------------------------------------------
+# Helper function
+# -----------------------------------------------------------------------------
+
+
+#' Update one or more probabilities in a routing parameter list.
+#'
+#' @param param The full model parameters list, as returned by [parameters()].
+#' @param routing_name Character string naming the routing block within
+#'   `param$dist_config` (e.g. `"asu_routing_tia"`).
+#' @param updates Named numeric vector or list, where names are route names
+#'   and values are the new probabilities to set.
+#'
+#' @return The modified `params_list` with the updated probability.
+
+update_routing_prob <- function(param, routing_name, updates) {
+  if (!routing_name %in% names(param$dist_config)) {
+    stop(sprintf("Routing '%s' not found in param$dist_config", routing_name),
+         call. = FALSE)
+  }
+
+  params_list <- param$dist_config[[routing_name]]$params
+
+  if (is.null(names(updates)) || !all(nzchar(names(updates)))) {
+    stop("'updates' must be a named vector or list", call. = FALSE)
+  }
+
+  for (route in names(updates)) {
+    idx <- which(params_list$values == route)
+    if (length(idx) != 1L) {
+      stop(sprintf(
+        "Expected exactly one match for route '%s', found %d",
+        route, length(idx)
+      ), call. = FALSE)
+    }
+    params_list$prob[[idx]] <- updates[[route]]
+  }
+
+  param$dist_config[[routing_name]]$params <- params_list
+  param
+}
+
+
+# -----------------------------------------------------------------------------
 # 1. Parameter validation
 # -----------------------------------------------------------------------------
 
 test_that("model errors for invalid asu_arrivals values", {
-  param <- create_parameters()
+  param <- parameters()
   # Negative value for stroke
-  param$asu_arrivals$stroke <- -1L
+  param$dist_config$asu_arrival_stroke$params$mean <- -1L
   expect_error(
     model(param = param, run_number = 1L),
-    'All values in "asu_arrivals" must be greater than 0.'
+    'All values in "asu_arrival_stroke$params$mean" must be greater than 0.',
+    fixed = TRUE
   )
   # Zero value for neuro
-  param <- create_parameters()
-  param$asu_arrivals$neuro <- 0L
+  param <- parameters()
+  param$dist_config$asu_arrival_neuro$params$mean <- 0L
   expect_error(
     model(param = param, run_number = 1L),
-    'All values in "asu_arrivals" must be greater than 0.'
+    'All values in "asu_arrival_neuro$params$mean" must be greater than 0.',
+    fixed = TRUE
   )
 })
 
 
 test_that("model errors for invalid asu_los values", {
-  param <- create_parameters()
   # Negative mean for stroke_no_esd
-  param$asu_los$stroke_no_esd$mean <- -5L
+  param <- parameters()
+  param$dist_config$asu_los_stroke_noesd$params$mean <- -5L
   expect_error(
     model(param = param, run_number = 1L),
-    'All values in "asu_los" must be greater than 0.'
+    'All values in "asu_los_stroke_noesd$params$mean" must be greater than 0.',
+    fixed = TRUE
   )
   # Zero sd for tia
-  param <- create_parameters()
-  param$asu_los$tia$sd <- 0L
+  param <- parameters()
+  param$dist_config$asu_los_tia$params$sd <- 0L
   expect_error(
     model(param = param, run_number = 1L),
-    'All values in "asu_los" must be greater than 0.'
+    'All values in "asu_los_tia$params$sd" must be greater than 0.',
+    fixed = TRUE
   )
 })
 
 
 test_that("model errors for invalid asu_routing probabilities", {
-  param <- create_parameters()
+  param <- parameters()
   # Non-numeric value
-  param$asu_routing$stroke$rehab <- "a"
+  param <- update_routing_prob(param, "asu_routing_stroke", c(rehab = "a"))
   expect_error(
     model(param = param, run_number = 1L),
-    'Routing vector "asu_routing$stroke" must be numeric.',
+    'Routing vector "asu_routing_stroke$params$prob" must be numeric.',
     fixed = TRUE
   )
   # Probability out of bounds
-  param <- create_parameters()
-  param$asu_routing$stroke$rehab <- -0.1
+  param <- parameters()
+  param <- update_routing_prob(param, "asu_routing_stroke", c(rehab = -0.1))
   expect_error(
     model(param = param, run_number = 1L),
-    'All values in routing vector "asu_routing$stroke" must be between 0 and 1.',  # nolint: line_length_linter
+    'All values in routing vector "asu_routing_stroke$params$prob" must be between 0 and 1.',  # nolint: line_length_linter
     fixed = TRUE
   )
   # Probabilities do not sum to 1
-  param <- create_parameters()
-  param$asu_routing$stroke$rehab <- 0.5
-  param$asu_routing$stroke$esd <- 0.5
-  param$asu_routing$stroke$other <- 0.5
+  param <- parameters()
+  param <- update_routing_prob(param, "asu_routing_stroke",
+                               c(rehab = 0.5, esd = 0.5, other = 0.5))
   expect_error(
     model(param = param, run_number = 1L),
-    'Values in routing vector "asu_routing$stroke" must sum to 1 (+-0.01).',
+    'Values in routing vector "asu_routing_stroke$params$prob" must sum to 1 (+-0.01).',  # nolint: line_length_linter
     fixed = TRUE
   )
 })
 
 
 test_that("model errors for invalid rehab_routing probabilities", {
-  param <- create_parameters()
-  param$rehab_routing$other$esd <- 1.5
+  # Probabilities should be within 0 and 1
+  param <- parameters()
+  param <- update_routing_prob(param, "rehab_routing_other", c(esd = 1.5))
   expect_error(
     model(param = param, run_number = 1L),
-    'All values in routing vector "rehab_routing$other" must be between 0 and 1.',  # nolint: line_length_linter
+    'All values in routing vector "rehab_routing_other$params$prob" must be between 0 and 1.',  # nolint: line_length_linter
     fixed = TRUE
   )
-  # Probabilities do not sum to 1
-  param <- create_parameters()
-  param$rehab_routing$stroke$esd <- 0.8
-  param$rehab_routing$stroke$other <- 0.3
+
+  # Probabilities should sum to 1
+  param <- parameters()
+  param <- update_routing_prob(param, "rehab_routing_stroke",
+                               c(esd = 0.8, other = 0.3))
   expect_error(
     model(param = param, run_number = 1L),
-    'Values in routing vector "rehab_routing$stroke" must sum to 1 (+-0.01).',
+    'Values in routing vector "rehab_routing_stroke$params$prob" must sum to 1 (+-0.01)',  # nolint: line_length_linter
     fixed = TRUE
   )
 })
 
 
-test_that("model errors for missing keys in asu_los", {
-  param <- create_parameters()
-  param$asu_los$other <- NULL  # Remove required key
-  expect_error(
-    model(param = param, run_number = 1L),
-    "Missing keys: other."
+patrick::with_parameters_test_that(
+  "model errors for invalid, missing, and extra keys in parameters",
+  {
+    param <- parameters()
+    param <- mod(param)
+    expect_error(model(run_number = 0L, param = param), msg, fixed = TRUE)
+  },
+  patrick::cases(
+    missing_number_of_runs = list(
+      mod = function(p) {
+        p$number_of_runs <- NULL
+        p
+      },
+      msg = "Problem in param. Missing: number_of_runs. Extra: ."
+    ),
+    # Missing key in param$dist_config
+    missing_rehab_arrival_neuro = list(
+      mod = function(p) {
+        p$dist_config$rehab_arrival_neuro <- NULL
+        p
+      },
+      msg = "Problem in param$dist_config. Missing: rehab_arrival_neuro. Extra: ."  # nolint: line_length_linter
+    ),
+    # Missing specific dist_config key
+    missing_rehab_los_tia = list(
+      mod = function(p) {
+        p$dist_config$rehab_los_tia$params <- NULL
+        p
+      },
+      msg = "Missing required parameter(s) in param$dist_configrehab_los_tia: params. Allowed: class_name, params"  # nolint: line_length_linter
+    ),
+    # Extra key in top-level param
+    extra_top_level = list(
+      mod = function(p) {
+        p$extra_key <- 5L
+        p
+      },
+      msg = "Problem in param. Missing: . Extra: extra_key."
+    ),
+    # Extra key in param$dist_config
+    extra_in_dist_config = list(
+      mod = function(p) {
+        p$dist_config$extra_key <- 5L
+        p
+      },
+      msg = "Problem in param$dist_config. Missing: . Extra: extra_key."
+    ),
+    # Extra key in nested dist_config entry
+    extra_in_asu_arrival_stroke = list(
+      mod = function(p) {
+        p$dist_config$asu_arrival_stroke$extra_key <- 5L
+        p
+      },
+      msg = "Unrecognised parameter(s) in param$dist_configasu_arrival_stroke: extra_key. Allowed: class_name, params"  # nolint: line_length_linter
+    )
   )
-})
-
-
-test_that("model errors for extra keys in asu_arrivals", {
-  param <- create_parameters()
-  param$asu_arrivals$extra <- 5L  # Add unexpected key
-  expect_error(
-    model(param = param, run_number = 1L),
-    "Extra keys: extra."
-  )
-})
-
+)
 
 # -----------------------------------------------------------------------------
 # 2. Run results
 # -----------------------------------------------------------------------------
 
 test_that("values are non-negative and not NA", {
-  param <- create_parameters(
+  param <- parameters(
     warm_up_period = 20L, data_collection_period = 20L,
     cores = 1L, number_of_runs = 1L
   )
@@ -145,7 +231,7 @@ patrick::with_parameters_test_that(
   "adjusting parameters decreases arrivals",
   {
     # Set some defaults
-    default_param <- create_parameters(
+    default_param <- parameters(
       warm_up_period = 100L, data_collection_period = 200L,
       cores = 1L, number_of_runs = 1L
     )
@@ -153,13 +239,8 @@ patrick::with_parameters_test_that(
     # Set up parameter sets
     init_param <- default_param
     adj_param <- default_param
-    if (is.null(metric)) {
-      init_param[[group]][[patient]] <- init_value
-      adj_param[[group]][[patient]] <- adj_value
-    } else {
-      init_param[[group]][[patient]][[metric]] <- init_value
-      adj_param[[group]][[patient]][[metric]] <- adj_value
-    }
+    init_param$dist_config[[group]]$params$mean <- init_value
+    adj_param$dist_config[[group]]$params$mean <- adj_value
 
     # Run model and compare number of arrivals
     init_arrivals <- nrow(runner(param = init_param)[["arrivals"]])
@@ -167,10 +248,8 @@ patrick::with_parameters_test_that(
     expect_gt(init_arrivals, adj_arrivals)
   },
   patrick::cases(
-    list(group = "asu_arrivals", patient = "stroke", metric = NULL,
-         init_value = 2L, adj_value = 6L),
-    list(group = "rehab_los", patient = "stroke_no_esd", metric = "mean",
-         init_value = 30L, adj_value = 10L)
+    list(group = "asu_arrival_stroke", init_value = 2L, adj_value = 6L),
+    list(group = "rehab_los_stroke_noesd", init_value = 30L, adj_value = 10L)
   )
 )
 
@@ -181,7 +260,7 @@ patrick::with_parameters_test_that(
 
 test_that("the same seed returns the same result", {
 
-  param <- create_parameters(
+  param <- parameters(
     warm_up_period = 20L, data_collection_period = 20L,
     cores = 1L, number_of_runs = 3L
   )
@@ -204,7 +283,7 @@ test_that("the same seed returns the same result", {
 
 test_that("model and runner produce same results if override future.seed", {
 
-  param <- create_parameters(
+  param <- parameters(
     warm_up_period = 20L, data_collection_period = 20L,
     cores = 1L, number_of_runs = 3L
   )
@@ -233,7 +312,7 @@ test_that("model and runner produce same results if override future.seed", {
 test_that("results are as expected if model runs with only a warm-up", {
 
   # Run with only warm-up and no data collection period
-  param <- create_parameters(
+  param <- parameters(
     warm_up_period = 100L, data_collection_period = 0L,
     cores = 1L, number_of_runs = 1L
   )
@@ -252,7 +331,7 @@ test_that("results are as expected if model runs with only a warm-up", {
 
 test_that("running with warm-up leads to different results than without", {
   # Run without warm-up, expect first audit to have time and occupancy of 0
-  param <- create_parameters(
+  param <- parameters(
     warm_up_period = 0L, data_collection_period = 20L,
     cores = 1L, number_of_runs = 1L
   )
@@ -264,7 +343,7 @@ test_that("running with warm-up leads to different results than without", {
   expect_true(all(first_audit[["occupancy"]] == 0L))
 
   # Run with warm-up, expect first audit to have time and occupancy > 0
-  param <- create_parameters(
+  param <- parameters(
     warm_up_period = 50L, data_collection_period = 20L,
     cores = 1L, number_of_runs = 1L
   )
@@ -284,7 +363,7 @@ test_that("running with warm-up leads to different results than without", {
 test_that("log to console and file work correctly", {
   # Set parameters and create temporary file for log
   log_file <- tempfile(fileext = ".log")
-  param <- create_parameters(
+  param <- parameters(
     warm_up_period = 0L,
     data_collection_period = 20L,
     log_to_console = TRUE,

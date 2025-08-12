@@ -76,7 +76,7 @@ devtools::install(upgrade = "never")
     ##   ─  building ‘simulation_0.1.0.tar.gz’
     ##      
     ## Running /opt/R/4.4.1/lib/R/bin/R CMD INSTALL \
-    ##   /tmp/RtmpLULkF1/simulation_0.1.0.tar.gz --install-tests 
+    ##   /tmp/RtmpnXXY7B/simulation_0.1.0.tar.gz --install-tests 
     ## * installing to library ‘/home/amy/.cache/R/renv/library/rdesrap_stroke-34041c45/linux-ubuntu-noble/R-4.4/x86_64-pc-linux-gnu’
     ## * installing *source* package ‘simulation’ ...
     ## ** using staged installation
@@ -341,37 +341,35 @@ subgroups.
 ``` r
 s1_param <- parameters(cores = cores)
 for (key in names(s1_param$dist_config)) {
-  if (grepl("arrival", key)) {
+  if (grepl("arrival", key, fixed = TRUE)) {
     s1_param$dist_config[[key]]$params$mean <- (
       s1_param$dist_config[[key]]$params$mean * 0.95
     )
   }
 }
 # View an example
-print("Before:")
+cat("Before:")
 ```
 
-    ## [1] "Before:"
+    ## Before:
 
 ``` r
-print(unlist(param$dist_config$asu_arrival_stroke))
+cat(unlist(param$dist_config$asu_arrival_stroke))
 ```
 
-    ##    class_name   params.mean 
-    ## "exponential"         "1.2"
+    ## exponential 1.2
 
 ``` r
-print("After:")
+cat("After:")
 ```
 
-    ## [1] "After:"
+    ## After:
 
 ``` r
-print(unlist(s1_param$dist_config$asu_arrival_stroke))
+cat(unlist(s1_param$dist_config$asu_arrival_stroke))
 ```
 
-    ##    class_name   params.mean 
-    ## "exponential"        "1.14"
+    ## exponential 1.14
 
 ``` r
 s1_results <- runner(param = s1_param)
@@ -560,34 +558,32 @@ requirements.
 ``` r
 # Set IAT very high, essentially meaning that we have no neuro arrivals
 s4_param <- parameters(cores = 9L)
-s4_param$dist_config$asu_arrival_neuro$params$mean = 10000000000
-s4_param$dist_config$rehab_arrival_neuro$params$mean = 10000000000
+s4_param$dist_config$asu_arrival_neuro$params$mean <- 10000000000
+s4_param$dist_config$rehab_arrival_neuro$params$mean <- 10000000000
 
 # View an example
-print("Before:")
+cat("Before:")
 ```
 
-    ## [1] "Before:"
+    ## Before:
 
 ``` r
-print(unlist(param$dist_config$asu_arrival_neuro))
+cat(unlist(param$dist_config$asu_arrival_neuro))
 ```
 
-    ##    class_name   params.mean 
-    ## "exponential"         "3.6"
+    ## exponential 3.6
 
 ``` r
-print("After:")
+cat("After:")
 ```
 
-    ## [1] "After:"
+    ## After:
 
 ``` r
-print(unlist(s4_param$dist_config$asu_arrival_neuro))
+cat(unlist(s4_param$dist_config$asu_arrival_neuro))
 ```
 
-    ##    class_name   params.mean 
-    ## "exponential"       "1e+10"
+    ## exponential 1e+10
 
 ``` r
 s4_results <- runner(param = s4_param)
@@ -1075,4 +1071,4 @@ seconds <- as.integer(runtime %% 60L)
 cat(sprintf("Notebook run time: %dm %ds", minutes, seconds))
 ```
 
-    ## Notebook run time: 1m 33s
+    ## Notebook run time: 1m 31s
