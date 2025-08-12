@@ -27,7 +27,7 @@ update_routing_prob <- function(param, routing_name, updates) {
 
   params_list <- param$dist_config[[routing_name]]$params
 
-  if (is.null(names(updates)) || any(names(updates) == "")) {
+  if (is.null(names(updates)) || !all(nzchar(names(updates)))) {
     stop("'updates' must be a named vector or list", call. = FALSE)
   }
 
@@ -94,7 +94,7 @@ test_that("model errors for invalid asu_los values", {
 test_that("model errors for invalid asu_routing probabilities", {
   param <- parameters()
   # Non-numeric value
-  param <- update_routing_prob(param, "asu_routing_stroke", c("rehab" = "a"))
+  param <- update_routing_prob(param, "asu_routing_stroke", c(rehab = "a"))
   expect_error(
     model(param = param, run_number = 1L),
     'Routing vector "asu_routing_stroke$params$prob" must be numeric.',
@@ -102,7 +102,7 @@ test_that("model errors for invalid asu_routing probabilities", {
   )
   # Probability out of bounds
   param <- parameters()
-  param <- update_routing_prob(param, "asu_routing_stroke", c("rehab" = -0.1))
+  param <- update_routing_prob(param, "asu_routing_stroke", c(rehab = -0.1))
   expect_error(
     model(param = param, run_number = 1L),
     'All values in routing vector "asu_routing_stroke$params$prob" must be between 0 and 1.',  # nolint: line_length_linter
@@ -111,7 +111,7 @@ test_that("model errors for invalid asu_routing probabilities", {
   # Probabilities do not sum to 1
   param <- parameters()
   param <- update_routing_prob(param, "asu_routing_stroke",
-                               c("rehab" = 0.5, "esd" = 0.5, "other" = 0.5))
+                               c(rehab = 0.5, esd = 0.5, other = 0.5))
   expect_error(
     model(param = param, run_number = 1L),
     'Values in routing vector "asu_routing_stroke$params$prob" must sum to 1 (+-0.01).',  # nolint: line_length_linter
@@ -123,7 +123,7 @@ test_that("model errors for invalid asu_routing probabilities", {
 test_that("model errors for invalid rehab_routing probabilities", {
   # Probabilities should be within 0 and 1
   param <- parameters()
-  param <- update_routing_prob(param, "rehab_routing_other", c("esd" = 1.5))
+  param <- update_routing_prob(param, "rehab_routing_other", c(esd = 1.5))
   expect_error(
     model(param = param, run_number = 1L),
     'All values in routing vector "rehab_routing_other$params$prob" must be between 0 and 1.',  # nolint: line_length_linter
@@ -133,7 +133,7 @@ test_that("model errors for invalid rehab_routing probabilities", {
   # Probabilities should sum to 1
   param <- parameters()
   param <- update_routing_prob(param, "rehab_routing_stroke",
-                               c("esd"=0.8, "other"=0.3))
+                               c(esd = 0.8, other = 0.3))
   expect_error(
     model(param = param, run_number = 1L),
     'Values in routing vector "rehab_routing_stroke$params$prob" must sum to 1 (+-0.01)',  # nolint: line_length_linter
@@ -143,7 +143,7 @@ test_that("model errors for invalid rehab_routing probabilities", {
 
 
 patrick::with_parameters_test_that(
-  "model errors for invalid/missing/extra keys in parameters",
+  "model errors for invalid, missing, and extra keys in parameters",
   {
     param <- parameters()
     param <- mod(param)
@@ -151,32 +151,50 @@ patrick::with_parameters_test_that(
   },
   patrick::cases(
     missing_number_of_runs = list(
-      mod = function(p) { p$number_of_runs <- NULL; p },
+      mod = function(p) {
+        p$number_of_runs <- NULL
+        p
+      },
       msg = "Problem in param. Missing: number_of_runs. Extra: ."
     ),
     # Missing key in param$dist_config
     missing_rehab_arrival_neuro = list(
-      mod = function(p) { p$dist_config$rehab_arrival_neuro <- NULL; p },
+      mod = function(p) {
+        p$dist_config$rehab_arrival_neuro <- NULL
+        p
+      },
       msg = "Problem in param$dist_config. Missing: rehab_arrival_neuro. Extra: ."  # nolint: line_length_linter
     ),
     # Missing specific dist_config key
     missing_rehab_los_tia = list(
-      mod = function(p) { p$dist_config$rehab_los_tia$params <- NULL; p },
+      mod = function(p) {
+        p$dist_config$rehab_los_tia$params <- NULL
+        p
+      },
       msg = "Missing required parameter(s) in param$dist_configrehab_los_tia: params. Allowed: class_name, params"  # nolint: line_length_linter
     ),
     # Extra key in top-level param
     extra_top_level = list(
-      mod = function(p) { p$extra_key <- 5L; p },
+      mod = function(p) {
+        p$extra_key <- 5L
+        p
+      },
       msg = "Problem in param. Missing: . Extra: extra_key."
     ),
     # Extra key in param$dist_config
     extra_in_dist_config = list(
-      mod = function(p) { p$dist_config$extra_key <- 5L; p },
+      mod = function(p) {
+        p$dist_config$extra_key <- 5L
+        p
+      },
       msg = "Problem in param$dist_config. Missing: . Extra: extra_key."
     ),
     # Extra key in nested dist_config entry
     extra_in_asu_arrival_stroke = list(
-      mod = function(p) { p$dist_config$asu_arrival_stroke$extra_key <- 5L; p },
+      mod = function(p) {
+        p$dist_config$asu_arrival_stroke$extra_key <- 5L
+        p
+      },
       msg = "Unrecognised parameter(s) in param$dist_configasu_arrival_stroke: extra_key. Allowed: class_name, params"  # nolint: line_length_linter
     )
   )

@@ -186,14 +186,20 @@ check_allowed_params <- function(object_name, actual_names, allowed_names) {
   extra_names  <- setdiff(actual_names, allowed_names)
   missing_names <- setdiff(allowed_names, actual_names)
   if (length(extra_names) > 0L) {
-    stop("Unrecognised parameter(s) in ", object_name, ": ",
-         paste(extra_names, collapse = ", "), ". Allowed: ",
-         paste(allowed_names, collapse = ", "), call. = FALSE)
+    stop(
+      sprintf(
+        "Unrecognised parameter(s) in %s: %s. Allowed: %s",
+        object_name, toString(extra_names), toString(allowed_names)
+      ), call. = FALSE
+    )
   }
   if (length(missing_names) > 0L) {
-    stop("Missing required parameter(s) in ", object_name, ": ",
-         paste(missing_names, collapse = ", "), ". Allowed: ",
-         paste(allowed_names, collapse = ", "), call. = FALSE)
+    stop(
+      sprintf(
+        "Missing required parameter(s) in %s: %s. Allowed: %s",
+        object_name, toString(missing_names), toString(allowed_names)
+      ), call. = FALSE
+    )
   }
 }
 
@@ -230,7 +236,7 @@ check_param_values <- function(param) {
       check_allowed_params(
         object_name = paste0("param$dist_config$", dist_name, "$params"),
         actual_names = names(params),
-        allowed_names = c("mean")
+        allowed_names = "mean"
       )
     }
 
