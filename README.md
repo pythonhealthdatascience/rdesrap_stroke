@@ -86,24 +86,6 @@ single_results <- runner(param = param)
 bash run_rmarkdown.sh
 ```
 
-**Run tests:**
-
-```{.r}
-devtools::test()
-```
-
-**Compute test coverage:**
-
-```{.r}
-devtools::test_coverage()
-```
-
-**Lint code:**
-
-```{.r}
-lintr::lint_dir()
-```
-
 ### Generating the results from the article
 
 The original study used Simul8. Each of the outputs from that article have been replicated in this repository using R:
@@ -169,6 +151,12 @@ If you use this repository, please cite either the GitHub repository or Zenodo:
 ## Licence
 
 MIT Licence. See `LICENSE.md` for details.
+
+<br>
+
+## Community
+
+Curious about contributing? Check out the [contributing guidelines](CONTRIBUTING.md) to learn how you can help. Every bit of help counts, and your contribution - no matter how minor - is highly valued.
 
 <br>
 
