@@ -60,7 +60,6 @@ parameters <- function(
     log_to_console = log_to_console,
     log_to_file = log_to_file,
     file_path = file_path,
-    verbose = NULL,
     dist = NULL
   )
 }
