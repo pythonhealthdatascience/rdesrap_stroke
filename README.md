@@ -135,9 +135,9 @@ The other notebooks generate results for tests and illustrate other functionalit
 
 If you use this repository, please cite either the GitHub repository or Zenodo:
 
-> Heather, A. (2025). Stroke capacity planning model: R DES RAP. GitHub. https://github.com/pythonhealthdatascience/rdesrap_stroke.
+> Heather, A. & Monks, T. (2025). Stroke capacity planning model: R DES RAP. GitHub. https://github.com/pythonhealthdatascience/rdesrap_stroke.
 >
-> Heather, A. (2025). Stroke capacity planning model: R DES RAP. Zenodo. https://doi.org/10.5281/zenodo.15863376.
+> Heather, A. & Monks, T. (2025). Stroke capacity planning model: R DES RAP. Zenodo. https://doi.org/10.5281/zenodo.15863376.
 
 **Contributors:**
 
@@ -145,6 +145,11 @@ If you use this repository, please cite either the GitHub repository or Zenodo:
 
 * [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--6596--3479-A6CE39?style=for-the-badge&logo=orcid&logoColor=white)](https://orcid.org/0000-0002-6596-3479)
 * [![GitHub](https://img.shields.io/badge/GitHub-amyheather-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/amyheather)
+
+**Tom Monks** - peer review of rdesrap_mms repository, with advice from that review also informing this repository.
+
+* [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2631--4481-A6CE39?style=for-the-badge&logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2631-4481)
+* [![GitHub](https://img.shields.io/badge/GitHub-TomMonks-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/TomMonks)
 
 <br>
 
