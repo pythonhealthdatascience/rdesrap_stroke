@@ -15,7 +15,6 @@
 #'
 #' @importFrom simmer branch get_attribute log_ release seize set_attribute
 #' @importFrom simmer timeout trajectory
-#' @importFrom stats rlnorm
 #'
 #' @return Simmer trajectory object. Defines patient journey logic through the
 #' healthcare system.

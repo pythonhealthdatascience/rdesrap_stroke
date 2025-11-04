@@ -13,7 +13,11 @@
 #' at any time, use `register()`.
 #'
 #' @docType class
+#'
 #' @importFrom R6 R6Class
+#' @importFrom stats rbeta rbinom rchisq rexp rgeom rgamma rlnorm rnorm rpois
+#' @importFrom stats rt runif
+#'
 #' @export
 
 DistributionRegistry <- R6Class("DistributionRegistry", list( # nolint: object_name_linter

@@ -11,9 +11,9 @@
 #' documentation, which states: "Note that as.list(seq_along(x)) is not a valid
 #' set of such .Random.seed values."
 #'
-#' @importFrom future plan multisession sequential
-#' @importFrom future.apply future_lapply
 #' @importFrom dplyr bind_rows
+#' @importFrom future availableCores multisession plan sequential
+#' @importFrom future.apply future_lapply
 #'
 #' @return Named list with three tables: monitored arrivals, monitored
 #' resources, and the processed results from each run.
