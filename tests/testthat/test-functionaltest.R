@@ -255,7 +255,6 @@ patrick::with_parameters_test_that(
 
 
 test_that("no arrivals if high inter-arrival time for all patients", {
-  # Run model with extremely large number of nurses
   param <- parameters(
     warm_up_period = 1000L, data_collection_period = 1000L,
     cores = 1L, number_of_runs = 1L
