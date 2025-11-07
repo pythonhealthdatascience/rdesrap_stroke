@@ -14,10 +14,15 @@ authors:
     email: a.heather2@exeter.ac.uk
     affiliation: University of Exeter
     orcid: 'https://orcid.org/0000-0002-6596-3479'
+  - given-names: Tom
+    family-names: Monks
+    email: t.m.w.monks@exeter.ac.uk
+    affiliation: University of Exeter Medical School
+    orcid: http://orcid.org/0000-0003-2631-4481
 repository-code: >-
   https://github.com/pythonhealthdatascience/rdesrap_stroke
 abstract: >-
   Reproducible analytical pipeline (RAP) for R discrete-event simulation (DES)
   implementing the Stroke Capacity Planning Model from Monks et al. 2016.
-version: 0.2.0
-date-released: '2025-08-12'
+version: 0.3.0
+date-released: '2025-11-07'

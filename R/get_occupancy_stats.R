@@ -16,6 +16,7 @@
 #' @param occupancy DataFrame with three columns: \code{resource}, \code{time},
 #' and \code{occupancy}.
 #'
+#' @importFrom dplyr filter
 #' @importFrom rlang .data
 #'
 #' @return A list of data frames, one per resource, each containing occupancy

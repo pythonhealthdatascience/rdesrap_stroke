@@ -15,6 +15,10 @@
 
 <br>
 
+This repository is an example accompanying the [**DES RAP Book**](https://github.com/pythonhealthdatascience/des_rap_book) — an open educational resource on reproducible discrete-event simulation (DES) in Python and R. The book demonstrates best practices for building, validating, and sharing DES models within a reproducible analytical pipeline (RAP). The `rdesrap_stroke` model illustrates how these principles can be applied to a real-world healthcare capacity planning problem.
+
+<br>
+
 ## Repository overview
 
 This repository provides a reproducible analytical pipeline (RAP) that implements a real-life stroke service capacity planning model in R. It serves as a practical example, fully reproducible and aligned with RAP principles, based on the following study:
@@ -27,7 +31,9 @@ Model diagram:
 
 <br>
 
-## Installation
+## Usage and reproduction instructions
+
+<details><summary><b>Installation</b></summary>
 
 Clone the repository:
 
@@ -50,10 +56,11 @@ renv::init()
 renv::install()
 renv::snapshot()
 ```
+</details>
 
 <br>
 
-## How to run
+<details><summary><b>How to run</b></summary>
 
 The simulation code is in the `R/` folder as a local package. There are files executing the model and analysing the results in `rmarkdown/`.
 
@@ -86,25 +93,11 @@ single_results <- runner(param = param)
 bash run_rmarkdown.sh
 ```
 
-**Run tests:**
+</details>
 
-```{.r}
-devtools::test()
-```
+<br>
 
-**Compute test coverage:**
-
-```{.r}
-devtools::test_coverage()
-```
-
-**Lint code:**
-
-```{.r}
-lintr::lint_dir()
-```
-
-### Generating the results from the article
+<details><summary><b>Generating the results from the article</b></summary>
 
 The original study used Simul8. Each of the outputs from that article have been replicated in this repository using R:
 
@@ -139,39 +132,52 @@ From this repository:
 
 ![](outputs/figure3_asu.png)
 
+</details>
+
 <br>
 
-## Run time and machine specification
+<details><summary><b>Run time and machine specification</b></summary>
 
 The run time for this analysis (`notebooks/analysis.Rmd`) is **1m 38s** seconds. This was on an Intel Core i7-12700H, 32GB RAM, Ubuntu 24.04.1.
 
 The other notebooks generate results for tests and illustrate other functionality (e.g. importing parameters from csv, running with logs), and these just take a second or two.
 
+</details>
+
 <br>
 
-## Citation
+## Project details and credits
+
+### How to cite the repository
 
 If you use this repository, please cite either the GitHub repository or Zenodo:
 
-> Heather, A. (2025). Stroke capacity planning model: R DES RAP. GitHub. https://github.com/pythonhealthdatascience/rdesrap_stroke.
+> Heather, A. & Monks, T. (2025). Stroke capacity planning model: R DES RAP. GitHub. https://github.com/pythonhealthdatascience/rdesrap_stroke.
 >
-> Heather, A. (2025). Stroke capacity planning model: R DES RAP. Zenodo. https://doi.org/10.5281/zenodo.15863376.
+> Heather, A. & Monks, T. (2025). Stroke capacity planning model: R DES RAP. Zenodo. https://doi.org/10.5281/zenodo.15863376.
 
-**Contributors:**
+### Contributors
 
 **Amy Heather** - developed the repository.
 
 * [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--6596--3479-A6CE39?style=for-the-badge&logo=orcid&logoColor=white)](https://orcid.org/0000-0002-6596-3479)
 * [![GitHub](https://img.shields.io/badge/GitHub-amyheather-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/amyheather)
 
-<br>
+**Tom Monks** - peer review of rdesrap_mms repository, with advice from that review also informing this repository.
 
-## Licence
+* [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2631--4481-A6CE39?style=for-the-badge&logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2631-4481)
+* [![GitHub](https://img.shields.io/badge/GitHub-TomMonks-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/TomMonks)
+
+### Licence
 
 MIT Licence. See `LICENSE.md` for details.
 
-<br>
+### Community
 
-## Funding
+Curious about contributing? Check out the [contributing guidelines](CONTRIBUTING.md) to learn how you can help. Every bit of help counts, and your contribution - no matter how minor - is highly valued.
+
+### Funding
 
 This project was developed as part of the project STARS: Sharing Tools and Artefacts for Reproducible Simulations. It is supported by the Medical Research Council [grant number [MR/Z503915/1](https://gtr.ukri.org/projects?ref=MR%2FZ503915%2F1)].
+
+![](images/stars_banner.png)

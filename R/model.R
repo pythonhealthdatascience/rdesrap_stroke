@@ -30,8 +30,7 @@ model <- function(run_number, param, set_seed = TRUE) {
   }
 
   # Determine whether to get verbose activity logs
-  param[["verbose"]] <- any(c(param[["log_to_console"]],
-                              param[["log_to_file"]]))
+  verbose <- any(c(param[["log_to_console"]], param[["log_to_file"]]))
 
   # Convert discrete categories from character to numeric (as will store using
   # set.attribute(), which doesn't accept strings)
@@ -71,7 +70,7 @@ model <- function(run_number, param, set_seed = TRUE) {
   # Create simmer environment - set verbose to FALSE as using custom logs
   # (but can change to TRUE if want to see default simmer logs as well)
   env <- simmer("simulation", verbose = FALSE,
-                log_level = if (param[["verbose"]]) 1L else 0L)
+                log_level = if (verbose) 1L else 0L)
 
   # Add ASU and rehab direct admission patient generators
   for (unit in c("asu", "rehab")) {
@@ -111,7 +110,7 @@ model <- function(run_number, param, set_seed = TRUE) {
   )
 
   # Save and/or display the log
-  if (isTRUE(param[["verbose"]])) {
+  if (isTRUE(verbose)) {
     # Create full log message by adding parameters
     param_string <- paste(names(param), param, sep = "=", collapse = ";\n ")
     full_log <- append(c("Parameters:", param_string, "Log:"), sim_log)

@@ -18,7 +18,6 @@
 #' arrival intervals (e.g., \code{param$asu_arrivals$stroke = 10}).
 #'
 #' @importFrom simmer add_generator
-#' @importFrom stats rexp
 #'
 #' @return The modified Simmer environment with the new patient generator added.
 #' @export

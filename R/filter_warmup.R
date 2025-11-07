@@ -4,6 +4,7 @@
 #' @param warm_up_period Length of warm-up period.
 #'
 #' @importFrom dplyr filter group_by ungroup
+#' @importFrom rlang .data
 #'
 #' @return The name list `result`, but with the tables (`arrivals` and
 #' `occupancy`) filtered to remove warm-up patients.
