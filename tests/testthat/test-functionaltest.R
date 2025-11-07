@@ -261,16 +261,16 @@ test_that("no arrivals if high inter-arrival time for all patients", {
     cores = 1L, number_of_runs = 1L
   )
   for (key in names(param$dist_config)) {
-    if (grepl("arrival", key)) {
+    if (grepl("arrival", key, fixed = TRUE)) {
       param$dist_config[[key]]$params$ mean <- 10000000L
     }
   }
   results <- runner(param = param)
 
   # Check that there are no arrivals
-  expect_true(nrow(results$arrivals) == 0)
-  expect_true(nrow(results$occupancy) == 0)
-  expect_true(length(results$occupancy_stats) == 0)
+  expect_identical(nrow(results$arrivals), 0L)
+  expect_identical(nrow(results$occupancy), 0L)
+  expect_length(results$occupancy_stats, 0L)
 })
 
 
