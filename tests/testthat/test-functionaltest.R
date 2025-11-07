@@ -254,6 +254,26 @@ patrick::with_parameters_test_that(
 )
 
 
+test_that("no arrivals if high inter-arrival time for all patients", {
+  # Run model with extremely large number of nurses
+  param <- parameters(
+    warm_up_period = 1000L, data_collection_period = 1000L,
+    cores = 1L, number_of_runs = 1L
+  )
+  for (key in names(param$dist_config)) {
+    if (grepl("arrival", key)) {
+      param$dist_config[[key]]$params$ mean <- 10000000L
+    }
+  }
+  results <- runner(param = param)
+
+  # Check that there are no arrivals
+  expect_true(nrow(results$arrivals) == 0)
+  expect_true(nrow(results$occupancy) == 0)
+  expect_true(length(results$occupancy_stats) == 0)
+})
+
+
 # -----------------------------------------------------------------------------
 # 3. Seeds
 # -----------------------------------------------------------------------------
