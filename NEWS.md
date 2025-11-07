@@ -1,3 +1,20 @@
+# Stroke capacity planning model: R DES RAP 0.3.0
+
+Introduces a code of conduct and new test, and includes improvements to documentation, contributor and parameter use.
+
+## New features
+
+* Add `CODE_OF_CONDUCT.md`.
+* Add test for model with no arrivals.
+
+## Other changes
+
+* Greatly improved/expanded `CONTRIBUTING.md`.
+* Add Tom to `CITATION.cff` and `DESCRIPTION`.
+* Corrections to docstrings (e.g., add missing `@importFrom`).
+* `verbose` is local parameter in `model` rather than part of `param` list.
+* Improvements to `README.md`.
+
 # Stroke capacity planning model: R DES RAP 0.2.0
 
 Introduces `DistributionRegistry` with JSON-based parameters, replacing individual parameter functions and CSV. Also add test coverage, add file path check, and documentation and dependency management updates.
