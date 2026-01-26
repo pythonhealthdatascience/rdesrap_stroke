@@ -57,8 +57,6 @@ check_log_file_path <- function(param) {
 #'
 #' @param param List containing parameters for the simulation.
 #'
-#' @importFrom jsonlite fromJSON
-#'
 #' @return None. Throws an error if there are missing or extra parameters.
 #' @export
 

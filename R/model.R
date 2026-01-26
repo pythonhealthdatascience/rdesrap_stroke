@@ -9,13 +9,6 @@ utils::globalVariables("time")
 #' may not wish to do if being set elsewhere - such as done in \code{runner()}).
 #' Default is TRUE.
 #'
-#' @importFrom dplyr filter group_by mutate rowwise ungroup
-#' @importFrom rlang .data
-#' @importFrom simmer add_resource get_mon_arrivals get_mon_resources simmer
-#' @importFrom simmer wrap
-#' @importFrom stats setNames
-#' @importFrom utils capture.output
-#'
 #' @return Named list with two tables: arrivals and occupancy.
 #' @export
 

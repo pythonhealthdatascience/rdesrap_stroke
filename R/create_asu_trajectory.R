@@ -13,9 +13,6 @@
 #' of routing to each destination (e.g.
 #' \code{param$asu_routing$stroke$rehab = 0.24}).
 #'
-#' @importFrom simmer branch get_attribute log_ release seize set_attribute
-#' @importFrom simmer timeout trajectory
-#'
 #' @return Simmer trajectory object. Defines patient journey logic through the
 #' healthcare system.
 #' @export
