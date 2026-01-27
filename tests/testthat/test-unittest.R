@@ -92,24 +92,25 @@ test_that("warm-up filtering works as expected", {
 
 
 # -----------------------------------------------------------------------------
-# 3. DistributionRegistry
+# 3. create_distribution_registry()
 # -----------------------------------------------------------------------------
 
 test_that("initialize creates common distributions", {
-  reg <- DistributionRegistry$new()
-  expect_true("normal" %in% names(reg$registry))
-  expect_true("uniform" %in% names(reg$registry))
-  expect_true("binomial" %in% names(reg$registry))
+  reg <- create_distribution_registry()
+
+  expect_silent(reg$create("normal", mean = 0, sd = 1))
+  expect_silent(reg$create("uniform", min = 0, max = 1))
+  expect_silent(reg$create("binomial", size_param = 1, prob = 0.5))
 })
 
 test_that("get retrieves a distribution generator", {
-  reg <- DistributionRegistry$new()
+  reg <- create_distribution_registry()
   g <- reg$get("normal")
   expect_type(g, "closure")
 })
 
 test_that("create returns a sampler that samples correctly", {
-  reg <- DistributionRegistry$new()
+  reg <- create_distribution_registry()
   sampler <- reg$create("normal", mean = 10L, sd = 2L)
   samples <- sampler(size = 5L)
   expect_length(samples, 5L)
@@ -117,7 +118,7 @@ test_that("create returns a sampler that samples correctly", {
 })
 
 test_that("register adds and retrieves custom distribution", {
-  reg <- DistributionRegistry$new()
+  reg <- create_distribution_registry()
   reg$register("const", function(val) function(size = 1L) rep(val, size))
   sampler <- reg$create("const", val = 42L)
   samples <- sampler(3L)
@@ -125,7 +126,7 @@ test_that("register adds and retrieves custom distribution", {
 })
 
 test_that("create_batch creates multiple samplers", {
-  reg <- DistributionRegistry$new()
+  reg <- create_distribution_registry()
   batch <- reg$create_batch(list(
     list(class_name = "normal", params = list(mean = 0L, sd = 1L)),
     list(class_name = "binomial", params = list(size_param = 10L, prob = 0.5))

@@ -46,7 +46,7 @@ model <- function(run_number, param, set_seed = TRUE) {
   })
 
   # Set up sampling distributions
-  registry <- simulation::DistributionRegistry$new()
+  registry <- simulation::create_distribution_registry()
   param[["dist"]] <- registry$create_batch(as.list(param[["dist_config_num"]]))
 
   # Restructure as dist[type][unit][patient]
