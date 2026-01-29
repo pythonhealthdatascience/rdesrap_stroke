@@ -2,6 +2,8 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom checkmate assert_character assert_flag assert_int assert_integer
+#' @importFrom checkmate assert_list assert_numeric
 #' @importFrom dplyr bind_rows filter group_by mutate rowwise ungroup
 #' @importFrom future availableCores multisession plan sequential
 #' @importFrom future.apply future_lapply
