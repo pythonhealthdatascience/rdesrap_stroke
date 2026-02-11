@@ -13,7 +13,6 @@ dist_config=list(asu_arrival_stroke = list(class_name = "exponential", params = 
  log_to_console=TRUE;
  log_to_file=TRUE;
  file_path=../outputs/log_example.log;
- verbose=TRUE;
  dist=list(arrival = list(asu = list(stroke = function (size = 1) 
 rexp(size, rate = 1/mean), tia = function (size = 1) 
 rexp(size, rate = 1/mean), neuro = function (size = 1) 
@@ -22,17 +21,39 @@ rexp(size, rate = 1/mean)), rehab = list(stroke = function (size = 1)
 rexp(size, rate = 1/mean), neuro = function (size = 1) 
 rexp(size, rate = 1/mean), other = function (size = 1) 
 rexp(size, rate = 1/mean))), los = list(asu = list(stroke_noesd = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog), stroke_esd = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog), stroke_mortality = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog), tia = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog), neuro = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog), other = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog)), rehab = list(stroke_noesd = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog), stroke_esd = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog), tia = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog), neuro = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog), other = function (size = 1) 
-rlnorm(size, meanlog = meanlog, sdlog = sdlog))), routing = list(asu = list(stroke = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}, stroke_esd = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}, stroke_mortality = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}, tia = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}, neuro = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}, other = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}), rehab = list(stroke_noesd = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}, stroke_esd = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}, tia = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}, neuro = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+}, other = function (size = 1) 
+{
+    rlnorm(size, meanlog = params$meanlog, sdlog = params$sdlog)
+})), routing = list(asu = list(stroke = function (size = 1) 
 {
     sample(values, size = size, replace = TRUE, prob = prob)
 }, tia = function (size = 1) 

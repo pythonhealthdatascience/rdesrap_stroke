@@ -1,7 +1,7 @@
 Generate expected results
 ================
 Amy Heather
-2025-08-11
+2026-02-11
 
 - [Set-up](#set-up)
 - [Base case](#base-case)
@@ -524,9 +524,6 @@ print(param)
     ## $file_path
     ## NULL
     ## 
-    ## $verbose
-    ## NULL
-    ## 
     ## $dist
     ## NULL
 
@@ -621,4 +618,4 @@ seconds <- as.integer(runtime %% 60L)
 cat(sprintf("Notebook run time: %dm %ds", minutes, seconds))
 ```
 
-    ## Notebook run time: 0m 1s
+    ## Notebook run time: 0m 3s

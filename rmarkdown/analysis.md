@@ -1,7 +1,7 @@
 Analysis
 ================
 Amy Heather
-2025-08-11
+2026-02-11
 
 - [Set-up](#set-up)
 - [Base case](#base-case)
@@ -65,18 +65,17 @@ parallel, you must use `devtools::install()` and then
 devtools::install(upgrade = "never")
 ```
 
-    ## ── R CMD build ─────────────────────────────────────────────────────────────────
-    ##      checking for file ‘/home/amy/Documents/stars/rdesrap_stroke/DESCRIPTION’ ...  ✔  checking for file ‘/home/amy/Documents/stars/rdesrap_stroke/DESCRIPTION’
+    ## ── R CMD build ────────────────────────────────────────────────────────────────────────────────────────────────
+    ##      checking for file ‘/home/amy/Documents/stars/rdesrap_stroke/DESCRIPTION’ ...  ✔  checking for file ‘/home/amy/Documents/stars/rdesrap_stroke/DESCRIPTION’ (355ms)
     ##   ─  preparing ‘simulation’:
     ##    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
-    ##   ─  checking for LF line-endings in source and make files and shell scripts
+    ##   ─  checking for LF line-endings in source and make files and shell scripts (429ms)
     ##   ─  checking for empty or unneeded directories
-    ##    Removed empty directory ‘simulation/tests/testthat/_snaps’
     ##    Omitted ‘LazyData’ from DESCRIPTION
-    ##   ─  building ‘simulation_0.1.0.tar.gz’
+    ##   ─  building ‘simulation_1.0.0.tar.gz’
     ##      
     ## Running /opt/R/4.4.1/lib/R/bin/R CMD INSTALL \
-    ##   /tmp/RtmpnXXY7B/simulation_0.1.0.tar.gz --install-tests 
+    ##   /tmp/RtmpT12vEN/simulation_1.0.0.tar.gz --install-tests 
     ## * installing to library ‘/home/amy/.cache/R/renv/library/rdesrap_stroke-34041c45/linux-ubuntu-noble/R-4.4/x86_64-pc-linux-gnu’
     ## * installing *source* package ‘simulation’ ...
     ## ** using staged installation
@@ -455,8 +454,7 @@ full_tab2 <- make_delay_table(
     ## Warning: Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
     ## ℹ Please use `all_of(var)` (or `any_of(var)`) instead of `.data[[var]]`
     ## This warning is displayed once every 8 hours.
-    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-    ## generated.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
 
 ``` r
 full_tab2
@@ -1071,4 +1069,4 @@ seconds <- as.integer(runtime %% 60L)
 cat(sprintf("Notebook run time: %dm %ds", minutes, seconds))
 ```
 
-    ## Notebook run time: 1m 31s
+    ## Notebook run time: 3m 40s
