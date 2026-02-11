@@ -158,5 +158,5 @@ model <- function(run_number, param, set_seed = TRUE) {
     result = result, warm_up_period = param[["warm_up_period"]]
   )
 
-  return(result)
+  result
 }
