@@ -113,7 +113,7 @@ If you are a maintainer and need to publish a new release:
 
 1. Update `NEWS.md`.
 
-2. Update the version number in `DESCRIPTION`, `CITATION.cff` and `CITATION`, and update the date in `CITATION.cff`.
+2. Update the version number in `DESCRIPTION` and `CITATION.cff`, and update the date in `CITATION.cff`.
 
 3. Create a release on GitHub, which will automatically archive to Zenodo.
 

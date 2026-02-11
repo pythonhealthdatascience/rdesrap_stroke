@@ -17,8 +17,6 @@
 #' structure \code{param$<unit>_arrivals$<patient_type>} containing numeric
 #' arrival intervals (e.g., \code{param$asu_arrivals$stroke = 10}).
 #'
-#' @importFrom simmer add_generator
-#'
 #' @return The modified Simmer environment with the new patient generator added.
 #' @export
 

@@ -87,7 +87,7 @@ param <- create_parameters(number_of_runs = 5L)
 single_results <- runner(param = param)
 ```
 
-**Run all analyses (from command line):**
+**Run all analyses (from terminal - will not work from R console):**
 
 ```{.r}
 bash run_rmarkdown.sh
@@ -138,7 +138,7 @@ From this repository:
 
 <details><summary><b>Run time and machine specification</b></summary>
 
-The run time for this analysis (`notebooks/analysis.Rmd`) is **1m 38s** seconds. This was on an Intel Core i7-12700H, 32GB RAM, Ubuntu 24.04.1.
+The run time for this analysis (`notebooks/analysis.Rmd`) is **3m 40s** seconds. This was on an Intel Core i7-12700H, 32GB RAM, Ubuntu 24.04.1.
 
 The other notebooks generate results for tests and illustrate other functionality (e.g. importing parameters from csv, running with logs), and these just take a second or two.
 

@@ -13,9 +13,6 @@
 #' probability of routing to each destination (e.g.
 #' \code{param$rehab_routing$stroke$esd = 0.40}).
 #'
-#' @importFrom simmer get_attribute log_ release seize set_attribute timeout
-#' @importFrom simmer trajectory
-#'
 #' @return Simmer trajectory object. Defines patient journey logic through the
 #' healthcare system.
 #' @export

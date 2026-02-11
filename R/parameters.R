@@ -13,8 +13,6 @@
 #' @param log_to_file Whether to save activity log to file.
 #' @param file_path Path to save log to file.
 #'
-#' @importFrom jsonlite fromJSON
-#'
 #' @return A named list of all simulation parameters.
 #' @export
 

@@ -1,3 +1,18 @@
+# Stroke capacity planning model: R DES RAP 1.0.0
+
+Stable release, with package-level documentation, switch from R6 to function for distribution registry, validation using `checkmate`, and new quality assurance documentation.
+
+## New features
+
+* Add `docs/quality_assurance.md`.
+* Add `checkmate` to project dependencies.
+
+## Other changes
+
+* Switched to package-level documentation (instead of individual `@importFrom` on each function).
+* Changed R6 class `DistributionRegistry` into a function `create_distribution_registry()`.
+* Refactored validation so it uses `checkmate`.
+
 # Stroke capacity planning model: R DES RAP 0.3.0
 
 Introduces a code of conduct and new test, and includes improvements to documentation, contributor and parameter use.

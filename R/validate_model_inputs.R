@@ -22,10 +22,7 @@ valid_inputs <- function(run_number, param) {
 #' @export
 
 check_run_number <- function(run_number) {
-  if (run_number < 0L || run_number %% 1L != 0L) {
-    stop("The run number must be a non-negative integer. Provided: ",
-         run_number, call. = FALSE)
-  }
+  assert_int(run_number, lower = 0L, .var.name = "run_number")
 }
 
 
@@ -38,13 +35,19 @@ check_run_number <- function(run_number) {
 #' @export
 
 check_log_file_path <- function(param) {
+  assert_list(param, names = "unique", .var.name = "param")
+
   log_to_file <- param[["log_to_file"]]
   file_path <- param[["file_path"]]
-  if (isTRUE(log_to_file) && (is.null(file_path) || !nzchar(file_path))) {
-    stop(
-      "If 'log_to_file' is TRUE, you must provide a non-NULL, ",
-      "non-empty 'file_path'.",
-      call. = FALSE
+
+  assert_flag(log_to_file, null.ok = TRUE, .var.name = "log_to_file")
+
+  if (isTRUE(log_to_file)) {
+    assert_character(
+      file_path,
+      min.chars = 1L,
+      len = 1L,
+      .var.name = "file_path"
     )
   }
 }
@@ -57,12 +60,11 @@ check_log_file_path <- function(param) {
 #'
 #' @param param List containing parameters for the simulation.
 #'
-#' @importFrom jsonlite fromJSON
-#'
 #' @return None. Throws an error if there are missing or extra parameters.
 #' @export
 
 check_param_names <- function(param) {
+  assert_list(param, names = "unique", .var.name = "param")
 
   # Check the distribution names....
   # Import JSON with the required names
@@ -102,15 +104,28 @@ check_param_names <- function(param) {
 
 check_prob_vector <- function(vec, name) {
   if (!is.numeric(vec)) {
-    stop('Routing vector "', name, '" must be numeric.', call. = FALSE)
+    stop(sprintf('Routing vector "%s" must be numeric.', name), call. = FALSE)
   }
+
   if (any(vec < 0L | vec > 1L)) {
-    stop('All values in routing vector "', name, '" must be between 0 and 1.',
-         call. = FALSE)
+    stop(
+      sprintf(
+        'All values in routing vector "%s" must be between 0 and 1.',
+        name
+      ),
+      call. = FALSE
+    )
   }
-  if (sum(vec) < 0.99 || sum(vec) > 1.01) {
-    stop('Values in routing vector "', name, '" must sum to 1 (+-0.01).',
-         call. = FALSE)
+
+  sum_vec <- sum(vec)
+  if (sum_vec < 0.99 || sum_vec > 1.01) {
+    stop(
+      sprintf(
+        'Values in routing vector "%s" must sum to 1 (+-0.01).',
+        name
+      ),
+      call. = FALSE
+    )
   }
 }
 
@@ -126,12 +141,7 @@ check_prob_vector <- function(vec, name) {
 #' @export
 
 check_positive_integer <- function(x, name) {
-  if (is.null(x) || x <= 0L || x %% 1L != 0L) {
-    stop(
-      sprintf('The parameter "%s" must be an integer greater than 0.', name),
-      call. = FALSE
-    )
-  }
+  assert_int(x, lower = 1L, .var.name = name)
 }
 
 #' Check if all values are positive
@@ -145,11 +155,14 @@ check_positive_integer <- function(x, name) {
 #' @export
 
 check_all_positive <- function(x, name) {
-  if (!is.null(x) && any(unlist(x) <= 0L)) {
-    stop(
-      sprintf('All values in "%s" must be greater than 0.', name),
-      call. = FALSE
-    )
+  if (!is.null(x)) {
+    val <- unlist(x)
+    if (any(val <= 0L)) {
+      stop(
+        sprintf('All values in "%s" must be greater than 0.', name),
+        call. = FALSE
+      )
+    }
   }
 }
 
@@ -164,12 +177,7 @@ check_all_positive <- function(x, name) {
 #' @export
 
 check_nonneg_integer <- function(x, name) {
-  if (is.null(x) || x < 0L || x %% 1L != 0L) {
-    stop(
-      sprintf('The parameter "%s" must be an integer >= 0.', name),
-      call. = FALSE
-    )
-  }
+  assert_int(x, lower = 0L, .var.name = name)
 }
 
 
@@ -183,6 +191,17 @@ check_nonneg_integer <- function(x, name) {
 #' @export
 
 check_allowed_params <- function(object_name, actual_names, allowed_names) {
+  assert_character(
+    actual_names,
+    any.missing = FALSE,
+    .var.name = "actual_names"
+  )
+  assert_character(
+    allowed_names,
+    any.missing = FALSE,
+    .var.name = "allowed_names"
+  )
+
   extra_names  <- setdiff(actual_names, allowed_names)
   missing_names <- setdiff(allowed_names, actual_names)
   if (length(extra_names) > 0L) {
@@ -215,6 +234,7 @@ check_allowed_params <- function(object_name, actual_names, allowed_names) {
 #' @export
 
 check_param_values <- function(param) {
+  assert_list(param, names = "unique", .var.name = "param")
 
   # High-level parameters (runs, simulation run length)
   check_positive_integer(param[["number_of_runs"]], "number_of_runs")
@@ -253,10 +273,21 @@ check_param_values <- function(param) {
     if (type == "discrete") {
       vals <- unlist(params$values)
       prob <- unlist(params$prob)
+
+      # For discrete distributions, values are typically character route names,
+      # so we just check they exist and are non-empty
+      assert_character(
+        vals,
+        any.missing = FALSE,
+        min.chars = 1L,
+        .var.name = paste0(dist_name, "$params$values")
+      )
+
       if (length(vals) != length(prob)) {
         stop(sprintf("Discrete dist '%s' values and prob length mismatch",
                      dist_name), call. = FALSE)
       }
+
       check_prob_vector(prob, paste0(dist_name, "$params$prob"))
       check_allowed_params(
         object_name = paste0("param$dist_config$", dist_name, "$params"),
