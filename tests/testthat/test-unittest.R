@@ -98,9 +98,9 @@ test_that("warm-up filtering works as expected", {
 test_that("initialize creates common distributions", {
   reg <- create_distribution_registry()
 
-  expect_silent(reg$create("normal", mean = 0, sd = 1))
-  expect_silent(reg$create("uniform", min = 0, max = 1))
-  expect_silent(reg$create("binomial", size_param = 1, prob = 0.5))
+  expect_silent(reg$create("normal", mean = 0L, sd = 1L))
+  expect_silent(reg$create("uniform", min = 0L, max = 1L))
+  expect_silent(reg$create("binomial", size_param = 1L, prob = 0.5))
 })
 
 test_that("get retrieves a distribution generator", {
